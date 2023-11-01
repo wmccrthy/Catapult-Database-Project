@@ -166,9 +166,10 @@ DB = pg.connect(** db_params)
 
 cur = DB.cursor()
 
-
 # CUR.EXECUTE(SQL) -> PERFORMS GIVEN SQL QUERY 
 # CUR.FETCHALL() -> RETURNS ALL QUERIED DATA (AS ARRAY OF TUPLES (ROWS))
+
+
 cur.execute("UPDATE team SET headcoach = 'Wyatt McCarthy' WHERE teamid='MSOC';")
 
 cur.execute('SELECT * FROM team;')
@@ -182,6 +183,20 @@ cur.execute('SELECT * FROM team;')
 rows = cur.fetchall()
 for row in rows:
     print(row)
+
+# GIVEN A COLUMN(VARIABLE), TABLE AND OPTIONAL CONDITION, PERFORMS SELECT FROM QUERY 
+def selectFrom(var, table, condition=None):
+    query = f'SELECT {var} FROM {table};'
+    if (condition):
+        query = f'SELECT {var} FROM {table} WHERE {condition};'
+    cur.execute(query)
+    return cur.fetchall()
+
+# UPDATES A GIVEN COLUMN (VARIABLE) OF A TABLE TO newVal, WHERE THE ROW UPDATED IS DEFINED BY GIVEN CONDITION 
+def update(var, newVal, table, condition):
+    query = f'UPDATE {table} SET {var}={newVal} WHERE {condition};'
+    cur.execute(query);
+    return 
 
 
 
