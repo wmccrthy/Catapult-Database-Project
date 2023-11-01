@@ -1,3 +1,4 @@
+import psycopg2 as pg
 import csv 
 # TAKE IN TJ EXCEL:
 
@@ -103,6 +104,7 @@ def createSessionPlayerRelations(csvFilePath, teamID):
     
     def select(playerName):
         return Player(playerName)
+  # use select to grab player object s.t you can query specific stats 
 
     # def createPlayers():
     #     with open("sessions.csv", mode='w') as toWrite:
@@ -117,8 +119,11 @@ def createSessionPlayerRelations(csvFilePath, teamID):
             fields = ['date', 'type']
             writer = csv.DictWriter(toWrite, fieldnames=fields)
             writer.writeheader()
+            seen = {}
             for s in holds:
-                writer.writerow({'date': s[0], 'type': s[2]})
+                if s[0] not in seen:
+                    seen[s[0]] = 1
+                    writer.writerow({'date': s[0], 'type': s[2]})
     
     def createHolds():
         with open("holds.csv", mode='w') as toWrite:
@@ -140,18 +145,43 @@ def createSessionPlayerRelations(csvFilePath, teamID):
                 for s in players[p]:
                     writer.writerow({'name':p,'date':s[0], 'teamID':teamID})
 
-
-
     createSessions()
     createHolds()                
     createParticipatesIn()
 
-
-    # use select to grab player object s.t you can query specific stats 
-
-
-    
 createSessionPlayerRelations("TEST STATS.csv", "MSOC")
+
+
+# CONNECT TO POSTGRES DB SO WE CAN POPULATE TABLES 
+
+db_params = {
+    'dbname': 'project',
+    'user': 'postgres',
+    'password': 'ams2022',
+    'host': 'cosc-257-node11.cs.amherst.edu',  # Change to your database server host if needed
+    'port': '5432'        # Change to your database server port if needed
+}
+
+DB = pg.connect(** db_params)
+
+cur = DB.cursor()
+
+
+# CUR.EXECUTE(SQL) -> PERFORMS GIVEN SQL QUERY 
+# CUR.FETCHALL() -> RETURNS ALL QUERIED DATA (AS ARRAY OF TUPLES (ROWS))
+cur.execute("UPDATE team SET headcoach = 'Wyatt McCarthy' WHERE teamid='MSOC';")
+
+cur.execute('SELECT * FROM team;')
+rows = cur.fetchall()
+for row in rows:
+    print(row)
+print()
+
+cur.execute("UPDATE team SET headcoach = 'Justin Serpone' WHERE teamid='MSOC';")
+cur.execute('SELECT * FROM team;')
+rows = cur.fetchall()
+for row in rows:
+    print(row)
 
 
 
