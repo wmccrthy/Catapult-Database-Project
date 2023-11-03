@@ -145,7 +145,7 @@ def createSessionPlayerRelations(statFilePath, devicePath, teamID, season):
 
 # METHODS TO CREATE CSV FILES THAT ALIGN DIRECTLY WITH THE OUR RELATIONS; SHOULD BE REALLY EASY TO USE THESE CSVs TO POPULATE POSTGRES DATABASE
     def createPlayers():
-        with open("players.csv", mode='w') as toWrite:
+        with open("player.csv", mode='w') as toWrite:
             fields = ['name', 'email', 'class']
             writer = csv.DictWriter(toWrite, fieldnames=fields)
             writer.writeheader()
@@ -153,28 +153,28 @@ def createSessionPlayerRelations(statFilePath, devicePath, teamID, season):
                 data = players[p]
                 writer.writerow({'name':p, 'email':data[0], 'class':data[0][len(data[0])-14:len(data[0])-12]})
     def createSessions():
-        with open("sessions.csv", mode='w') as toWrite:
-            fields = ['date', 'type']
+        with open("session.csv", mode='w') as toWrite:
+            fields = ['sessionID', 'type', 'date']
             writer = csv.DictWriter(toWrite, fieldnames=fields)
             writer.writeheader()
             seen = {}
             for s in holds:
                 if s[0] not in seen:
                     seen[s[0]] = 1
-                    writer.writerow({'date': s[0], 'type': s[2]})
+                    writer.writerow({'sessionID': s[0], 'type': s[2], 'date':s[1]})
     def createHolds():
         with open("holds.csv", mode='w') as toWrite:
-            fields = ['teamID', 'date']
+            fields = ['teamID', 'sessionID']
             writer = csv.DictWriter(toWrite, fieldnames=fields)
             writer.writeheader()
             seen = {}
             for s in holds:
                 if s[0] not in seen:
                     seen[s[0]] = 1
-                    writer.writerow({'teamID': teamID, 'date': s[0]})
+                    writer.writerow({'teamID': teamID, 'sessionID': s[0]})
     def createParticipatesIn():
         with open("participatesIn.csv", mode='w') as toWrite:
-            fields = ['email', 'date', 'teamID']
+            fields = ['email', 'sessionID', 'teamID']
             writer = csv.DictWriter(toWrite, fieldnames=fields)
             writer.writeheader()
             for p in players:
@@ -182,7 +182,7 @@ def createSessionPlayerRelations(statFilePath, devicePath, teamID, season):
                 for s in players[p][1]:
                     if s[0] not in seen:
                         seen[s[0]] = 1
-                        writer.writerow({'email':players[p][0],'date':s[0], 'teamID':teamID})
+                        writer.writerow({'email':players[p][0],'sessionID':s[0], 'teamID':teamID})
 
     def createTracks():
         with open("tracks.csv", mode='w') as toWrite:
@@ -195,7 +195,7 @@ def createSessionPlayerRelations(statFilePath, devicePath, teamID, season):
 
     def createRecordsStatsOn():
         with open("recordsStatsOn.csv", mode='w') as toWrite:
-            fields = ['deviceID', 'email', 'date', 'teamID', 'distance', 'sprintDistance', 'energy', 'playerLoad', 'topSpeed', 'distancePerMin']
+            fields = ['deviceID', 'email', 'sessionID', 'teamID', 'distance', 'sprintDistance', 'energy', 'playerLoad', 'topSpeed', 'distancePerMin']
             writer = csv.DictWriter(toWrite, fieldnames=fields)
             writer.writeheader()
             for d in devices:
@@ -206,18 +206,17 @@ def createSessionPlayerRelations(statFilePath, devicePath, teamID, season):
                         seen[s[0]] = 1
                         if curPlayerName in holds[s]:
                             distance, sprintDistance, energy, playerLoad, topSpeed, distancePerMin = holds[s][curPlayerName]
-                            writer.writerow({'deviceID':d, 'email':curPlayerEmail, 'date':s[0], 'teamID':teamID, 'distance':distance, 'sprintDistance':sprintDistance, 'energy':energy, 'playerLoad':playerLoad, 'topSpeed':topSpeed, 'distancePerMin':distancePerMin})
+                            writer.writerow({'deviceID':d, 'email':curPlayerEmail, 'sessionID':s[0], 'teamID':teamID, 'distance':distance, 'sprintDistance':sprintDistance, 'energy':energy, 'playerLoad':playerLoad, 'topSpeed':topSpeed, 'distancePerMin':distancePerMin})
         
             # stats per player, per session (where each player has identifying deviceID and email, each session has identifying date and teamID)
     def createDevices():
-        with open("devices.csv", mode='w') as toWrite:
+        with open("device.csv", mode='w') as toWrite:
             fields = ['deviceID']
             writer = csv.DictWriter(toWrite, fieldnames=fields)
             writer.writeheader()
             for d in devices:
                 writer.writerow({'deviceID': d})
     
-
 
     createPlayers()
     createSessions()

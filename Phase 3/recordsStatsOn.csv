@@ -1,4 +1,4 @@
-deviceID,email,date,teamID,distance,sprintDistance,energy,playerLoad,topSpeed,distancePerMin
+deviceID,email,sessionID,teamID,distance,sprintDistance,energy,playerLoad,topSpeed,distancePerMin
 92216,bking23@amherst.edu,45161,MSOC,8798.031,503.1864,491.1382,386.6329,16.5187,66.9389
 92216,bking23@amherst.edu,45162,MSOC,8640.918,618.8039,499.5329,376.0928,15.9172,78.5676
 92216,bking23@amherst.edu,45165,MSOC,7221.829,709.497,413.0961,294.1396,16.6728,72.435
