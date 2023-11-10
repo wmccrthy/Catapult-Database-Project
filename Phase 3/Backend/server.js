@@ -1,0 +1,165 @@
+const express = require("express")
+const cors = require("cors")
+const client = require("./db")
+// const { query } = require("express")
+
+const app = express()
+
+app.use(express.json())
+app.use(cors())
+
+app.listen(4000, () => console.log("server on local host 4000"))
+
+// ==============================================================
+// API ENDPOINTS 
+
+// endpoint for retrieving data from project db (prompts select operation according to query variable)
+// AS OF 11/6: works as intended 
+app.get("/select", async (req, res) => {
+    // res.send("Select Request Received: " + req.body)
+    const table = req.query["table"]
+    const field = req.query["field"]
+    // try for condition 
+    const condition = req.query["condition"]
+    if (condition) {
+        let queryData = await select(table, field, condition); 
+        res.send(queryData);
+    } else {
+        let queryData = await select(table, field); 
+        res.send(queryData);
+    }
+})
+
+// endpoint for inserting data into project db (prompts insert operation according to query variable)
+// NEEDS TO BE TESTED 
+app.post("/insert", async (req, res) => {
+    console.log(req.body)
+    res.send("Insert Request Received: " + req.body)
+    // console.log(req.query["table"])
+    const table = req.query["table"]
+    const field = req.query["field"]
+    const values = req.query["values"]
+    // try for condition 
+    const condition = req.query["condition"]
+    if (condition) {
+        let queryData = await insert(table, field, values, condition);
+        res.send(queryData);
+    } else {
+        let queryData = await insert(table, field, values);
+        res.send(queryData);
+    }
+})
+
+// 
+// NEEDS TO BE TESTED
+app.put("/update", async (req, res) => {
+    console.log(req.body)
+    res.send("Update Request Received: " + req.body)
+    // console.log(req.query["table"])
+    const table = req.query["table"]
+    const field = req.query["field"]
+    const values = req.query["values"]
+    const condition = req.query["condition"]
+    let queryData = await update(table, field, values, condition);
+    res.json(queryData);
+})
+
+
+// endpoint for updating data into project db (prompts update operation according to query variable)
+
+
+
+
+
+// =======================================================================
+// SQL FUNCTIONS 
+async function select (table, field, condition = null) {
+    var queryData = [];
+
+    // var config = "";
+    // var configNum = 1;
+    // for (let i of field.split(", ")) {
+    //     config += `$${configNum},`
+    //     configNum+=1
+    // }
+    // config = `(${config.substring(0, config.length-2)})`
+    
+    try {
+        if(condition == null) {
+            let q = `SELECT ${field} FROM ${table};`;
+            console.log(`RUNNING QUERY: ${q}`)
+            queryData = await client.query(q);
+        } else {
+            if (condition.includes("LIKE")) {
+                // reformat bc of annoying shit where URL misinterprets %
+                var unformattedCond = condition.split(" ")
+                unformattedCond[2] = `'%${unformattedCond[2]}%'`
+                condition = unformattedCond.join(" ");
+            }
+
+            let q = `SELECT ${field} FROM ${table} WHERE ${condition};`;
+            console.log(`RUNNING QUERY: ${q}`)
+            queryData = await client.query(q);
+        }
+        console.log(queryData)
+        console.log(queryData.rows);
+        console.log(`SELECTED FROM ${table}`)
+    } catch(err) {
+        console.error(err);
+    } finally {
+        console.log("SELECT RETURNING")
+        console.log(queryData.rows)
+        return queryData.rows;
+    }
+} 
+
+async function insert (table, field, values, condition = null) {
+    values = `(${values})`
+    try {
+        if(condition == null) {
+            let q = `INSERT INTO ${table} ${field} VALUES ${values} RETURNING *;`;
+            client.query(q, (err, res) => {
+                console.log(`RUNNING QUERY: ${q}`)
+                if (!err) {
+                    console.log(res.rows);
+                    console.log(`INSERTED INTO ${table}`)
+                } else {
+                    console.log(err.message);
+                }
+            });
+        } else {
+            let q = `INSERT INTO ${table} ${field} VALUES ${values} WHERE ${condition} RETURNING *;`;
+            client.query(q, (err, res) => {
+                console.log(`RUNNING QUERY: ${q}`)
+                if (!err) {
+                    console.log(res.rows);
+                    console.log(`INSERTED INTO ${table}`)
+                } else {
+                    console.log(err.message);
+                }
+            });
+        }
+    } catch(err) {
+        console.error(err);
+    }
+} 
+
+
+async function update(table, field, values, condition) {
+    // if (field != '*') {field = `(${field})`};
+    values = `(${values})`;
+
+    var queryData = [];
+    try {
+        let q = `UPDATE ${table} SET ${field}=${values} WHERE ${condition};`;
+        console.log(`RUNNING QUERY: ${q}`)
+        queryData = await client.query(q);
+        console.log(queryData.rows);
+    } catch(err) {
+        console.error(err);
+    } finally {
+        console.log("UPDATE RETURNING")
+        console.log(queryData.rows)
+        return queryData.rows;
+    }
+}
