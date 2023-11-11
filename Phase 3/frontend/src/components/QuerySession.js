@@ -95,7 +95,7 @@ const QuerySession = () => {
         <input id="sessionInp" className="w-full h-8 text-s text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none rounded-t-md" type="text" placeholder="Month Day Year" onChange={function (e) {
             setFilter(e.target.value);
             console.log(e);
-            console.log(sessionFilter)
+            console.log(sessionFilter);
             getSessions();
             filterList();
         }} onKeyUp={function () {
@@ -104,7 +104,7 @@ const QuerySession = () => {
             filterList();
         } } />
 
-        <div className="max-h-72 w-full overflow-scroll">
+        <div className="max-h-96 w-full overflow-y-scroll">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky top-0">
                     <tr>

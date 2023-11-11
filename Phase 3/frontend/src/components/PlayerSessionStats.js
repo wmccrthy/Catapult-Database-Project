@@ -1,74 +1,35 @@
 
 // TABLE WINDOW PROMPTED BY SELECTING VIEW STATS FROM THE "QUERYPLAYER" COMPONENT 
 
+// RATHER THAN OUTPUTTING TABLE -> OUTPUT BAR GRAPH W PLAYER DATA COMPARED TO SESSION AVERAGE DATA FOR EACH RELEVANT METRIC
+
+
 import { useState, useEffect } from "react";
 import React from "react";
+import PlayerSessionGraph from "./PlayerSessionGraph";
 
-const playerSessionStats = (props) => {
-    const stats = props.stats[0];
+const PlayerSessionStats = (props) => {
+    const playerStats = props.stats[0];
     const playerName = props.name;
-    const date = props.date;
-    console.log(stats);
-    if (stats == null) {
+    if (playerStats == null) {
         return (
             <div className="text-gray-500">{playerName} Has No Data for This Session</div>
-        )
-    }
-
-    // APPLIES FILTRATION TO PLAYER LIST BASED ON NAME INPUT
-    const filterList = () => {
-        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td className="px-6 py-4">{stats.distance}</td>
-                <td className="px-6 py-4">{stats.sprintdistance}</td>
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{stats.energy}</th>
-                <td className="px-6 py-4">{stats.topspeed}</td>
-                <td className="px-6 py-4">{stats.playerload}</td>
-        </tr>
-    }
-
+    )}
+    playerStats.email = props.name;
+    const averageStats = props.averages;
+    const totalData = []
+    totalData.push(averageStats)
+    totalData.push(playerStats)
+    const date = props.date;
+    console.log(playerStats);
+    console.log(averageStats);
 
     return (
         <div className="flex flex-col content-center items-center gap-5 w-full">
-            <div className="h-64 w-full mb-10">
-                <table className="w-full text-xs text-center text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky top-0">
-                        <tr>
-                            <th scope="col" className="px-6 py-3">
-                                Player
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Date
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Distance
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Sprint Distance
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Energy
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Top Speed
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Player Load
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <td className="px-6 py-4">{playerName}</td>
-                                <td className="px-6 py-4">{date}</td>
-                                <td className="px-6 py-4">{stats.distance}</td>
-                                <td className="px-6 py-4">{stats.sprintdistance}</td>
-                                <td className="px-6 py-4">{stats.energy}</td>
-                                <td className="px-6 py-4">{stats.topspeed}</td>
-                                <td className="px-6 py-4">{stats.playerload}</td>
-                            </tr>
-                    </tbody>
-            </table>
-            </div>
+             <h3 className="mt-1 text-center text-white font-semibold">{props.name} Data from {props.date}</h3>
+             <PlayerSessionGraph data={totalData} session={props.date} dataKeys={["distance", 'sprintdistance']} multiStat={true}></PlayerSessionGraph>
+            <PlayerSessionGraph data={totalData} session={props.date} dataKeys={['energy', 'playerload']} multiStat={true}></PlayerSessionGraph>
+            <PlayerSessionGraph data={totalData} session={props.date} dataKeys={['topspeed']} multiStat={false}></PlayerSessionGraph>
         </div>
         ) 
     }
@@ -76,4 +37,4 @@ const playerSessionStats = (props) => {
     
 
 
-export default playerSessionStats;
+export default PlayerSessionStats;
