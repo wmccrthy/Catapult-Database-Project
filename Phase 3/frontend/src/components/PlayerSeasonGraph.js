@@ -59,7 +59,7 @@ const PlayerSeasonGraph = (props) => {
         return (
             <div className="w-full flex flex-col justify-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
                     <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={800} height={400} data={data}>
-                        <XAxis dataKey="date" fontSize={8} angle={-25} dy={8}/>
+                        <XAxis dataKey="date" fontSize={8} angle={-20} dy={8}/>
                         <YAxis yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <Bar dataKey={dataKey1} yAxisId={"left"} barSize={650/data.length} fill="blue" />
@@ -72,7 +72,7 @@ const PlayerSeasonGraph = (props) => {
         return (
             <div className="w-full flex flex-col justify-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
                     <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={800} height={400} data={data}>
-                        <XAxis dataKey="date" fontSize={8} angle={-25} dy={8}/>
+                        <XAxis dataKey="date" fontSize={8} angle={-20} dy={8}/>
                         <YAxis yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <Bar dataKey={dataKey1} yAxisId={"left"} barSize={650/data.length} fill="blue" />
                         <Legend wrapperStyle={{bottom: 0}}></Legend>

@@ -1,6 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 const client = require("./db")
+const { response } = require("express")
 // const { query } = require("express")
 
 const app = express()
@@ -30,6 +31,13 @@ app.get("/select", async (req, res) => {
     }
 })
 
+app.get("/custom", async (req, res) => {
+    const customQuery = req.query["query"]
+    let queryData = await custom(customQuery);
+    res.send(queryData);
+})
+
+
 // endpoint for inserting data into project db (prompts insert operation according to query variable)
 // NEEDS TO BE TESTED 
 app.post("/insert", async (req, res) => {
@@ -50,7 +58,9 @@ app.post("/insert", async (req, res) => {
     }
 })
 
-// 
+
+
+// endpoint for updating data into project db (prompts update operation according to query variable)
 // NEEDS TO BE TESTED
 app.put("/update", async (req, res) => {
     console.log(req.body)
@@ -65,9 +75,6 @@ app.put("/update", async (req, res) => {
 })
 
 
-// endpoint for updating data into project db (prompts update operation according to query variable)
-
-
 
 
 
@@ -75,15 +82,6 @@ app.put("/update", async (req, res) => {
 // SQL FUNCTIONS 
 async function select (table, field, condition = null) {
     var queryData = [];
-
-    // var config = "";
-    // var configNum = 1;
-    // for (let i of field.split(", ")) {
-    //     config += `$${configNum},`
-    //     configNum+=1
-    // }
-    // config = `(${config.substring(0, config.length-2)})`
-    
     try {
         if(condition == null) {
             let q = `SELECT ${field} FROM ${table};`;
@@ -159,6 +157,22 @@ async function update(table, field, values, condition) {
         console.error(err);
     } finally {
         console.log("UPDATE RETURNING")
+        console.log(queryData.rows)
+        return queryData.rows;
+    }
+}
+
+async function custom(query) {
+    var queryData = [];
+    try {
+        console.log(`Running Query: ${query}`)
+        queryData = await client.query(query);
+        console.log(queryData)
+        console.log(queryData.rows);
+        console.log(`SELECTED FROM ${table}`)
+    } catch(err) {
+        console.error(err);
+    } finally {
         console.log(queryData.rows)
         return queryData.rows;
     }

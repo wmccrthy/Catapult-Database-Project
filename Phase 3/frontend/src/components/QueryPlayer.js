@@ -147,7 +147,7 @@ const QueryPlayer = (props) => {
                     </tbody>
             </table>
             </div>
-            <div className="w-full max-h-32 flex content-center justify-center mb-10">
+            <div className="w-full flex content-center justify-center mb-10">
                 {display}
             </div>
         </div>

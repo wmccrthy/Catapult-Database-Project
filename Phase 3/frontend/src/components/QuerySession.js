@@ -91,8 +91,9 @@ const QuerySession = () => {
     }, [])
 
     return (
-    <div className="flex flex-col content-center items-center w-3/5">
-        <input id="sessionInp" className="w-full h-8 text-s text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none rounded-t-md" type="text" placeholder="Month Day Year" onChange={function (e) {
+    <div className="flex flex-col content-center items-center w-3/5  border  border-gray-700">
+        <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg rounded-t-md  borderborder-gray-700">Session Data</h3>
+        <input id="sessionInp" className="w-full h-8 text-s text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
             setFilter(e.target.value);
             console.log(e);
             console.log(sessionFilter);
