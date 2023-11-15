@@ -11,7 +11,7 @@
 
 import { useState, useEffect } from "react";
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Area, AreaChart, Rectangle} from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
 
 const SessionGraph = (props) => {
@@ -127,14 +127,14 @@ const SessionGraph = (props) => {
                 setFilter(e.target.value)
                 filterData();
             }}></input>
-            <BarChart className="w-full mt-1 text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={800} height={400} data={data}>
-                <XAxis dataKey="email" fontSize={8} angle={-25} dy={8}/>
-                <YAxis yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
-                <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
-                <Bar dataKey={dataKey1} yAxisId={"left"} barSize={650/data.length} fill="blue" />
-                <Bar dataKey={dataKey2} yAxisId={"right"} barSize={650/data.length} fill="rgb(150, 150, 200)" />
-                <Legend wrapperStyle={{bottom: 0}}></Legend>
-                <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
+            <BarChart className="w-full mt-1 text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={visualViewport.width/2} height={400} data={data}>
+                    <XAxis dataKey="email" fontSize={8} angle={-25} dy={8}/>
+                    <YAxis yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
+                    <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
+                    <Bar dataKey={dataKey1} yAxisId={"left"} barSize={(visualViewport.width/2)/data.length} fill="blue" />
+                    <Bar dataKey={dataKey2} yAxisId={"right"} barSize={(visualViewport.width/2)/data.length} fill="rgb(150, 150, 200)" />
+                    <Legend wrapperStyle={{bottom: 0}}></Legend>
+                    <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
             </BarChart>
     </div>)
 }

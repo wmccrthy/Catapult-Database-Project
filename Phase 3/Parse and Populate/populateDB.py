@@ -41,6 +41,7 @@ def update(var, newVal, table, condition):
     DB.commit()
     return 
 
+
 def pad(newValues):
     check  = newValues.split(",")
     conv = [i for i in check]
@@ -55,6 +56,7 @@ def pad(newValues):
 
 def insertInto(table, fields, newValues):
     query = f'INSERT INTO {table} ({fields}) VALUES ({pad(newValues)});'
+    print(query)
     cur.execute(query)
     DB.commit()
     return 
@@ -66,6 +68,7 @@ def fillTable(tablePath, tableName):
         fields = playerRows.pop(0)
         for row in range(len(playerRows)):
             try: 
+                print(tableName + " Executing: ")
                 insertInto(tableName, fields, playerRows[row].replace("\n", ''))
             except: 
                 print("error | continuing ")
@@ -85,12 +88,12 @@ def updateTable(table, var):
             update(var, newVal, table, condition) 
 
 
-fillTable("/Users/wyattmccarthy/Desktop/Databases/Phase 3/Parse and Populate/session", "session")
+# fillTable("/Users/wyattmccarthy/Desktop/Databases/Catapult-Database-Project/Phase 3/Parse and Populate/session", "session")
 # fillTable("device")
-fillTable("/Users/wyattmccarthy/Desktop/Databases/Phase 3/Parse and Populate/holds", "holds")
+# fillTable("/Users/wyattmccarthy/Desktop/Databases/Catapult-Database-Project/Phase 3/Parse and Populate/holds", "holds")
 # fillTable("tracks")
-fillTable("/Users/wyattmccarthy/Desktop/Databases/Phase 3/Parse and Populate/participatesIn", "participatesIn")
-fillTable("/Users/wyattmccarthy/Desktop/Databases/Phase 3/Parse and Populate/recordsStatsOn", "recordsstatson")
+# fillTable("/Users/wyattmccarthy/Desktop/Databases/Catapult-Database-Project/Phase 3/Parse and Populate/participatesIn", "participatesIn")
+fillTable("/Users/wyattmccarthy/Desktop/Databases/Catapult-Database-Project/Phase 3/Parse and Populate/recordsStatsOn", "recordsstatson")
 
 # print(selectFrom("distancepermin, sessionid", "recordsStatsOn", "email='wmccarthy24@amherst.edu'"))
 # print()

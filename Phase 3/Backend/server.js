@@ -15,7 +15,6 @@ app.listen(4000, () => console.log("server on local host 4000"))
 // API ENDPOINTS 
 
 // endpoint for retrieving data from project db (prompts select operation according to query variable)
-// AS OF 11/6: works as intended 
 app.get("/select", async (req, res) => {
     // res.send("Select Request Received: " + req.body)
     const table = req.query["table"]
@@ -89,7 +88,7 @@ async function select (table, field, condition = null) {
             queryData = await client.query(q);
         } else {
             if (condition.includes("LIKE")) {
-                // reformat bc of annoying shit where URL misinterprets %
+                // reformat bc of annoying shit where URL misinterprets % symbol 
                 var unformattedCond = condition.split(" ")
                 unformattedCond[2] = `'%${unformattedCond[2]}%'`
                 condition = unformattedCond.join(" ");
@@ -169,7 +168,7 @@ async function custom(query) {
         queryData = await client.query(query);
         console.log(queryData)
         console.log(queryData.rows);
-        console.log(`SELECTED FROM ${table}`)
+        console.log(`Ran Query: ${query}`)
     } catch(err) {
         console.error(err);
     } finally {

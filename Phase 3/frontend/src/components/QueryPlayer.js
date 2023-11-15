@@ -35,28 +35,18 @@ const QueryPlayer = (props) => {
     }
 
     const getSessionAverages = async () => {
-        const players = await getPlayers(true);
-        var divisor = 0;
-        const sessionAvgs = {email:"session average", distance:0, sprintdistance:0, energy:0, playerload: 0, topspeed:0}
-        for (let p of players) {
-            // console.log(p)
-            var pStats = await getPlayerStats(p.email.replace("'", ""), session.replace("'", ""));
-            if (pStats.length != 0) {
-                pStats = pStats[0]
-                sessionAvgs.distance += pStats.distance;
-                sessionAvgs.sprintdistance += pStats.sprintdistance;
-                sessionAvgs.energy += pStats.energy;
-                sessionAvgs.playerload += pStats.playerload;
-                sessionAvgs.topspeed += pStats.topspeed;
-                divisor += 1;
-            }
+        const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE sessionid = '${session}';`
+        try {
+            var response = await fetch(`http://localhost:4000/custom?query=${averagesQuery}`);
+            const averageData = await response.json();
+            console.log("TESTING:")
+            // console.log(averageData);
+            averageData[0].email = "session average";
+            console.log(averageData)
+            return averageData[0];
+        } catch(err) {
+            console.error(err)
         }
-        sessionAvgs.distance /= divisor;
-        sessionAvgs.sprintdistance /= divisor;
-        sessionAvgs.energy /= divisor;
-        sessionAvgs.playerload /= divisor;
-        sessionAvgs.topspeed /= divisor;
-        return sessionAvgs;
     }
 
     // CALLED GETPLAYERS UPON INITIAL RENDERING SUCH THAT PLAYERLIST IS POPULATED ON SCREEN
@@ -147,7 +137,7 @@ const QueryPlayer = (props) => {
                     </tbody>
             </table>
             </div>
-            <div className="w-full flex content-center justify-center mb-10">
+            <div className="w-full flex content-center justify-center">
                 {display}
             </div>
         </div>

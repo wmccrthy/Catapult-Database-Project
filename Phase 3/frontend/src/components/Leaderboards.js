@@ -1,5 +1,5 @@
 import React from "react";
-import {useState, useEffect} from "react";
+import {useState, useEffect, ReactDOM} from "react";
 import PlayerSessionGraph from "./PlayerSessionGraph";
 
 
@@ -18,7 +18,6 @@ import PlayerSessionGraph from "./PlayerSessionGraph";
 
 
 // query for each stat perhaps? 
-
 const leaderQuery = async (stat) => {
     var query = `SELECT R.email, R.${stat} FROM recordsstatson R
     WHERE R.${stat} = (SELECT MAX(${stat}) FROM recordsstatson WHERE email = R.email) ORDER BY R.${stat} DESC;
@@ -40,7 +39,7 @@ const Leaderboards = () => {
 
     const [sessionList, setSessionList] = useState([]);
     const [display, setDisplay] = useState(<div></div>)
-
+    const [active, setActive] = useState(null)
     // const distanceLeaders = getLeaderBoard("distance");
     // const sprintLeaders = getLeaderBoard("sprintdistance");
     // const speedLeaders = getLeaderBoard("topspeed");
@@ -75,23 +74,47 @@ const Leaderboards = () => {
         
     }, [])
 
+    const toggleButton = (el) => {
+        if (active != null) {active.classList.toggle("leaderSelected")}
+        setActive(el)
+        el.classList.toggle("leaderSelected")
+    }
+
     return (
-    <div className="flex flex-col content-center items-center w-3/5  border  border-gray-700">
+    <div className="flex flex-col content-center items-center w-3/5 border border-gray-700">
         <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg rounded-t-md  borderborder-gray-700">Leaderboards</h3>
         <div className="max-h-156 w-full overflow-scroll flex flex-col content-center justify-evenly">
-            <div className="w-full flex justify-center text-center gap-10"> 
-                <button className="text-s text-gray-700 uppercase  dark:text-gray-400" onClick={async function() {
+            <div className="w-full flex items-center content-center justify-center text-center gap-10 mb-5"> 
+                <button className="leaderButton text-[1vw] text-gray-700 uppercase  dark:text-gray-400" onClick={async function(e) {
                     var data = await getLeaderBoard("distance");
                     setDisplay(<PlayerSessionGraph data={data} dataKeys={["distance"]}></PlayerSessionGraph>)
+                    toggleButton(e.target)
                 }}>Distance</button>
-                <button className="text-s text-gray-700 uppercase  dark:text-gray-400" onClick={async function() {
+                <button className="leaderButton text-[1vw] text-gray-700 uppercase  dark:text-gray-400" onClick={async function(e) {
                     var data = await getLeaderBoard("sprintdistance");
                     setDisplay(<PlayerSessionGraph data={data} dataKeys={["sprintdistance"]}></PlayerSessionGraph>)
+                    toggleButton(e.target)
                 }}>Sprint Distance</button>
-                <button className="text-s text-gray-700 uppercase  dark:text-gray-400" onClick={async function() {
+                 <button className="leaderButton text-[1vw] text-gray-700 uppercase  dark:text-gray-400" onClick={async function(e) {
+                    var data = await getLeaderBoard("distancepermin");
+                    setDisplay(<PlayerSessionGraph data={data} dataKeys={["distancepermin"]}></PlayerSessionGraph>)
+                    toggleButton(e.target)
+                }}>Distance/Min</button>
+                <button className="leaderButton text-[1vw] text-gray-700 uppercase  dark:text-gray-400" onClick={async function(e) {
                     var data = await getLeaderBoard("topspeed");
                     setDisplay(<PlayerSessionGraph data={data} dataKeys={["topspeed"]}></PlayerSessionGraph>)
+                    toggleButton(e.target)
                 }}>Speed</button>
+                 <button className="leaderButton text-[1vw] text-gray-700 uppercase  dark:text-gray-400" onClick={async function(e) {
+                    var data = await getLeaderBoard("energy");
+                    setDisplay(<PlayerSessionGraph data={data} dataKeys={["energy"]}></PlayerSessionGraph>)
+                    toggleButton(e.target)
+                }}>Energy</button>
+                 <button className="leaderButton text-[1vw] text-gray-700 uppercase  dark:text-gray-400" onClick={async function(e) {
+                    var data = await getLeaderBoard("playerload");
+                    setDisplay(<PlayerSessionGraph data={data} dataKeys={["playerload"]}></PlayerSessionGraph>)
+                    toggleButton(e.target)
+                }}>Player Load</button>
             </div>
             {display}
         </div>

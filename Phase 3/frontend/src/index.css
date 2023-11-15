@@ -15,3 +15,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.leaderButton {
+  transition: .4s all ease;
+  opacity: .35;
+}
+
+.leaderButton:hover {
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+.leaderSelected {
+  opacity: 1;
+  transform: scale(1.12);
+}
