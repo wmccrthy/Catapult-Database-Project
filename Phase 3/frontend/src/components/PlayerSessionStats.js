@@ -17,19 +17,22 @@ const PlayerSessionStats = (props) => {
     )}
     playerStats.email = props.name;
     const averageStats = props.averages;
+    const playerAvgStats = props.pAverages;
     const totalData = []
     totalData.push(averageStats)
     totalData.push(playerStats)
+    totalData.push(playerAvgStats);
     const date = props.date;
     console.log(playerStats);
     console.log(averageStats);
 
     return (
-        <div className="flex flex-col content-center items-center justify-center gap-5 w-full">
+        
+        <div id="cont" className="flex flex-col content-center items-center justify-center gap-5 w-full">
              <h3 className="mt-1 text-center text-white font-semibold">{props.name} Data from {props.date}</h3>
-             <PlayerSessionGraph data={totalData} session={props.date} dataKeys={["distance", 'sprintdistance']} multiStat={true}></PlayerSessionGraph>
-            <PlayerSessionGraph data={totalData} session={props.date} dataKeys={['energy', 'playerload']} multiStat={true}></PlayerSessionGraph>
-            <PlayerSessionGraph data={totalData} session={props.date} dataKeys={['topspeed']} multiStat={false}></PlayerSessionGraph>
+             <PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={totalData} session={props.date} dataKeys={["distance", 'sprintdistance']} multiStat={true}></PlayerSessionGraph>
+            <PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100}  data={totalData} session={props.date} dataKeys={['energy', 'playerload']} multiStat={true}></PlayerSessionGraph>
+            <PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100}  data={totalData} session={props.date} dataKeys={['topspeed']} multiStat={false}></PlayerSessionGraph>
         </div>
         ) 
     }

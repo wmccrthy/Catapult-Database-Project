@@ -42,6 +42,8 @@ def update(var, newVal, table, condition):
     return 
 
 
+
+
 def pad(newValues):
     check  = newValues.split(",")
     conv = [i for i in check]
@@ -93,7 +95,7 @@ def updateTable(table, var):
 # fillTable("/Users/wyattmccarthy/Desktop/Databases/Catapult-Database-Project/Phase 3/Parse and Populate/holds", "holds")
 # fillTable("tracks")
 # fillTable("/Users/wyattmccarthy/Desktop/Databases/Catapult-Database-Project/Phase 3/Parse and Populate/participatesIn", "participatesIn")
-fillTable("/Users/wyattmccarthy/Desktop/Databases/Catapult-Database-Project/Phase 3/Parse and Populate/recordsStatsOn", "recordsstatson")
+# fillTable("/Users/wyattmccarthy/Desktop/Databases/Catapult-Database-Project/Phase 3/Parse and Populate/recordsStatsOn", "recordsstatson")
 
 # print(selectFrom("distancepermin, sessionid", "recordsStatsOn", "email='wmccarthy24@amherst.edu'"))
 # print()

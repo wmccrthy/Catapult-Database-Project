@@ -10,6 +10,7 @@ const QueryPlayer = (props) => {
     const [nameFilter, setFilter] = useState("");
     const [playerList, setPlayerList] = useState([]);
     const [display, setDisplay] = useState(props.defData);
+    const seshType = props.type;
     const session = props.session;
     const sessionDate = props.date;
 
@@ -39,10 +40,27 @@ const QueryPlayer = (props) => {
         try {
             var response = await fetch(`http://localhost:4000/custom?query=${averagesQuery}`);
             const averageData = await response.json();
-            console.log("TESTING:")
-            // console.log(averageData);
             averageData[0].email = "session average";
             console.log(averageData)
+            return averageData[0];
+        } catch(err) {
+            console.error(err)
+        }
+    }
+    
+    // get players average stats for given session type (game or training)
+    const getPlayerAverages = async (playerEmail, playerName, sessionType) => {
+        sessionType = sessionType.replace(" ", "").replace("\n", "")
+        const relevantSessions = `SELECT sessionid FROM session WHERE type = '${sessionType}'`;
+        const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid IN (${relevantSessions});`
+        try {
+            var response = await fetch(`http://localhost:4000/custom?query=${averagesQuery}`);
+            // var testres = await fetch(`http://localhost:4000/custom?query=${relevantSessions}`);
+            // const testD = await testres.json();
+            // console.log(testres)
+            const averageData = await response.json();
+            averageData[0].email = `${playerName} ${sessionType} avg`;
+            // console.log(averageData)
             return averageData[0];
         } catch(err) {
             console.error(err)
@@ -78,10 +96,11 @@ const QueryPlayer = (props) => {
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{player.name}</th>
                 <td className="px-6 py-4">{player.email}</td>
                 <td className="px-6 py-4 flex"><button  onClick={async function () {
-                                var statArr = await getPlayerStats(player.email, session);
-                                var avgStatArr = await getSessionAverages();
-                                setDisplay(<PlayerSessionStats stats={statArr} averages={avgStatArr}  name={player.name} date={sessionDate}></PlayerSessionStats>);
-                                console.log(display);
+                                    var statArr = await getPlayerStats(player.email, session);
+                                    var avgStatArr = await getSessionAverages();
+                                    var playerAvgArr = await getPlayerAverages(player.email, player.name);
+                                    setDisplay(<PlayerSessionStats stats={statArr} averages={avgStatArr} pAverages={playerAvgArr} name={player.name} date={sessionDate}></PlayerSessionStats>);
+                                    console.log(display)
                                     // need to render new table displaying stats (new component)
                 }}>View Stats</button></td>
             </tr>
@@ -128,7 +147,8 @@ const QueryPlayer = (props) => {
                                 <td className="px-6 py-4 flex"><button  onClick={async function () {
                                     var statArr = await getPlayerStats(player.email, session);
                                     var avgStatArr = await getSessionAverages();
-                                    setDisplay(<PlayerSessionStats stats={statArr} averages={avgStatArr} name={player.name} date={sessionDate}></PlayerSessionStats>);
+                                    var playerAvgArr = await getPlayerAverages(player.email, player.name, seshType);
+                                    setDisplay(<PlayerSessionStats stats={statArr} averages={avgStatArr} pAverages={playerAvgArr} name={player.name} date={sessionDate}></PlayerSessionStats>);
                                     console.log(display)
                                     // need to render new table displaying stats (new component)
                                 }}>View Stats</button></td>

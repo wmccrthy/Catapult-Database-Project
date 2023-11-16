@@ -91,8 +91,8 @@ const QuerySession = () => {
     }, [])
 
     return (
-    <div className="flex flex-col content-center items-center w-3/5  border  border-gray-700">
-        <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg rounded-t-md  borderborder-gray-700">Session Data</h3>
+    <div id="cont" className="flex flex-col content-center items-center w-full border  border-gray-700">
+        <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg rounded-t-md">Session Data</h3>
         <input id="sessionInp" className="w-full h-8 text-s text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
             setFilter(e.target.value);
             console.log(e);
@@ -113,16 +113,16 @@ const QuerySession = () => {
                             Type
                         </th>
                         <th scope="col" className="px-6 py-3">
-                            Session ID
+                            Session_ID
                         </th>
                         <th scope="col" className="px-6 py-3">
                             Date
                         </th>
                         <th scope="col" className="px-6 py-3">
-                            View Player Stats
+                            Player Stats
                         </th>
                         <th scope="col" className="px-6 py-3">
-                            View All Stats
+                            All Stats
                         </th>
                     </tr>
                 </thead>
@@ -136,7 +136,7 @@ const QuerySession = () => {
                                 <td className="px-6 py-4">{session.date}</td>
                                 <td className="px-6 py-4"><button onClick={function () {
                                     // QueryPlayer
-                                    setDisplay(<QueryPlayer session={session.sessionid} date={session.date} defData={<div></div>}></QueryPlayer>)
+                                    setDisplay(<QueryPlayer type={session.type} session={session.sessionid} date={session.date} defData={<div></div>}></QueryPlayer>)
                                     console.log(display)
                                 }}>View Player Stats</button></td>
                                 <td className="px-6 py-4">
@@ -159,22 +159,13 @@ const QuerySession = () => {
                                             }
                                         }
                                         console.log(formatList);
+                                        var graphW = document.querySelector("#cont").offsetWidth-100;
                                         setDisplay(
                                             <div className="flex flex-col justify-center content-center">
                                                 <h3 className="mt-3 mb-3 text-center text-white font-bold">{session.type.toUpperCase()} from {session.date}</h3>
-                                                {/* <h3 className="text-center font-bold">{session.type.toUpperCase()} from {session.date}</h3>
-                                                <BarChart className="mt-1" width={800} height={400} data={formatList}>
-                                                    <XAxis dataKey="email" fontSize={8} dy={10}/>
-                                                    <YAxis yAxisId="left" orientation="left" stroke="#8884d8"></YAxis> 
-                                                    <YAxis yAxisId="right" orientation="right" stroke="green"></YAxis> 
-                                                    <Bar dataKey="distance" yAxisId={"left"} barSize={15} fill="#8884d8"/>
-                                                    <Bar dataKey="sprintdistance" yAxisId={"right"} barSize={15} fill="green"/>
-                                                    <Legend></Legend>
-                                                    <Tooltip></Tooltip>
-                                                </BarChart> */}
-                                                <SessionGraph data={formatList} session={session} dataKeys={["distance", 'sprintdistance']}></SessionGraph>
-                                                <SessionGraph data={formatList} session={session} dataKeys={['energy', 'playerload']}></SessionGraph>
-                                                <SessionGraph data={formatList} session={session} dataKeys={['topspeed']}></SessionGraph>
+                                                <SessionGraph width={graphW} data={formatList} session={session} dataKeys={["distance", 'sprintdistance']}></SessionGraph>
+                                                <SessionGraph  width={graphW} data={formatList} session={session} dataKeys={['energy', 'playerload']}></SessionGraph>
+                                                <SessionGraph  width={graphW} data={formatList} session={session} dataKeys={['topspeed']}></SessionGraph>
                                             </div>)
                                         console.log(display)
                                     }}>View All Stats</button>

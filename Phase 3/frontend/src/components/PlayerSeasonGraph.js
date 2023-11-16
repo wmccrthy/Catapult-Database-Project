@@ -5,6 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Area, AreaChart, Rectangl
 
 
 const PlayerSeasonGraph = (props) => {
+    const graphW = props.width;
     const [data, setData] = useState(props.data);
     console.log(data);
     const dataKey1 = props.dataKeys[0]
@@ -58,12 +59,12 @@ const PlayerSeasonGraph = (props) => {
     if (props.multiStat) {
         return (
             <div className="w-full flex flex-col justify-center items-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
-                    <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={visualViewport.width/2} height={400} data={data}>
-                        <XAxis dataKey="date" fontSize={8} angle={-20} dy={8}/>
+                    <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={400} data={data}>
+                        <XAxis dataKey="date" fontSize={8} angle={-10} dy={8}/>
                         <YAxis yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
-                        <Bar dataKey={dataKey1} yAxisId={"left"} barSize={(visualViewport.width/2)/data.length} fill="blue" />
-                        <Bar dataKey={dataKey2} yAxisId={"right"} barSize={(visualViewport.width/2)/data.length} fill="rgb(150, 150, 200)" />
+                        <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length*1.5} fill="blue" />
+                        <Bar dataKey={dataKey2} yAxisId={"right"} barSize={graphW/data.length*1.5} fill="rgb(150, 150, 200)" />
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
                         <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart>
@@ -71,10 +72,11 @@ const PlayerSeasonGraph = (props) => {
     } else {
         return (
             <div className="w-full flex flex-col justify-center items-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
-                    <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={visualViewport.width/2} height={400} data={data}>
-                        <XAxis dataKey="date" fontSize={8} angle={-20} dy={8}/>
+                    <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={400} data={data}>
+                        <XAxis dataKey="date" fontSize={8} angle={-10} dy={8}/>
                         <YAxis yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
-                        <Bar dataKey={dataKey1} yAxisId={"left"} barSize={(visualViewport.width/2)/data.length} fill="blue" />
+                        <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
+                        <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length} fill="blue" />
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
                         <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart>

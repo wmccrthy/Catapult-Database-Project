@@ -9,12 +9,13 @@
 //  - data keys (for bar values) (NEED TO MAKE THIS WORK NOW)
 
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
 
 const SessionGraph = (props) => {
+    const graphW = props.width;
     const session = props.session;
     const [data, setData] = useState(props.data);
     const dataKey1 = props.dataKeys[0]
@@ -127,12 +128,12 @@ const SessionGraph = (props) => {
                 setFilter(e.target.value)
                 filterData();
             }}></input>
-            <BarChart className="w-full mt-1 text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={visualViewport.width/2} height={400} data={data}>
+            <BarChart className="w-full mt-1 text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={400} data={data}>
                     <XAxis dataKey="email" fontSize={8} angle={-25} dy={8}/>
                     <YAxis yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                     <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
-                    <Bar dataKey={dataKey1} yAxisId={"left"} barSize={(visualViewport.width/2)/data.length} fill="blue" />
-                    <Bar dataKey={dataKey2} yAxisId={"right"} barSize={(visualViewport.width/2)/data.length} fill="rgb(150, 150, 200)" />
+                    <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length} fill="blue" />
+                    <Bar dataKey={dataKey2} yAxisId={"right"} barSize={graphW/data.length} fill="rgb(150, 150, 200)" />
                     <Legend wrapperStyle={{bottom: 0}}></Legend>
                     <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
             </BarChart>

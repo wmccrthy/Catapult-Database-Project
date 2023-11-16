@@ -15,6 +15,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Area, AreaChart, Rectangl
 
 
 const PlayerSessionGraph = (props) => {
+    const graphW = props.width;
     const session = props.session;
     const [data, setData] = useState(props.data);
     const dataKey1 = props.dataKeys[0]
@@ -68,12 +69,12 @@ const PlayerSessionGraph = (props) => {
     if (props.multiStat) {
         return (
             <div className="w-full flex flex-col justify-center items-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
-                    <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={visualViewport.width/2} height={450} data={data}>
-                        <XAxis dataKey="email" fontSize={8} angle={-25} dy={8}/>
+                    <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={450} data={data}>
+                        <XAxis dataKey="email" fontSize={8}  dy={8}/>
                         <YAxis yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
-                        <Bar dataKey={dataKey1} yAxisId={"left"} barSize={(visualViewport.width/2)/data.length} fill="blue" />
-                        <Bar dataKey={dataKey2} yAxisId={"right"} barSize={(visualViewport.width/2)/data.length} fill="rgb(150, 150, 200)" />
+                        <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length} fill="blue" />
+                        <Bar dataKey={dataKey2} yAxisId={"right"} barSize={graphW/data.length} fill="rgb(150, 150, 200)" />
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
                         <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart>
@@ -81,10 +82,10 @@ const PlayerSessionGraph = (props) => {
     } else {
         return (
             <div className="w-full flex flex-col justify-center items-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
-                    <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={visualViewport.width/2} height={450} data={data}>
-                        <XAxis dataKey="email" fontSize={8} angle={-25} dy={8}/>
+                    <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={450} data={data}>
+                        <XAxis dataKey="email" fontSize={8}  dy={8}/>
                         <YAxis yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
-                        <Bar dataKey={dataKey1} yAxisId={"left"} barSize={(visualViewport.width/2)/data.length} fill="blue" />
+                        <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length} fill="blue" />
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
                         <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart>

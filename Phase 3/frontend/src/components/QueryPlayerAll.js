@@ -42,13 +42,8 @@ const QueryPlayerAll = (props) => {
             var seshData = await getPlayerStats(playerEmail.replace("'", ""), session.sessionid.replace("'", ""));
             console.log(seshData)
             if (seshData.length > 0) {
-                var toAdd = {} 
+                var toAdd = seshData[0];
                 toAdd.date = session.date;
-                toAdd.distance = seshData[0].distance;
-                toAdd.sprintdistance = seshData[0].sprintdistance;
-                toAdd.energy = seshData[0].energy;
-                toAdd.playerload = seshData[0].playerload;
-                toAdd.topspeed = seshData[0].topspeed;
                 seasonStats.push(toAdd);
             }   
         }
@@ -64,6 +59,25 @@ const QueryPlayerAll = (props) => {
             return playerData;
         } catch(err) {
             console.log(err)
+        }
+    }
+
+ // get players average stats for given session type (game or training)
+    const getPlayerAverages = async (playerEmail, playerName, sessionType) => {
+        sessionType = sessionType.replace(" ", "").replace("\n", "")
+        const relevantSessions = `SELECT sessionid FROM session WHERE type = '${sessionType}'`;
+        const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid IN (${relevantSessions});`
+        try {
+            var response = await fetch(`http://localhost:4000/custom?query=${averagesQuery}`);
+            // var testres = await fetch(`http://localhost:4000/custom?query=${relevantSessions}`);
+            // const testD = await testres.json();
+            // console.log(testres)
+            const averageData = await response.json();
+            averageData[0].date = `${playerName} ${sessionType} avg`;
+            // console.log(averageData)
+            return averageData[0];
+        } catch(err) {
+            console.error(err)
         }
     }
     
@@ -97,7 +111,12 @@ const QueryPlayerAll = (props) => {
                                 // var statArr = await getPlayerStats(player.email, session);
                                 var sessionArr = await getSessions();
                                 var seasonStatArr = await getSeasonStats(player.email, sessionArr);
-                                setDisplay(<PlayerSeasonStats stats={seasonStatArr} name={player.name} date={sessionDate}></PlayerSeasonStats>);
+                                var trainingAvg = await getPlayerAverages(player.email, player.name, "training")
+                                var gameAvg = await getPlayerAverages(player.email, player.name, "game");
+                                var avgData = []
+                                avgData.push(gameAvg)
+                                avgData.push(trainingAvg)
+                                setDisplay(<PlayerSeasonStats averages={avgData} stats={seasonStatArr} name={player.name} date={sessionDate}></PlayerSeasonStats>);
                                 // need to render new table displaying stats (new component)
                 }}>View Stats</button></td>
             </tr>
@@ -108,8 +127,8 @@ const QueryPlayerAll = (props) => {
 
 
     return (
-        <div className="flex flex-col content-center items-center w-3/5 border border-gray-700">
-            <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg rounded-t-md border border- border-gray-700">Player Season Data</h3>
+        <div id="cont" className="flex flex-col content-center items-center w-full border border-gray-700">
+            <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg">Player Season Data</h3>
             <input id="playerInp" className="w-full h-8 text-s text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none" type="text" placeholder="Enter Player Name" onChange={function (e) {
                 setFilter(e.target.value);
                 console.log(e);
@@ -146,7 +165,12 @@ const QueryPlayerAll = (props) => {
                                     // var statArr = await getPlayerStats(player.email, session);
                                     var sessionArr = await getSessions();
                                     var seasonStatArr = await getSeasonStats(player.email, sessionArr);
-                                    setDisplay(<PlayerSeasonStats stats={seasonStatArr} name={player.name} date={sessionDate}></PlayerSeasonStats>);
+                                    var trainingAvg = await getPlayerAverages(player.email, player.name, "training")
+                                    var gameAvg = await getPlayerAverages(player.email, player.name, "game");
+                                    var avgData = []
+                                    avgData.push(gameAvg)
+                                    avgData.push(trainingAvg)
+                                    setDisplay(<PlayerSeasonStats averages={avgData} stats={seasonStatArr} name={player.name} date={sessionDate}></PlayerSeasonStats>);
                                     // need to render new table displaying stats (new component)
                                 }}>View Stats</button></td>
                             </tr>
