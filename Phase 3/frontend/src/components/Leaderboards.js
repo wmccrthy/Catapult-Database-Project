@@ -3,20 +3,6 @@ import {useState, useEffect, ReactDOM} from "react";
 import PlayerSessionGraph from "./PlayerSessionGraph";
 
 
-// display ranking of each player's highest score in each stat 
-
-// THINK OF SQL QUERY TO: 
-//  GET HIGHEST DISTANCE, SPRINT DISTANCE, ENERGY, PLAYERLOAD, TOP SPEED FOR EACH PLAYER 
-//  RETURNS TABLE OF PLAYER NAME-> TOP STATS
-
-// layout:
-// HEADER
-// then for each (distance, sprintdistance, energy, playerload, topspeed):
-    // sub header (stat)
-    // playerName - their stat 
-    // ....
-
-
 // query for each stat perhaps? 
 const leaderQuery = async (stat) => {
     var query = `SELECT R.email, R.${stat} FROM recordsstatson R

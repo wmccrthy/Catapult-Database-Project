@@ -165,7 +165,7 @@ const QueryPlayerAll = (props) => {
                                     // var statArr = await getPlayerStats(player.email, session);
                                     var sessionArr = await getSessions();
                                     var seasonStatArr = await getSeasonStats(player.email, sessionArr);
-                                    var trainingAvg = await getPlayerAverages(player.email, player.name, "training")
+                                    var trainingAvg = await getPlayerAverages(player.email, player.name, "training");
                                     var gameAvg = await getPlayerAverages(player.email, player.name, "game");
                                     var avgData = []
                                     avgData.push(gameAvg)
