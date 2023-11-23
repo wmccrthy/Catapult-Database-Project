@@ -30,3 +30,7 @@ code {
   opacity: 1;
   transform: scale(1.12);
 }
+
+.indic { 
+  transition: .4s all ease;
+}

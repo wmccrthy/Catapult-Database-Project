@@ -72,11 +72,12 @@ const QuerySession = () => {
     // UPDATES Session list variable to match user input filtering 
     const getSessions = async () => {
         try {
-            const condTest = `date ILIKE ${sessionFilter}`
-            var response = await fetch(`http://localhost:4000/select?table=session&field=date, sessionid, type`);
-            if (sessionFilter.replace(" ", "").length >= 1) {
-                response = await fetch(`http://localhost:4000/select?table=session&field=date, sessionid, type&condition=${condTest}`);
-            } 
+            const condTest = `date ILIKE ${sessionFilter} ORDER BY sessionid`
+            // var response = await fetch(`http://localhost:4000/select?table=session&field=date, sessionid, type`);
+            // if (sessionFilter.replace(" ", "").length >= 1) {
+            //     response = await fetch(`http://localhost:4000/select?table=session&field=date, sessionid, type&condition=${condTest}`);
+            // } 
+            var response = await fetch(`http://localhost:4000/select?table=session&field=date, sessionid, type&condition=${condTest}`);
             const sessionData = await response.json()
             console.log(sessionData)
             setSessionList(sessionData)
@@ -91,7 +92,7 @@ const QuerySession = () => {
     }, [])
 
     return (
-    <div id="cont" className="flex flex-col content-center items-center w-full border  border-gray-700">
+    <div id="cont" className="flex flex-col content-center items-center w-full border  border-gray-700 rounded-md">
         <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg rounded-t-md">Session Data</h3>
         <input id="sessionInp" className="w-full h-8 text-s text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
             setFilter(e.target.value);

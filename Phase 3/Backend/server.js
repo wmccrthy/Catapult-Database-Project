@@ -21,6 +21,7 @@ app.get("/select", async (req, res) => {
     const field = req.query["field"]
     // try for condition 
     const condition = req.query["condition"]
+
     if (condition) {
         let queryData = await select(table, field, condition); 
         res.send(queryData);
@@ -55,6 +56,12 @@ app.post("/insert", async (req, res) => {
         let queryData = await insert(table, field, values);
         res.send(queryData);
     }
+})
+
+app.post("/customInsert", async (req, res) => {
+    const customQuery = req.query["query"]
+    let queryData = await custom(customQuery);
+    res.send(queryData);
 })
 
 
