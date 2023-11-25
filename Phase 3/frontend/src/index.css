@@ -32,5 +32,7 @@ code {
 }
 
 .indic { 
-  transition: .4s all ease;
+  --tw-bg-opacity: 1;
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
+  border-radius: 0.75em;
 }
