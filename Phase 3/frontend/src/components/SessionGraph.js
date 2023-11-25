@@ -9,9 +9,9 @@
 //  - data keys (for bar values) (NEED TO MAKE THIS WORK NOW)
 
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect} from "react";
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer} from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Label} from 'recharts';
 
 
 const SessionGraph = (props) => {
@@ -24,6 +24,7 @@ const SessionGraph = (props) => {
     var units2 = null;
     if (dataKey1 == "distance") {
         units1 = "meters"
+        units2 = "meters"
     } else if (dataKey1 == "energy") {
         units1 = "calories"
         units2 = "work"
@@ -31,17 +32,9 @@ const SessionGraph = (props) => {
         units1 = "mph"
     }
     var graphDesc = null;
-    
     if (dataKey1 && dataKey2) {
         graphDesc = `${dataKey1} and ${dataKey2} per player`
-    } else {
-        graphDesc = `${dataKey1} per player`
-    } 
-    if (units1 && units2) {
-        graphDesc +=  `(${units1}, ${units2})`
-    } else {
-        graphDesc += `(${units1})`
-    }
+    } else {graphDesc = `${dataKey1} per player`} 
     
     useEffect (() => {
         if (data !== props.data) {
@@ -117,27 +110,49 @@ const SessionGraph = (props) => {
         return null;
       };
     
-
-    return (
-    <div className="w-full flex flex-col justify-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
-            <h3 className="mt-1 text-center text-white font-semibold">{graphDesc}</h3>
-            <input id="filter" className="w-full h-8 text-s text-center bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
-                setFilter(document.querySelector("#filter").value);
-                filterData();
-            }} onChange={function (e) {
-                setFilter(e.target.value)
-                filterData();
-            }}></input>
-            <BarChart className="w-full mt-1 text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={400} data={data}>
-                    <XAxis dataKey="email" fontSize={8} angle={-25} dy={8}/>
-                    <YAxis yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
-                    <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
-                    <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length} fill="blue" />
-                    <Bar dataKey={dataKey2} yAxisId={"right"} barSize={graphW/data.length} fill="rgb(150, 150, 200)" />
-                    <Legend wrapperStyle={{bottom: 0}}></Legend>
-                    <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
-            </BarChart>
-    </div>)
+    if (dataKey2 != null) {
+        return (
+            <div className="w-full flex flex-col justify-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
+                    <h3 className="mt-1 text-center text-white font-semibold">{graphDesc}</h3>
+                    <input id="filter" className="w-full h-8 text-s text-center bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
+                        setFilter(document.querySelector("#filter").value);
+                        filterData();
+                    }} onChange={function (e) {
+                        setFilter(e.target.value)
+                        filterData();
+                    }}></input>
+                    <BarChart className="w-full mt-1 text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={400} data={data}>
+                            <XAxis dataKey="email" fontSize={8} angle={-25} dy={8}/>
+                            <YAxis label={<Label angle={-90} dx={-30}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
+                            <YAxis label={<Label angle={-90} dx={20}>{`${dataKey2} (${units2})`}</Label>} yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
+                            <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length} fill="blue" />
+                            <Bar dataKey={dataKey2} yAxisId={"right"} barSize={graphW/data.length} fill="rgb(150, 150, 200)" />
+                            <Legend wrapperStyle={{bottom: 0}}></Legend>
+                            <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
+                    </BarChart>
+            </div>)
+    } else {
+        return (
+            <div className="w-full flex flex-col justify-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
+                    <h3 className="mt-1 text-center text-white font-semibold">{graphDesc}</h3>
+                    <input id="filter" className="w-full h-8 text-s text-center bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
+                        setFilter(document.querySelector("#filter").value);
+                        filterData();
+                    }} onChange={function (e) {
+                        setFilter(e.target.value)
+                        filterData();
+                    }}></input>
+                    <BarChart className="w-full mt-1 text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={400} data={data}>
+                            <XAxis dataKey="email" fontSize={8} angle={-25} dy={8}/>
+                            <YAxis label={<Label angle={-90} dx={-30}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
+                            <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
+                            <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length} fill="blue" />
+                            <Legend wrapperStyle={{bottom: 0}}></Legend>
+                            <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
+                    </BarChart>
+            </div>)
+    }
+    
 }
 
 export default SessionGraph;

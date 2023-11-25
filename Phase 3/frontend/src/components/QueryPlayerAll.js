@@ -11,8 +11,6 @@ const QueryPlayerAll = (props) => {
     const [nameFilter, setFilter] = useState("");
     const [playerList, setPlayerList] = useState([]);
     const [display, setDisplay] = useState(props.defData);
-    const session = props.session;
-    const sessionDate = props.date;
 
     // UPDATES PLAYER LIST STATE VARIABLE TO REPRESENT THE PLAYER LIST FILTERED BY NAME INPUT (QUERIES THE PLAYER TABLE OF DATABASE)
     const getPlayers = async (allPlayers = false) => {
@@ -35,30 +33,15 @@ const QueryPlayerAll = (props) => {
         }
     }
 
-    // create array of player stats across all sessions 
-    const getSeasonStats = async (playerEmail, sessionList) => {
-        var seasonStats = []
-        for (let session of sessionList) {
-            var seshData = await getPlayerStats(playerEmail.replace("'", ""), session.sessionid.replace("'", ""));
-            console.log(seshData)
-            if (seshData.length > 0) {
-                var toAdd = seshData[0];
-                toAdd.date = session.date;
-                seasonStats.push(toAdd);
-            }   
-        }
-        return seasonStats;
-    }
-    
-    // get player stats from one session
-    const getPlayerStats = async (playerEmail, session) => {
+    const getSeasonStats = async (playerEmail) => {
+        const query = `SELECT session.date, distance, sprintdistance, topspeed, energy, playerload FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE email = '${playerEmail}';`
         try {
-            const condTest = `email = '${playerEmail}' AND sessionid = '${session}'`
-            var response = await fetch(`http://localhost:4000/select?table=recordsstatson&field=distance, sprintdistance, energy, topspeed, playerload&condition=${condTest}`);
-            const playerData = await response.json();
-            return playerData;
+            var response = await fetch(`http://localhost:4000/custom?query=${query}`);
+            const seasonData = await response.json();
+            console.log(seasonData)
+            return seasonData;
         } catch(err) {
-            console.log(err)
+            console.error(err)
         }
     }
 
@@ -69,32 +52,12 @@ const QueryPlayerAll = (props) => {
         const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid IN (${relevantSessions});`
         try {
             var response = await fetch(`http://localhost:4000/custom?query=${averagesQuery}`);
-            // var testres = await fetch(`http://localhost:4000/custom?query=${relevantSessions}`);
-            // const testD = await testres.json();
-            // console.log(testres)
             const averageData = await response.json();
             averageData[0].date = `${playerName} ${sessionType} avg`;
             // console.log(averageData)
             return averageData[0];
         } catch(err) {
             console.error(err)
-        }
-    }
-    
-    // get all sessions 
-    const getSessions = async () => {
-        try {
-            const condTest = `date ILIKE ${''} ORDER BY sessionid`
-            // var response = await fetch(`http://localhost:4000/select?table=session&field=date, sessionid, type`);
-            // if (sessionFilter.replace(" ", "").length >= 1) {
-            //     response = await fetch(`http://localhost:4000/select?table=session&field=date, sessionid, type&condition=${condTest}`);
-            // } 
-            var response = await fetch(`http://localhost:4000/select?table=session&field=date, sessionid, type&condition=${condTest}`);
-            const sessionData = await response.json()
-            console.log(sessionData)
-            return sessionData;
-        } catch(err) {
-            console.log(err)
         }
     }
     
@@ -113,15 +76,14 @@ const QueryPlayerAll = (props) => {
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{player.name}</th>
                 <td className="px-6 py-4">{player.email}</td>
                 <td className="px-6 py-4 flex"><button  onClick={async function () {
-                                // var statArr = await getPlayerStats(player.email, session);
-                                var sessionArr = await getSessions();
-                                var seasonStatArr = await getSeasonStats(player.email, sessionArr);
-                                var trainingAvg = await getPlayerAverages(player.email, player.name, "training")
+                                var trainingAvg = await getPlayerAverages(player.email, player.name, "training");
                                 var gameAvg = await getPlayerAverages(player.email, player.name, "game");
                                 var avgData = []
                                 avgData.push(gameAvg)
                                 avgData.push(trainingAvg)
-                                setDisplay(<PlayerSeasonStats averages={avgData} stats={seasonStatArr} name={player.name} date={sessionDate}></PlayerSeasonStats>);
+                                var seasonStatArr = await getSeasonStats(player.email)
+                                // console.log(seasonStatArr)
+                                setDisplay(<PlayerSeasonStats averages={avgData} stats={seasonStatArr} name={player.name}></PlayerSeasonStats>);
                                 // need to render new table displaying stats (new component)
                 }}>View Stats</button></td>
             </tr>
@@ -167,15 +129,14 @@ const QueryPlayerAll = (props) => {
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{player.name}</th>
                                 <td className="px-6 py-4">{player.email}</td>
                                 <td className="px-6 py-4 flex"><button  onClick={async function () {
-                                    // var statArr = await getPlayerStats(player.email, session);
-                                    var sessionArr = await getSessions();
-                                    var seasonStatArr = await getSeasonStats(player.email, sessionArr);
                                     var trainingAvg = await getPlayerAverages(player.email, player.name, "training");
                                     var gameAvg = await getPlayerAverages(player.email, player.name, "game");
                                     var avgData = []
                                     avgData.push(gameAvg)
                                     avgData.push(trainingAvg)
-                                    setDisplay(<PlayerSeasonStats averages={avgData} stats={seasonStatArr} name={player.name} date={sessionDate}></PlayerSeasonStats>);
+                                    var seasonStatArr = await getSeasonStats(player.email)
+                                    // console.log(seasonStatArr)
+                                    setDisplay(<PlayerSeasonStats averages={avgData} stats={seasonStatArr} name={player.name}></PlayerSeasonStats>);
                                     // need to render new table displaying stats (new component)
                                 }}>View Stats</button></td>
                             </tr>
@@ -189,7 +150,5 @@ const QueryPlayerAll = (props) => {
         </div>
         ) 
     }
-
-    
 
 export default QueryPlayerAll;

@@ -74,7 +74,7 @@ const Leaderboards = () => {
     }
 
     return (
-    <div className="flex flex-col content-center items-center align-center w-4/5 border border-gray-700">
+    <div className="flex flex-col content-center items-center align-center w-11/12 border border-gray-700 rounded-t-md">
         <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg rounded-t-md">Leaderboards</h3>
         <div id="cont" className="max-h-156 w-full overflow-scroll flex flex-col content-center items-center justify-evenly">
             <h4 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-gray-400 font-bold text-lg rounded-t-md m-1">Highest Recorded Stats</h4>

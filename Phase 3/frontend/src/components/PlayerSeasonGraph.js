@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Area, AreaChart, Rectangle} from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Label} from 'recharts';
 
 
 const PlayerSeasonGraph = (props) => {
@@ -14,6 +14,7 @@ const PlayerSeasonGraph = (props) => {
     var units2 = null;
     if (dataKey1 == "distance") {
         units1 = "meters"
+        units2 = "meters"
     } else if (dataKey1 == "energy") {
         units1 = "calories"
         units2 = "work"
@@ -61,8 +62,8 @@ const PlayerSeasonGraph = (props) => {
             <div className="w-full flex flex-col justify-center items-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
                     <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={400} data={data}>
                         <XAxis dataKey="date" fontSize={8} angle={-10} dy={8}/>
-                        <YAxis yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
-                        <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
+                        <YAxis label={<Label angle={-90} dx={-30}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
+                        <YAxis label={<Label angle={-90} dx={25}>{`${dataKey2} (${units2})`}</Label>} yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length*1.5} fill="blue" />
                         <Bar dataKey={dataKey2} yAxisId={"right"} barSize={graphW/data.length*1.5} fill="rgb(150, 150, 200)" />
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
@@ -74,7 +75,7 @@ const PlayerSeasonGraph = (props) => {
             <div className="w-full flex flex-col justify-center items-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
                     <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={400} data={data}>
                         <XAxis dataKey="date" fontSize={8} angle={-10} dy={8}/>
-                        <YAxis yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
+                        <YAxis label={<Label angle={-90} dx={-10}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length} fill="blue" />
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
