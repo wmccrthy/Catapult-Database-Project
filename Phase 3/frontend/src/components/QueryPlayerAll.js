@@ -94,7 +94,7 @@ const QueryPlayerAll = (props) => {
 
 
     return (
-        <div id="cont" className="flex flex-col content-center items-center w-full border border-gray-700 rounded-md overflow-y-scroll min-h-96">
+        <div id="cont" className="flex flex-col content-center items-center w-full border border-gray-700 rounded-md min-h-96">
             <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg rounded-t-md">Player Season Data</h3>
             <input id="playerInp" className="w-full h-8 text-s text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none" type="text" placeholder="Enter Player Name" onChange={function (e) {
                 setFilter(e.target.value);
@@ -108,7 +108,7 @@ const QueryPlayerAll = (props) => {
                 filterList();
             } } />
     
-            <div className="max-h-96 w-full overflow-y-scroll">
+            <div className="max-h-96 w-full overflow-y-auto">
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky top-0">
                         <tr>

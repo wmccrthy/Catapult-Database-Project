@@ -42,7 +42,7 @@ const Tabs = () => {
     }
 
     return (
-        <div className="flex items-center w-full min-h-full justify-evenly overflow-y-scroll">
+        <div className="flex items-center w-full min-h-full justify-evenly">
             {/* <div id="nav" className="mb-10 overflow-hidden flex align-center justify-between w-7/12 h-16 bg-gray-50 border border-t-0 border-gray-300 text-gray-900 text-sm font-bold rounded-b-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white relative">
                 <button className="h-full w-full hover:text-gray-500" onClick={(e) => {
                     handleClick(<QueryPlayerAll/>, e)
@@ -64,36 +64,36 @@ const Tabs = () => {
                     handleClick(<QueryPlayerAll/>, e)
                 }}>
                     <div className="group flex items-center align-center overflow-visible">
-                        <IoIosMan size="60" className="hover:rounded-xl hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Players")}}></IoIosMan>
-                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute left-20 bg-gray-300 scale-0 transition duration-300 text-gray-900 font-light rounded-xl">{hovText}</span>
+                        <IoIosMan size="60" className="hover:rounded-md hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Players")}}></IoIosMan>
+                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute left-20  scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-sm font-light rounded-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
                     </div>
                 </button>
                 <button className="h-fit w-full flex items-center justify-center" onClick={(e) => {
                     handleClick(<QuerySession/>, e)
                 }}>
                     <div className="group flex items-center align-center overflow-visible">
-                        <IoCalendarSharp size="60" className="hover:rounded-xl hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Sessions")}}></IoCalendarSharp>
-                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute left-20 bg-gray-300 scale-0 transition duration-300 text-gray-900 font-light rounded-xl">{hovText}</span>
+                        <IoCalendarSharp size="60" className="hover:rounded-md hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Sessions")}}></IoCalendarSharp>
+                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute left-20  scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-sm font-light rounded-lg  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
                     </div>
                 </button>
                 <button className="w-full h-fit flex items-center justify-center"onClick={(e) => {
                     handleClick(<Leaderboards/>, e)
                 }}>
                     <div className="group flex items-center align-center overflow-visible">
-                        <FaTrophy size="60" className="hover:rounded-xl hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Leaderboards")}}></FaTrophy>
-                        <span className="group-hover:scale-100 w-24 flex items-center justify-center h-7 absolute left-20 bg-gray-300 scale-0 transition duration-300 text-gray-900 font-light rounded-xl">{hovText}</span>
+                        <FaTrophy size="60" className="hover:rounded-md hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Leaderboards")}}></FaTrophy>
+                        <span className="group-hover:scale-100 w-24 flex items-center justify-center h-7 absolute left-20  scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-xs font-light rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
                     </div>
                 </button>
                 <button className="h-fit w-full flex items-center justify-center" onClick={(e) => {
                     handleClick(<DataKey/>, e)
                 }}>
                     <div className="group flex items-center align-center overflow-visible">
-                        <FaPlus size="60" className="hover:rounded-xl hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Add Data")}}></FaPlus>
-                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute left-20 bg-gray-300 scale-0 transition duration-300 text-gray-900 font-light rounded-xl">{hovText}</span>
+                        <FaPlus size="60" className="hover:rounded-md hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Add Data")}}></FaPlus>
+                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute left-20  scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-sm font-light rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
                     </div>
                 </button>
             </div>
-            <div className="w-9/12 overflow-y-scroll flex items-center align-center justify-center">
+            <div className="w-9/12 flex items-center align-center justify-center">
                 {active}
             </div>
         </div>

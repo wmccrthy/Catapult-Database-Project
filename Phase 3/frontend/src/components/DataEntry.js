@@ -18,10 +18,6 @@ const DataEntry = () => {
     const mpsTOmph  = 2.23694;
     const [data, setData] = useState([])
     const [teamid, setTeamid] = useState('')
-    // const [sessionRelation, setSessionRelation] = useState()
-    // const [holdsRelation, setHoldsRelation] = useState()
-    // const [participatesRelation, setParticipatesRelation] = useState()
-    // const [recordsStatsRelation, setRecordsStatsRelation] = useState()
 
     const handleFileUpload = async (e) => {
         const dataFile = e.target.files[0]
@@ -155,24 +151,66 @@ const DataEntry = () => {
         //      - we want to convert the following: distance/sprintdistance/distancepermin (yards), top speed (mph)
     }
 
+
+    const parsePlayerAddition = async () => {
+        const inputs = document.querySelector("#player-inp").querySelectorAll("input")
+        var pName = inputs[0].value
+        var pEmail = inputs[1].value
+        var dID = inputs[2].value 
+        var season = inputs[3].value 
+        var queries = []
+        var playerQuery = `INSERT INTO player (email, name) VALUES ('${pEmail}', '${pName}')`; var deviceQuery = `INSERT INTO device (deviceid) VALUES ('${dID}')`; var tracksQuery = `INSERT INTO tracks (deviceid, email, season) VALUES ('${dID}', '${pEmail}', '${season}')`;
+        queries.push(playerQuery, deviceQuery, tracksQuery)
+        for (var q of queries) {
+            try {
+                var insert = await fetch(`http://localhost:4000/customInsert?query=${q}`, {
+                    method: "POST"
+                })
+                var success = await insert.json()
+                console.log(success)
+            } catch (err) {
+                console.error(err)
+            }
+        }        
+    }
+
     return (
         <div className="flex p-4 rounded-md flex-col items-center content-center">
-            <div className="flex mb-5 items-center gap-2 text-white font-light">
-                <input type="file" accept=".csv" onInput={async function (e) {
-                    await handleFileUpload(e)
-                    // console.log(data)
-                }} className="w-1/8  text-s  text-gray-700  dark:text-gray-400 outline-none"></input>
-               <h6 className="text-center">Team ID</h6>
-               <select id="teamID" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={null}>
-                <option value="MSOC">MSOC</option>
-                <option value="WSOC">WSOC</option>
-                {/* <option value="game"></option> */}
-            </select>
+            <div className="mb-10 flex flex-col items-center">
+                <h5 className="text-white text-center">Upload Session Data</h5>
+                <div className="flex mb-5 items-center gap-2 text-white font-light">
+                    <input type="file" accept=".csv" onInput={async function (e) {
+                        await handleFileUpload(e)
+                        // console.log(data)
+                    }} className="w-1/8  text-s  text-gray-700  dark:text-gray-400 outline-none"></input>
+                <h6 className="text-center">Team ID</h6>
+                <select id="teamID" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={null}>
+                    <option value="MSOC">MSOC</option>
+                    <option value="WSOC">WSOC</option>
+                    {/* <option value="game"></option> */}
+                </select>
+                </div>
+                <button className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
+                    await parseData(data)
+                }}>Upload</button>
             </div>
-            <button className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
-                await parseData(data)
-            }}>Upload</button>
-              </div>
+            <div id="player-inp" className="flex flex-col items-center gap-2">
+                <h6 className="text-center text-white font-light">Add Players</h6>
+                <div className="flex items-center gap-2">
+                    <input type="text" placeholder="Player Name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    </input>
+                    <input type="text" placeholder="Player Email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">  
+                    </input>
+                    <input type="text" placeholder="Paired Device ID" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    </input>
+                    <input type="text" placeholder="Season(ex. Fall23)" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    </input>
+                </div>
+                <button className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
+                    await parsePlayerAddition()
+                }}>Add</button>
+            </div>
+        </div>
         
     )
 }
