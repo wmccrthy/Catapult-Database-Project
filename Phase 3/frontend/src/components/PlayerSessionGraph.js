@@ -22,15 +22,15 @@ const PlayerSessionGraph = (props) => {
     const dataKey2 = props.dataKeys[1]
     var units1 = null;
     var units2 = null;
-    if (dataKey1 == "distance") {
-        units1 = "meters"
-        units2 = "meters"
+    if (dataKey1 == "distance" | dataKey1 === "sprintdistance") {
+        units1 = "yards"
+        units2 = "yards"
     } else if (dataKey1 == "energy") {
         units1 = "calories"
         units2 = "work"
     } else if (dataKey1 == "topspeed") {
         units1 = "mph"
-    } else if (dataKey1 == "distancepermin") {units1 = "meters/second"}
+    } else if (dataKey1 == "distancepermin") {units1 = "yards/second"}
     
     useEffect (() => {
         if (data !== props.data) {

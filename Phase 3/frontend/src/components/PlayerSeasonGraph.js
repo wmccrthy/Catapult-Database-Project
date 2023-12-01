@@ -13,8 +13,8 @@ const PlayerSeasonGraph = (props) => {
     var units1 = null;
     var units2 = null;
     if (dataKey1 == "distance") {
-        units1 = "meters"
-        units2 = "meters"
+        units1 = "yards"
+        units2 = "yards"
     } else if (dataKey1 == "energy") {
         units1 = "calories"
         units2 = "work"

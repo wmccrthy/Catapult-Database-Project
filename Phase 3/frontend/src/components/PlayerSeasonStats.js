@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import PlayerSessionGraph from "./PlayerSessionGraph";
 import PlayerSeasonGraph from "./PlayerSeasonGraph";
+import { motion } from "framer-motion";
 
 const PlayerSeasonStats = (props) => {
     const playerStats = props.stats;
@@ -12,7 +13,7 @@ const PlayerSeasonStats = (props) => {
     console.log(playerStats);
 
     return (
-        <div id="cont" className="flex flex-col content-center justify-center items-center gap-5 w-full">
+        <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  id="cont" className="flex flex-col content-center justify-center items-center gap-5 w-full">
              <h3 className="mt-3 mb-3 text-center text-white font-bold">{playerName} Data Across Season</h3>
              <PlayerSeasonGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={playerStats} dataKeys={["distance", 'sprintdistance']} multiStat={true}></PlayerSeasonGraph>
              <PlayerSeasonGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={playerStats}  dataKeys={['energy', 'playerload']} multiStat={true}></PlayerSeasonGraph>
@@ -22,7 +23,7 @@ const PlayerSeasonStats = (props) => {
              <PlayerSeasonGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData}  dataKeys={["distance", 'sprintdistance']} multiStat={true}></PlayerSeasonGraph>
              <PlayerSeasonGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData} dataKeys={['energy', 'playerload']} multiStat={true}></PlayerSeasonGraph>
              <PlayerSeasonGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData} dataKeys={['topspeed']} multiStat={false}></PlayerSeasonGraph>
-        </div>
+        </motion.div>
         ) 
     }
 

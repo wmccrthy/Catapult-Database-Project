@@ -5,6 +5,7 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import PlayerSessionStats from "./PlayerSessionStats";
+import { motion } from "framer-motion";
 
 const QueryPlayer = (props) => {
     const [nameFilter, setFilter] = useState("");
@@ -111,7 +112,7 @@ const QueryPlayer = (props) => {
 
 
     return (
-        <div className="flex flex-col content-center items-center w-full">
+        <motion.div className="flex flex-col content-center items-center w-full">
             <input id="playerInp" className="w-full h-8 text-s text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none" type="text" placeholder="Enter Player Name" onChange={function (e) {
                 setFilter(e.target.value);
                 console.log(e);
@@ -160,7 +161,7 @@ const QueryPlayer = (props) => {
             <div className="w-full flex content-center justify-center">
                 {display}
             </div>
-        </div>
+        </motion.div>
         ) 
     }
 

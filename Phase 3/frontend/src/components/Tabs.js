@@ -13,6 +13,7 @@ import { IoIosMan } from "react-icons/io";
 import { IoCalendarSharp } from "react-icons/io5";
 import { FaTrophy } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa";
+import {motion} from "framer-motion";
 
 const Tabs = () => {
     const [active, setActive] = useState(<div></div>)
@@ -21,12 +22,14 @@ const Tabs = () => {
 
     const handleClick = (element, bt) => {
         // set active tab to clicked button's associated window 
-        setActive(element)
+        var animatedDiv = <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:0.75}}> {element} </motion.div>
+        setActive(element);
         console.log(bt)
         // document.querySelector("#indicator").style.left = left;
         bt.currentTarget.querySelector("svg").classList.toggle("indic")
         if (toggle != null) { toggle.classList.toggle("indic") }
         setToggle(bt.currentTarget.querySelector("svg"))
+
         // console.log(bt.target)
         // console.log(document.querySelector("#indicator"))
         // var xPos = bt.getBoundingClientRect().top - (bt.getBoundingClientRect().bottom - bt.getBoundingClientRect().top)
@@ -42,7 +45,7 @@ const Tabs = () => {
     }
 
     return (
-        <div className="flex items-center w-full min-h-full justify-evenly">
+        <div className="flex w-full min-h-full h-full justify-evenly">
             {/* <div id="nav" className="mb-10 overflow-hidden flex align-center justify-between w-7/12 h-16 bg-gray-50 border border-t-0 border-gray-300 text-gray-900 text-sm font-bold rounded-b-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white relative">
                 <button className="h-full w-full hover:text-gray-500" onClick={(e) => {
                     handleClick(<QueryPlayerAll/>, e)
@@ -58,14 +61,14 @@ const Tabs = () => {
                 }}>Data Entry</button>
                 
             </div> */}
-            <div id="nav" className="fixed top-0 left-0 flex flex-col align-center justify-evenly w-20 h-full  bg-gray-50 border-r  border-gray-300 text-gray-900 text-sm font-bold dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+            <div id="nav" className="fixed top-0 left-0 flex flex-col align-center justify-evenly w-20 h-full  bg-gray-800 border-r  border-gray-300 text-gray-900 text-sm font-bold dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                 {/* <div id="indicator" className="w-10 h-1/6 opacity-0 absolute top-0 left-0  bg-white indic"></div> */}
                 <button className="h-fit w-full flex items-center justify-center" onClick={(e) => {
                     handleClick(<QueryPlayerAll/>, e)
                 }}>
                     <div className="group flex items-center align-center overflow-visible">
                         <IoIosMan size="60" className="hover:rounded-md hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Players")}}></IoIosMan>
-                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute left-20  scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-sm font-light rounded-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
+                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute left-24 opacity-90 scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-sm font-light rounded-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
                     </div>
                 </button>
                 <button className="h-fit w-full flex items-center justify-center" onClick={(e) => {
@@ -73,7 +76,7 @@ const Tabs = () => {
                 }}>
                     <div className="group flex items-center align-center overflow-visible">
                         <IoCalendarSharp size="60" className="hover:rounded-md hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Sessions")}}></IoCalendarSharp>
-                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute left-20  scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-sm font-light rounded-lg  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
+                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute left-24 opacity-90 scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-sm font-light rounded-lg  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
                     </div>
                 </button>
                 <button className="w-full h-fit flex items-center justify-center"onClick={(e) => {
@@ -81,7 +84,7 @@ const Tabs = () => {
                 }}>
                     <div className="group flex items-center align-center overflow-visible">
                         <FaTrophy size="60" className="hover:rounded-md hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Leaderboards")}}></FaTrophy>
-                        <span className="group-hover:scale-100 w-24 flex items-center justify-center h-7 absolute left-20  scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-xs font-light rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
+                        <span className="group-hover:scale-100 w-24 flex items-center justify-center h-7 absolute left-24 opacity-90  scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-xs font-light rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
                     </div>
                 </button>
                 <button className="h-fit w-full flex items-center justify-center" onClick={(e) => {
@@ -89,11 +92,11 @@ const Tabs = () => {
                 }}>
                     <div className="group flex items-center align-center overflow-visible">
                         <FaPlus size="60" className="hover:rounded-md hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Add Data")}}></FaPlus>
-                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute left-20  scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-sm font-light rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
+                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute left-24 opacity-90  scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-sm font-light rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
                     </div>
                 </button>
             </div>
-            <div className="w-9/12 flex items-center align-center justify-center">
+            <div className=" left-12 relative w-9/12 min-h-full flex justify-center content-center items-center">
                 {active}
             </div>
         </div>

@@ -12,6 +12,7 @@
 import { useState, useEffect} from "react";
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Label} from 'recharts';
+import { motion } from "framer-motion";
 
 
 const SessionGraph = (props) => {
@@ -23,8 +24,8 @@ const SessionGraph = (props) => {
     var units1 = null;
     var units2 = null;
     if (dataKey1 == "distance") {
-        units1 = "meters"
-        units2 = "meters"
+        units1 = "yards"
+        units2 = "yards"
     } else if (dataKey1 == "energy") {
         units1 = "calories"
         units2 = "work"
@@ -112,7 +113,7 @@ const SessionGraph = (props) => {
     
     if (dataKey2 != null) {
         return (
-            <div className="w-full flex flex-col justify-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
+            <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  className="w-full flex flex-col justify-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
                     <h3 className="mt-1 text-center text-white font-semibold">{graphDesc}</h3>
                     <input id="filter" className="w-full h-8 text-s text-center bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
                         setFilter(document.querySelector("#filter").value);
@@ -130,10 +131,10 @@ const SessionGraph = (props) => {
                             <Legend wrapperStyle={{bottom: 0}}></Legend>
                             <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart>
-            </div>)
+            </motion.div>)
     } else {
         return (
-            <div className="w-full flex flex-col justify-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
+            <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  className="w-full flex flex-col justify-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
                     <h3 className="mt-1 text-center text-white font-semibold">{graphDesc}</h3>
                     <input id="filter" className="w-full h-8 text-s text-center bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
                         setFilter(document.querySelector("#filter").value);
@@ -150,7 +151,7 @@ const SessionGraph = (props) => {
                             <Legend wrapperStyle={{bottom: 0}}></Legend>
                             <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart>
-            </div>)
+            </motion.div>)
     }
     
 }
