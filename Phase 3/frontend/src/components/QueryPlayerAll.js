@@ -95,7 +95,7 @@ const QueryPlayerAll = (props) => {
 
 
     return (
-        <motion.div initial={{opacity: 0, y: 50, scale:.95}} animate={{opacity:1, y:0, scale:1}}  transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full border border-gray-700 rounded-md min-h-96">
+        <motion.div initial={{opacity: 0, x:50, scale:.95}} animate={{opacity:1, x:0, scale:1}}  transition={{duration:.5, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full border border-gray-700 rounded-md min-h-96">
             <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg rounded-t-md">Player Season Data</h3>
             <input id="playerInp" className="w-full h-8 text-s text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none" type="text" placeholder="Enter Player Name" onChange={function (e) {
                 setFilter(e.target.value);

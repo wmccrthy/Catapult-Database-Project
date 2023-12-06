@@ -176,7 +176,7 @@ const DataEntry = () => {
     }
 
     return (
-        <motion.div initial={{opacity: 0.25, scale: 0}} animate={{opacity:1, scale:1}} transition={{duration:0.75}} className="flex p-4 rounded-md flex-col items-center content-center">
+        <motion.div initial={{opacity: 0.25, scale: .5}} animate={{opacity:1, scale:1}} transition={{duration:0.5}} className="flex p-4 rounded-md flex-col items-center content-center">
             <div className="mb-10 flex flex-col items-center">
                 <h5 className="text-white text-center">Upload Session Data</h5>
                 <div className="flex mb-5 items-center gap-2 text-white font-light">
