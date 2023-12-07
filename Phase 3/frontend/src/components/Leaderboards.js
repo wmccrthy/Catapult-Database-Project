@@ -19,6 +19,7 @@ const leaderQuery = async (stat) => {
     }
 }
 
+// 
 const leaderAvgQuery = async (stat, filter = null) => {
     var query = `SELECT email, AVG(${stat}) AS ${stat} FROM recordsstatson GROUP BY email ORDER BY ${stat} DESC;`
     if (filter != null) {
@@ -75,7 +76,7 @@ const Leaderboards = () => {
     }
 
     return (
-    <motion.div initial={{opacity: 0, x:50, scale:.95}} animate={{opacity:1, x:0, scale:1}}   transition={{duration:0.65}} className="flex flex-col content-center items-center align-center w-11/12 border border-gray-700 rounded-t-md">
+    <motion.div initial={{opacity: 0,  scale:.95}} animate={{opacity:1, scale:1}}   transition={{duration:0.65}} className="flex flex-col content-center items-center align-center w-11/12 border border-gray-700 rounded-t-md">
         <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg rounded-t-md">Leaderboards</h3>
         <div id="cont" className="max-h-156 w-full flex flex-col content-center items-center justify-evenly">
             <h4 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-gray-400 font-bold text-lg rounded-t-md m-1">Highest Recorded Stats</h4>

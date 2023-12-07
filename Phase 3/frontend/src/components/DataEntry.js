@@ -159,6 +159,9 @@ const DataEntry = () => {
         var pEmail = inputs[1].value
         var dID = inputs[2].value 
         var season = inputs[3].value 
+        if (pName.replace(" ", "").length == 0 | pEmail.replace(" ", "").length == 0 | dID.replace(" ", "").length == 0 | season.replace(" ", "").length == 0) {
+            alert("Cannt add null inputs")
+        }
         var queries = []
         var playerQuery = `INSERT INTO player (email, name) VALUES ('${pEmail}', '${pName}')`; var deviceQuery = `INSERT INTO device (deviceid) VALUES ('${dID}')`; var tracksQuery = `INSERT INTO tracks (deviceid, email, season) VALUES ('${dID}', '${pEmail}', '${season}')`;
         queries.push(playerQuery, deviceQuery, tracksQuery)
