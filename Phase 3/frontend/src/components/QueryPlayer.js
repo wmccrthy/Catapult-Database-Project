@@ -19,12 +19,12 @@ const QueryPlayer = (props) => {
     const getPlayers = async (allPlayers = false) => {
         try {
             if (allPlayers) {
-                var response = await fetch(`http://localhost:4000/select?table=player&field=name, email`);
+                var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email`);
             } else {
                 const condTest = `name ILIKE ${nameFilter}`
-                var response = await fetch(`http://localhost:4000/select?table=player&field=name, email`);
+                var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email`);
                 if (nameFilter.replace(" ", "").length >= 1) {
-                    response = await fetch(`http://localhost:4000/select?table=player&field=name, email&condition=${condTest}`);
+                    response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email&condition=${condTest}`);
                 } 
             }
             const playerData = await response.json()
@@ -39,7 +39,7 @@ const QueryPlayer = (props) => {
     const getSessionAverages = async () => {
         const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE sessionid = '${session}';`
         try {
-            var response = await fetch(`http://localhost:4000/custom?query=${averagesQuery}`);
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
             const averageData = await response.json();
             averageData[0].email = "session average";
             console.log(averageData)
@@ -55,7 +55,7 @@ const QueryPlayer = (props) => {
         const relevantSessions = `SELECT sessionid FROM session WHERE type = '${sessionType}'`;
         const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid IN (${relevantSessions});`
         try {
-            var response = await fetch(`http://localhost:4000/custom?query=${averagesQuery}`);
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
             // var testres = await fetch(`http://localhost:4000/custom?query=${relevantSessions}`);
             // const testD = await testres.json();
             // console.log(testres)
@@ -80,7 +80,7 @@ const QueryPlayer = (props) => {
             // console.log("working")
             const condTest = `email = '${playerEmail}' AND sessionid = '${session}'`
             // console.log(condTest)
-            var response = await fetch(`http://localhost:4000/select?table=recordsstatson&field=distance, sprintdistance, energy, topspeed, playerload&condition=${condTest}`);
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=recordsstatson&field=distance, sprintdistance, energy, topspeed, playerload&condition=${condTest}`);
             const playerData = await response.json();
             // console.log(playerData);
             return playerData;

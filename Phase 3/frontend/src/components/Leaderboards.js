@@ -10,7 +10,7 @@ const leaderQuery = async (stat) => {
     WHERE R.${stat} = (SELECT MAX(${stat}) FROM recordsstatson WHERE email = R.email) ORDER BY R.${stat} DESC;`
     
     try {
-        var response = await fetch(`http://localhost:4000/custom?query=${query}`)
+        var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`)
         var leaderBoardData = await response.json();
         console.log(leaderBoardData);
         return leaderBoardData;
@@ -26,7 +26,7 @@ const leaderAvgQuery = async (stat, filter = null) => {
         query = `SELECT R.email, AVG(R.${stat}) AS ${stat} FROM recordsstatson R WHERE (SELECT S.type FROM session S WHERE S.sessionid = R.sessionid) = '${filter}' GROUP BY R.email ORDER BY ${stat} DESC;`
     }
     try { 
-        var response = await fetch(`http://localhost:4000/custom?query=${query}`)
+        var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`)
         var leaderBoardData = await response.json();
         console.log(leaderBoardData);
         return leaderBoardData;

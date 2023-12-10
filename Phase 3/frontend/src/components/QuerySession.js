@@ -20,7 +20,7 @@ const moreEfficientSessionData = async (session) => {
         // console.log("working")
         const condTest = `sessionid = '${session}'`
         // console.log(condTest)
-        var response = await fetch(`http://localhost:4000/select?table=recordsstatson&field=email, distance, sprintdistance, energy, topspeed, playerload&condition=${condTest}`);
+        var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=recordsstatson&field=email, distance, sprintdistance, energy, topspeed, playerload&condition=${condTest}`);
         const playerData = await response.json();
         for (let row of playerData) {
             console.log(row)
@@ -63,7 +63,7 @@ const QuerySession = () => {
             // if (sessionFilter.replace(" ", "").length >= 1) {
             //     response = await fetch(`http://localhost:4000/select?table=session&field=date, sessionid, type&condition=${condTest}`);
             // } 
-            var response = await fetch(`http://localhost:4000/select?table=session&field=date, sessionid, type&condition=${condTest}`);
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=session&field=date, sessionid, type&condition=${condTest}`);
             const sessionData = await response.json()
             console.log(sessionData)
             setSessionList(sessionData)

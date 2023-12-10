@@ -63,10 +63,10 @@ const DataEntry = () => {
                 var player = {}
                 player.name = `'${row["Player Name"]}'`
                 try {
-                    var fetchEmail = await fetch(`http://localhost:4000/select?table=player&field=email&condition=name = ${player.name}`)
+                    var fetchEmail = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=email&condition=name = ${player.name}`)
                     var getEmail = await fetchEmail.json();
                     player.email = `'${getEmail[0].email}'`;
-                    var fetchDevice = await fetch(`http://localhost:4000/select?table=tracks&field=deviceid&condition=email = ${player.email}`)
+                    var fetchDevice = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=tracks&field=deviceid&condition=email = ${player.email}`)
                     var getDevice = await fetchDevice.json()
                     player.deviceid = `'${getDevice[0].deviceid}'`;
                 } catch(err) {
@@ -97,7 +97,7 @@ const DataEntry = () => {
         for (var q of sessionQueries) {
             console.log(q)
             try {
-                var ins = await fetch(`http://localhost:4000/customInsert?query=${q}`, {
+                var ins = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/customInsert?query=${q}`, {
                     method: "POST"
                 })
                 var success = await ins.json()
@@ -108,7 +108,7 @@ const DataEntry = () => {
         }
         for (var q of holdsQueries) {
             try {
-                var ins = await fetch(`http://localhost:4000/customInsert?query=${q}`, {
+                var ins = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/customInsert?query=${q}`, {
                     method: "POST"
                 })
                 var success = await ins.json()
@@ -119,7 +119,7 @@ const DataEntry = () => {
         }
         for (var q of participatesQueries) {
             try {
-                var ins = await fetch(`http://localhost:4000/customInsert?query=${q}`, {
+                var ins = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/customInsert?query=${q}`, {
                     method: "POST"
                 })
                 var success = await ins.json()
@@ -130,7 +130,7 @@ const DataEntry = () => {
         }
         for (var q of recordsQueries) {
             try {
-                var ins = await fetch(`http://localhost:4000/customInsert?query=${q}`, {
+                var ins = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/customInsert?query=${q}`, {
                     method: "POST"
                 })
                 var success = await ins.json()
@@ -161,13 +161,14 @@ const DataEntry = () => {
         var season = inputs[3].value 
         if (pName.replace(" ", "").length == 0 | pEmail.replace(" ", "").length == 0 | dID.replace(" ", "").length == 0 | season.replace(" ", "").length == 0) {
             alert("Cannt add null inputs")
+            return;
         }
         var queries = []
         var playerQuery = `INSERT INTO player (email, name) VALUES ('${pEmail}', '${pName}')`; var deviceQuery = `INSERT INTO device (deviceid) VALUES ('${dID}')`; var tracksQuery = `INSERT INTO tracks (deviceid, email, season) VALUES ('${dID}', '${pEmail}', '${season}')`;
         queries.push(playerQuery, deviceQuery, tracksQuery)
         for (var q of queries) {
             try {
-                var insert = await fetch(`http://localhost:4000/customInsert?query=${q}`, {
+                var insert = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/customInsert?query=${q}`, {
                     method: "POST"
                 })
                 var success = await insert.json()

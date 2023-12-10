@@ -70,9 +70,9 @@ const SessionGraph = (props) => {
     const getPlayers = async () => {
         try {
             const condTest = `name ILIKE ${nameFilter}`
-            var response = await fetch(`http://localhost:4000/select?table=player&field=name, email`);
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email`);
             if (nameFilter.replace(" ", "").length >= 1) {
-                response = await fetch(`http://localhost:4000/select?table=player&field=name, email&condition=${condTest}`);
+                response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email&condition=${condTest}`);
             } 
             const playerData = await response.json()
             console.log(playerData)
