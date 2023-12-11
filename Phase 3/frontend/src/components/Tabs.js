@@ -84,7 +84,7 @@ const Tabs = () => {
                 }}>
                     <div className="group flex items-center align-center overflow-visible">
                         <FaTrophy size="60" className="hover:rounded-md hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Leaderboards")}}></FaTrophy>
-                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute md:left-24 top-10 md:top-auto opacity-90 scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-sm font-light rounded-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
+                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute md:left-24 top-10 md:top-auto opacity-90 scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-xs font-light rounded-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
                     </div>
                 </button>
                 <button className="h-fit w-full flex items-center justify-center" onClick={(e) => {
@@ -92,7 +92,7 @@ const Tabs = () => {
                 }}>
                     <div className="group flex items-center align-center overflow-visible">
                         <FaPlus size="60" className="hover:rounded-md hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Add Data")}}></FaPlus>
-                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute md:left-24 top-10 md:top-auto opacity-90 scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-sm font-light rounded-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
+                        <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute md:left-24 top-10 md:top-auto opacity-90 scale-0 transition duration-300 bg-gray-50 border border-gray-300 text-gray-900 text-xs font-light rounded-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">{hovText}</span>
                     </div>
                 </button>
             </div>
