@@ -69,8 +69,8 @@ const PlayerSessionGraph = (props) => {
     
     if (props.multiStat) {
         return (
-            <div className="w-full flex flex-col justify-center items-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
-                    <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={450} data={data}>
+            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-800  text-gray-400 mb-5">
+                    <BarChart className="w-full mt-1 text-md bg-gray-800 text-gray-400" width={graphW} height={450} data={data}>
                         <XAxis dataKey="email" fontSize={8}  dy={8}/>
                         <YAxis label={<Label angle={-90} dx={-30}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <YAxis label={<Label angle={-90} dx={25}>{`${dataKey2} (${units2})`}</Label>} yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
@@ -82,8 +82,8 @@ const PlayerSessionGraph = (props) => {
             </div>)
     } else {
         return (
-            <div className="w-full flex flex-col justify-center items-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
-                    <BarChart className="w-full mt-1 text-md text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={450} data={data}>
+            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-800  text-gray-400 mb-5">
+                    <BarChart className="w-full mt-1 text-md  bg-gray-800 text-gray-400" width={graphW} height={450} data={data}>
                         <XAxis dataKey="email" fontSize={8}  dy={8}/>
                         <YAxis label={<Label angle={-90} dx={-30}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length} fill="blue" />

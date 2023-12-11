@@ -93,8 +93,8 @@ const QueryPlayer = (props) => {
     // APPLIES FILTRATION TO PLAYER LIST BASED ON NAME INPUT
     const filterList = () => {
         playerList.map(player => (
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{player.name}</th>
+            <tr className="border-b bg-gray-800 border-gray-700">
+                <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">{player.name}</th>
                 <td className="px-6 py-4">{player.email}</td>
                 <td className="px-6 py-4 flex"><button  onClick={async function () {
                                     var statArr = await getPlayerStats(player.email, session);
@@ -113,7 +113,7 @@ const QueryPlayer = (props) => {
 
     return (
         <motion.div className="flex flex-col content-center items-center w-full">
-            <input id="playerInp" className="w-full h-8 text-s text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none" type="text" placeholder="Enter Player Name" onChange={function (e) {
+            <input id="playerInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none" type="text" placeholder="Enter Player Name" onChange={function (e) {
                 setFilter(e.target.value);
                 console.log(e);
                 console.log(nameFilter)
@@ -126,8 +126,8 @@ const QueryPlayer = (props) => {
             } } />
     
             <div className="max-h-64 w-full overflow-y-auto">
-                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky top-0">
+                <table className="w-full text-sm text-left  text-gray-400">
+                    <thead className="text-xs  uppercase  bg-gray-700 text-gray-400 sticky top-0">
                         <tr>
                             <th scope="col" className="px-6 py-3">
                                 Name
@@ -142,8 +142,8 @@ const QueryPlayer = (props) => {
                     </thead>
                     <tbody>
                         {playerList.map(player => (
-                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{player.name}</th>
+                            <tr className="border-b bg-gray-800 border-gray-700">
+                                <th scope="row" className="px-6 py-4 font-medium  whitespace-nowrap text-white">{player.name}</th>
                                 <td className="px-6 py-4">{player.email}</td>
                                 <td className="px-6 py-4 flex"><button  onClick={async function () {
                                     var statArr = await getPlayerStats(player.email, session);

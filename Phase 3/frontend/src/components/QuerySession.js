@@ -42,8 +42,8 @@ const QuerySession = () => {
     // APPLIES FILTRATION TO PLAYER LIST BASED ON NAME INPUT
     const filterList = () => {
         sessionList.map(session => (
-                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{session.type}</th>
+                            <tr className="border-b bg-gray-800 border-gray-700">
+                                <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">{session.type}</th>
                                 <td className="px-6 py-4">{session.sessionid}</td>
                                 <td className="px-6 py-4">{session.date}</td>
                                 <td className="px-6 py-4"><button onClick={function () {
@@ -79,8 +79,8 @@ const QuerySession = () => {
 
     return (
         <motion.div  initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}} transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full border  border-gray-700 rounded-md">
-            <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg rounded-t-md">Session Data</h3>
-            <input id="sessionInp" className="w-full h-8 text-s text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
+            <h3 className="w-full text-center p-1 bg-gray-800 text-white font-bold text-lg rounded-t-md">Session Data</h3>
+            <input id="sessionInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
                 setFilter(e.target.value);
                 console.log(e);
                 console.log(sessionFilter);
@@ -93,8 +93,8 @@ const QuerySession = () => {
             } } />
 
             <div className="max-h-96 w-full overflow-y-auto">
-                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky top-0">
+                <table className="w-full text-sm text-left text-gray-400">
+                    <thead className="text-xs uppercase bg-gray-700 text-gray-400 sticky top-0">
                         <tr>
                             <th scope="col" className="px-6 py-3">
                                 Type
@@ -117,8 +117,8 @@ const QuerySession = () => {
                         {/* HAVE TWO BUTTONS WITHIN THE TABLE, ONE PROMPTS SEEING INDIVIDUAL PLAYER STATS
                         //  OTHER PROMPTS SEEING SESSION STATS FOR ALL PLAYERS (IN BAR GRAPH) PER METRIC */}
                         {sessionList.map(session => (
-                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{session.type}</th>
+                                <tr className="border-b bg-gray-800 border-gray-700">
+                                    <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">{session.type}</th>
                                     <td className="px-6 py-4">{session.sessionid}</td>
                                     <td className="px-6 py-4">{session.date}</td>
                                     <td className="px-6 py-4"><button onClick={function () {
@@ -148,7 +148,7 @@ const QuerySession = () => {
                     </tbody>
                 </table>
             </div>
-            <div className="w-full flex flex-col content-center justify-center items-center dark:bg-gray-800 rounded-b-md"> {display}</div>
+            <div className="w-full flex flex-col content-center justify-center items-center bg-gray-800 rounded-b-md"> {display}</div>
         
         </motion.div>
         

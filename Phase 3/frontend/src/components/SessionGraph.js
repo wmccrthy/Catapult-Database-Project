@@ -113,16 +113,16 @@ const SessionGraph = (props) => {
     
     if (dataKey2 != null) {
         return (
-            <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  className="w-full flex flex-col justify-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
+            <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  className="w-full flex flex-col justify-center content-center  bg-gray-800  text-gray-400 mb-5">
                     <h3 className="mt-1 text-center text-white font-semibold">{graphDesc}</h3>
-                    <input id="filter" className="w-full h-8 text-s text-center bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
+                    <input id="filter" className="w-full h-8 text-s text-center  bg-gray-700 text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
                         setFilter(document.querySelector("#filter").value);
                         filterData();
                     }} onChange={function (e) {
                         setFilter(e.target.value)
                         filterData();
                     }}></input>
-                    <BarChart className="w-full mt-1 text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={400} data={data}>
+                    <BarChart className="w-full mt-1  bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
                             <XAxis dataKey="email" fontSize={8} angle={-25} dy={8}/>
                             <YAxis label={<Label angle={-90} dx={-30}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                             <YAxis label={<Label angle={-90} dx={20}>{`${dataKey2} (${units2})`}</Label>} yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
@@ -134,16 +134,16 @@ const SessionGraph = (props) => {
             </motion.div>)
     } else {
         return (
-            <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  className="w-full flex flex-col justify-center content-center bg-gray-50 dark:bg-gray-800  dark:text-gray-400 mb-5">
+            <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  className="w-full flex flex-col justify-center content-center  bg-gray-800  text-gray-400 mb-5">
                     <h3 className="mt-1 text-center text-white font-semibold">{graphDesc}</h3>
-                    <input id="filter" className="w-full h-8 text-s text-center bg-gray-50 dark:bg-gray-700 dark:text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
+                    <input id="filter" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
                         setFilter(document.querySelector("#filter").value);
                         filterData();
                     }} onChange={function (e) {
                         setFilter(e.target.value)
                         filterData();
                     }}></input>
-                    <BarChart className="w-full mt-1 text-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-gray-400" width={graphW} height={400} data={data}>
+                    <BarChart className="w-full mt-1 bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
                             <XAxis dataKey="email" fontSize={8} angle={-25} dy={8}/>
                             <YAxis label={<Label angle={-90} dx={-30}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                             <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
