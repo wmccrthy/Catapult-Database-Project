@@ -82,7 +82,7 @@ const Leaderboards = () => {
         <h3 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-white font-bold text-lg rounded-t-md">Leaderboards</h3>
         <div id="cont" className="max-h-156 w-full flex flex-col content-center items-center justify-evenly">
             <h4 className="w-full text-center p-1 bg-gray-50 dark:bg-gray-800 text-gray-400 font-bold text-lg rounded-t-md m-1">Highest Recorded Stats</h4>
-            <div className="w-full flex items-center content-center md:justify-center justify-between text-center md:gap-10 mb-5 mt-3"> 
+            <div className="w-full flex items-center content-center lg:justify-center justify-between text-center md:gap-10 mb-5 mt-3"> 
                 <button className="leaderButton md:text-[1vw] text-[2vw]  text-gray-700 uppercase  dark:text-gray-400" onClick={async function(e) {
                     var data = await getLeaderBoard("distance");
                     setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["distance"]}></PlayerSessionGraph>)
@@ -132,7 +132,7 @@ const Leaderboards = () => {
                 <option value="training">Training</option>
                 <option value="game">Game</option>
             </select>
-            <div className="w-full flex items-center content-center md:justify-center justify-between text-center md:gap-10 mb-5 mt-3"> 
+            <div className="w-full flex items-center content-center lg:justify-center justify-between text-center md:gap-10 mb-5 mt-3"> 
                 <button className="leaderButton md:text-[1vw] text-[2vw]  text-gray-700 uppercase  dark:text-gray-400" onClick={async function(e) {
                     var typeFilter = document.querySelector("#sel").value;
                     if (typeFilter== 'All') {typeFilter = null;}
