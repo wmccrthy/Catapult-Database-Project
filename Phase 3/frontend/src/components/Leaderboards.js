@@ -22,12 +22,14 @@ const leaderQuery = async (stat) => {
 // 
 const leaderAvgQuery = async (stat, filter = null) => {
     var query = `SELECT email, AVG(${stat}) AS ${stat} FROM recordsstatson GROUP BY email ORDER BY ${stat} DESC;`
+    console.log(query)
     if (filter != null) {
         query = `SELECT R.email, AVG(R.${stat}) AS ${stat} FROM recordsstatson R WHERE (SELECT S.type FROM session S WHERE S.sessionid = R.sessionid) = '${filter}' GROUP BY R.email ORDER BY ${stat} DESC;`
     }
     try { 
         var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`)
         var leaderBoardData = await response.json();
+        console.log("hmmmm")
         console.log(leaderBoardData);
         return leaderBoardData;
     } catch (err) {
@@ -100,7 +102,7 @@ const Leaderboards = () => {
                     var data = await getLeaderBoard("topspeed");
                     setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["topspeed"]}></PlayerSessionGraph>)
                     toggleButton(e.target)
-                }}>Speed</button>
+                }}>Top Speed</button>
                  <button className="leaderButton text-[1vw] text-gray-700 uppercase  dark:text-gray-400" onClick={async function(e) {
                     var data = await getLeaderBoard("energy");
                     setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["energy"]}></PlayerSessionGraph>)
@@ -151,7 +153,7 @@ const Leaderboards = () => {
                     var data = await getAverageBoard("distancepermin", typeFilter);
                     setDisplay2(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["distancepermin"]}></PlayerSessionGraph>)
                     toggleButton2(e.target)
-                }}>Distance/Min</button>
+                }}>Distance Per Min</button>
                 <button className="leaderButton text-[1vw] text-gray-700 uppercase  dark:text-gray-400" onClick={async function(e) {
                     var typeFilter = document.querySelector("#sel").value;
                     if (typeFilter== 'All') {typeFilter = null;}
