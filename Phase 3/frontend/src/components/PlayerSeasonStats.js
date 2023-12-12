@@ -20,9 +20,9 @@ const PlayerSeasonStats = (props) => {
              <PlayerSeasonGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={playerStats} dataKeys={['topspeed']} multiStat={false}></PlayerSeasonGraph>
              {/* add graphs for displaying averages */}
              <h3 className="mt-3 mb-3 text-center text-white font-bold">{playerName} Average Data Per Session Type</h3>
-             <PlayerSeasonGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData}  dataKeys={["distance", 'sprintdistance']} multiStat={true}></PlayerSeasonGraph>
-             <PlayerSeasonGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData} dataKeys={['energy', 'playerload']} multiStat={true}></PlayerSeasonGraph>
-             <PlayerSeasonGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData} dataKeys={['topspeed']} multiStat={false}></PlayerSeasonGraph>
+             <PlayerSessionGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData}  dataKeys={["distance", 'sprintdistance']} multiStat={true}></PlayerSessionGraph>
+             <PlayerSessionGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData} dataKeys={['energy', 'playerload']} multiStat={true}></PlayerSessionGraph>
+             <PlayerSessionGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData} dataKeys={['topspeed']} multiStat={false}></PlayerSessionGraph>
         </motion.div>
         ) 
     }
