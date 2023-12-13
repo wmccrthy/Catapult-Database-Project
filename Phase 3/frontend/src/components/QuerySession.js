@@ -173,9 +173,9 @@ const QuerySession = () => {
                                                     <SessionGraph  width={graphW} data={formatList} session={session} dataKeys={['energy', 'playerload']}></SessionGraph>
                                                     <SessionGraph  width={graphW} data={formatList} session={session} dataKeys={['topspeed']}></SessionGraph>
                                                     {/* add 3 more graphs for session average data; compare how this session avg stats, compare with cumulative session avg stats */}
-                                                    <SessionGraph width={graphW} data={totalData} session={session} dataKeys={["distance", 'sprintdistance']}></SessionGraph>
-                                                    <SessionGraph  width={graphW} data={totalData} session={session} dataKeys={['energy', 'playerload']}></SessionGraph>
-                                                    <SessionGraph  width={graphW} data={totalData} session={session} dataKeys={['topspeed']}></SessionGraph>
+                                                    <SessionGraph width={graphW} data={totalData} session={session} dataKeys={["distance", 'sprintdistance']} date={session.date} isAvg={true}></SessionGraph>
+                                                    <SessionGraph  width={graphW} data={totalData} session={session} dataKeys={['energy', 'playerload']} date={session.date} isAvg={true}></SessionGraph>
+                                                    <SessionGraph  width={graphW} data={totalData} session={session} dataKeys={['topspeed']} date={session.date} isAvg={true}></SessionGraph>
                                                 </div>)
                                             console.log(display)
                                         }}>View All Stats</button>

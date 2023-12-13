@@ -17,7 +17,6 @@ import { motion } from "framer-motion";
 
 const SessionGraph = (props) => {
     const graphW = props.width;
-    const session = props.session;
     const [data, setData] = useState(props.data);
     const dataKey1 = props.dataKeys[0]
     const dataKey2 = props.dataKeys[1]
@@ -32,10 +31,18 @@ const SessionGraph = (props) => {
     } else {
         units1 = "mph"
     }
+
     var graphDesc = null;
-    if (dataKey1 && dataKey2) {
-        graphDesc = `${dataKey1} and ${dataKey2} per player`
-    } else {graphDesc = `${dataKey1} per player`} 
+    if (!props.isAvg) {
+        if (dataKey1 && dataKey2) {
+            graphDesc = `${dataKey1} and ${dataKey2} per player`
+        } else {graphDesc = `${dataKey1} per player`} 
+    } else {
+        if (dataKey1 && dataKey2) {
+            graphDesc = `${dataKey1} and ${dataKey2} ${props.date} average VS season average`
+        } else {graphDesc = `${dataKey1} ${props.date} average VS season average`} 
+    }
+    
     
     useEffect (() => {
         if (data !== props.data) {
