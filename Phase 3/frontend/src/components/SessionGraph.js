@@ -122,13 +122,13 @@ const SessionGraph = (props) => {
         return (
             <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  className="w-full flex flex-col justify-center content-center  bg-gray-800  text-gray-400 mb-5">
                     <h3 className="mt-1 text-center text-white font-semibold">{graphDesc}</h3>
-                    <input id="filter" className="w-full h-8 text-s text-center  bg-gray-700 text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
+                    [!props.isAvg && <input id="filter" className="w-full h-8 text-s text-center  bg-gray-700 text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
                         setFilter(document.querySelector("#filter").value);
                         filterData();
                     }} onChange={function (e) {
                         setFilter(e.target.value)
                         filterData();
-                    }}></input>
+                    }}></input>]
                     <BarChart className="w-full mt-1  bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
@@ -153,13 +153,13 @@ const SessionGraph = (props) => {
         return (
             <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  className="w-full flex flex-col justify-center content-center  bg-gray-800  text-gray-400 mb-5">
                     <h3 className="mt-1 text-center text-white font-semibold">{graphDesc}</h3>
-                    <input id="filter" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
+                    {!props.isAvg && <input id="filter" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
                         setFilter(document.querySelector("#filter").value);
                         filterData();
                     }} onChange={function (e) {
                         setFilter(e.target.value)
                         filterData();
-                    }}></input>
+                    }}></input>}
                     <BarChart className="w-full mt-1 bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
