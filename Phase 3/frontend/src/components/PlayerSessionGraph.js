@@ -16,13 +16,12 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Label} from 'recharts';
 
 const PlayerSessionGraph = (props) => {
     const graphW = props.width;
-    const session = props.session;
     const [data, setData] = useState(props.data);
     const dataKey1 = props.dataKeys[0]
     const dataKey2 = props.dataKeys[1]
     var units1 = null;
     var units2 = null;
-    if (dataKey1 == "distance" | dataKey1 === "sprintdistance") {
+    if (dataKey1 === "distance" | dataKey1 === "sprintdistance") {
         units1 = "yards"
         units2 = "yards"
     } else if (dataKey1 == "energy") {
@@ -47,8 +46,8 @@ const PlayerSessionGraph = (props) => {
                     <p className="label">{`${label}`}</p>
                     {/* <p className="intro">{getIntroOfPage(label)}</p> */}
                     <div className="desc">
-                        <p>{payload[0].name}: {payload[0].value}</p>
-                        <p>{payload[1].name}: {payload[1].value}</p>
+                        <p>{payload[0].name}: {payload[0].value} {units1}</p>
+                        <p>{payload[1].name}: {payload[1].value} {units2}</p>
                     </div>
                     </div>
                 );
@@ -59,7 +58,7 @@ const PlayerSessionGraph = (props) => {
                     <p className="label">{`${label}`}</p>
                     {/* <p className="intro">{getIntroOfPage(label)}</p> */}
                     <p className="desc">
-                        <p>{payload[0].name}: {payload[0].value}</p>
+                        <p>{payload[0].name}: {payload[0].value} {units1}</p>
                     </p>
                     </div>
                 );
@@ -73,15 +72,15 @@ const PlayerSessionGraph = (props) => {
                     <BarChart className="w-full mt-1 text-md bg-gray-800 text-gray-400" width={graphW} height={450} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="#8884d8" stopOpacity={0.1}/>
+                                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#8884d8" stopOpacity={0.1}/>
                             </linearGradient>
                             <linearGradient id="col2" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.1}/>
+                                <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.1}/>
                             </linearGradient>
                         </defs>
-                        <XAxis dataKey="email" fontSize={8}  dy={8}/>
+                        <XAxis dataKey="email" fontSize={8} dy={8}/>
                         <YAxis label={<Label angle={-90} dx={-30}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <YAxis label={<Label angle={-90} dx={25}>{`${dataKey2} (${units2})`}</Label>} yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length} fill="url(#col1)" />
@@ -100,7 +99,7 @@ const PlayerSessionGraph = (props) => {
                             <stop offset="95%" stopColor="#8884d8" stopOpacity={0.1}/>
                             </linearGradient>
                         </defs>
-                        <XAxis dataKey="email" fontSize={8}  dy={8}/>
+                        <XAxis dataKey="email" fontSize={8} dy={8}/>
                         <YAxis label={<Label angle={-90} dx={-30}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <Bar dataKey={dataKey1} yAxisId={"left"} barSize={graphW/data.length} fill="url(#col1)" />
                         <Legend wrapperStyle={{bottom: 0}}></Legend>

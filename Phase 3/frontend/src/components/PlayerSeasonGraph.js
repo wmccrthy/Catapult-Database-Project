@@ -5,7 +5,9 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Label, Line, LineChart, A
 
 
 const PlayerSeasonGraph = (props) => {
+    const playerEmail = props.email;
     const graphW = props.width;
+    const initData = props.data;
     const [data, setData] = useState(props.data);
     console.log(data);
     const dataKey1 = props.dataKeys[0]
@@ -20,6 +22,18 @@ const PlayerSeasonGraph = (props) => {
         units2 = "work"
     } else {
         units1 = "mph"
+    }
+
+    const getFilteredData = async (sessionType) => {
+        const query = `SELECT session.date, distance, sprintdistance, topspeed, energy, playerload FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE email = '${playerEmail}' AND session.type = '${sessionType}';`
+        try {
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`);
+            const seasonData = await response.json();
+            console.log(seasonData)
+            return seasonData;
+        } catch(err) {
+            console.error(err)
+        }
     }
     
     useEffect (() => {
@@ -37,8 +51,8 @@ const PlayerSeasonGraph = (props) => {
                     <p className="label">{`${label}`}</p>
                     {/* <p className="intro">{getIntroOfPage(label)}</p> */}
                     <div className="desc">
-                        <p>{payload[0].name}: {payload[0].value}</p>
-                        <p>{payload[1].name}: {payload[1].value}</p>
+                        <p>{payload[0].name}: {payload[0].value} {units1}</p>
+                        <p>{payload[1].name}: {payload[1].value} {units2}</p>
                     </div>
                     </div>
                 );
@@ -49,7 +63,7 @@ const PlayerSeasonGraph = (props) => {
                     <p className="label">{`${label}`}</p>
                     {/* <p className="intro">{getIntroOfPage(label)}</p> */}
                     <p className="desc">
-                        <p>{payload[0].name}: {payload[0].value}</p>
+                        <p>{payload[0].name}: {payload[0].value} {units1}</p>
                     </p>
                     </div>
                 );
@@ -57,6 +71,8 @@ const PlayerSeasonGraph = (props) => {
         return null;
       };
     
+    //   include select option like in leaderboards where players can filter data by "all", "games", or "training" s.t trends by session type are clearer 
+
     if (props.multiStat) {
         return (
             <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-800  text-gray-400 mb-5">
@@ -69,7 +85,18 @@ const PlayerSeasonGraph = (props) => {
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
                         <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart> */}
-                    
+                    <select className=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel" onChange={async function (e) {
+                        var typeFilter = e.target.value
+                        if (typeFilter == "All") {
+                            setData(initData);
+                            return;}
+                        var updatedData = await getFilteredData(typeFilter);
+                        setData(updatedData);
+                    }}>
+                        <option value={null}>All</option>
+                        <option value="training">Training</option>
+                        <option value="game">Game</option>
+                    </select>
                     <AreaChart className="w-full mt-1 text-md bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
@@ -103,6 +130,18 @@ const PlayerSeasonGraph = (props) => {
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
                         <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart> */}
+                    <select className=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel" onChange={async function (e) {
+                        var typeFilter = e.target.value
+                        if (typeFilter == "All") {
+                            setData(initData);
+                            return;}
+                        var updatedData = await getFilteredData(typeFilter);
+                        setData(updatedData);
+                    }}>
+                        <option value={null}>All</option>
+                        <option value="training">Training</option>
+                        <option value="game">Game</option>
+                    </select>
                     <AreaChart className="w-full mt-1 text-md  bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
@@ -117,8 +156,6 @@ const PlayerSeasonGraph = (props) => {
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
                         <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </AreaChart>
-
-
             </div>)
     }
     

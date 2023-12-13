@@ -33,6 +33,34 @@ const moreEfficientSessionData = async (session) => {
     }
 }
 
+const averageThisSession = async (session, date) => {
+    const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE sessionid = '${session}';`
+        try {
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
+            const averageData = await response.json();
+            averageData[0].date = `${date} avg`;
+            averageData[0].email = `${date} avg`;
+            // console.log(averageData)
+            return averageData[0];
+        } catch(err) {
+            console.error(err)
+        }
+}
+
+const averageAllSession = async (sessionType) => {
+    const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE session.type = '${sessionType}';`
+        try {
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
+            const averageData = await response.json();
+            averageData[0].date = `${sessionType} seasonal avg`;
+            averageData[0].email = `${sessionType} seasonal avg`;
+            // console.log(averageData)
+            return averageData[0];
+        } catch(err) {
+            console.error(err)
+        }
+}
+
 
 const QuerySession = () => {
     const [sessionFilter, setFilter] = useState("");
@@ -132,12 +160,22 @@ const QuerySession = () => {
                                             var formatList = await moreEfficientSessionData(session.sessionid)
                                             console.log(formatList)
                                             var graphW = document.querySelector("#cont").offsetWidth-100;
+                                            var averageToday = await averageThisSession(session.sessionid, session.date);
+                                            var averageAll = await averageAllSession(session.type);
+                                            console.log(averageAll)
+                                            var totalData = []
+                                            totalData.push(averageToday)
+                                            totalData.push(averageAll)
                                             setDisplay(
                                                 <div className="flex flex-col justify-center content-center">
                                                     <h3 className="mt-3 mb-3 text-center text-white font-bold">{session.type.toUpperCase()} from {session.date}</h3>
                                                     <SessionGraph width={graphW} data={formatList} session={session} dataKeys={["distance", 'sprintdistance']}></SessionGraph>
                                                     <SessionGraph  width={graphW} data={formatList} session={session} dataKeys={['energy', 'playerload']}></SessionGraph>
                                                     <SessionGraph  width={graphW} data={formatList} session={session} dataKeys={['topspeed']}></SessionGraph>
+                                                    {/* add 3 more graphs for session average data; compare how this session avg stats, compare with cumulative session avg stats */}
+                                                    <SessionGraph width={graphW} data={totalData} session={session} dataKeys={["distance", 'sprintdistance']}></SessionGraph>
+                                                    <SessionGraph  width={graphW} data={totalData} session={session} dataKeys={['energy', 'playerload']}></SessionGraph>
+                                                    <SessionGraph  width={graphW} data={totalData} session={session} dataKeys={['topspeed']}></SessionGraph>
                                                 </div>)
                                             console.log(display)
                                         }}>View All Stats</button>

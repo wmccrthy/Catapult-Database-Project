@@ -31,7 +31,7 @@ const PlayerSessionStats = (props) => {
         
         <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}} id="cont" className="flex flex-col content-center items-center justify-center gap-5 w-full">
              <h3 className="mt-1 text-center text-white font-semibold">{props.name} Data from {props.date}</h3>
-             <PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={totalData} session={props.date} dataKeys={["distance", 'sprintdistance']} multiStat={true}></PlayerSessionGraph>
+            <PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={totalData} session={props.date} dataKeys={["distance", 'sprintdistance']} multiStat={true}></PlayerSessionGraph>
             <PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100}  data={totalData} session={props.date} dataKeys={['energy', 'playerload']} multiStat={true}></PlayerSessionGraph>
             <PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100}  data={totalData} session={props.date} dataKeys={['topspeed']} multiStat={false}></PlayerSessionGraph>
         </motion.div>

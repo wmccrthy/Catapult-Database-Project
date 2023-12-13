@@ -55,6 +55,7 @@ const QueryPlayerAll = (props) => {
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
             const averageData = await response.json();
             averageData[0].date = `${playerName} ${sessionType} avg`;
+            averageData[0].email = `${playerName} ${sessionType} avg`;
             // console.log(averageData)
             return averageData[0];
         } catch(err) {
@@ -137,7 +138,7 @@ const QueryPlayerAll = (props) => {
                                     avgData.push(trainingAvg)
                                     var seasonStatArr = await getSeasonStats(player.email)
                                     // console.log(seasonStatArr)
-                                    setDisplay(<PlayerSeasonStats averages={avgData} stats={seasonStatArr} name={player.name}></PlayerSeasonStats>);
+                                    setDisplay(<PlayerSeasonStats averages={avgData} stats={seasonStatArr} name={player.name} email={player.email}></PlayerSeasonStats>);
                                     // need to render new table displaying stats (new component)
                                 }}>View Stats</button></td>
                             </tr>
