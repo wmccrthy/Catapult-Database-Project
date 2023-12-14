@@ -35,6 +35,7 @@ app.get("/select", async (req, res) => {
 
 app.get("/custom", async (req, res) => {
     const customQuery = req.query["query"]
+    console.log(customQuery)
     let queryData = await custom(customQuery);
     res.send(queryData);
 })
