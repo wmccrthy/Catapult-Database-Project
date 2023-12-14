@@ -174,7 +174,8 @@ async function update(table, field, values, condition) {
 async function custom(query) {
     var queryData = [];
     try {
-        if (query.includes("LIKE")) {
+        console.log(query)
+        if (query.includes("ILIKE")) {
             console.log("working detection")
             query = query.split(" ")
             var relInd = query.indexOf("ILIKE")
