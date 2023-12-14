@@ -86,7 +86,7 @@ const Leaderboards = () => {
         <h3 className="w-full text-center p-1  bg-gray-800 text-white font-bold text-lg rounded-t-md">Leaderboards</h3>
         <div id="cont" className="max-h-156 w-full flex flex-col content-center items-center justify-evenly">
             <h4 className="w-full text-center p-1  bg-gray-800 text-gray-400 font-bold text-lg rounded-t-md m-1">Highest Recorded Stats</h4>
-            <select className=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel1" onChange={async function (e) {
+            <select className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel1" onChange={async function (e) {
                 var typeFilter = e.target.value
                 if (active != null) {
                     var curMetric = active.innerHTML.replaceAll(" ", "").toLowerCase()
@@ -148,7 +148,7 @@ const Leaderboards = () => {
         {/* have input that allows user to pick whether ranked average data is from game, training, or either */}
         <div id="cont" className="max-h-156 w-full flex flex-col content-center items-center justify-evenly">
             <h4 className="w-full text-center p-1 bg-gray-800 text-gray-400 font-bold text-lg rounded-t-md m-1">Average Recorded Stats</h4>
-            <select className=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel" onChange={async function (e) {
+            <select className=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel" onChange={async function (e) {
                 var typeFilter = e.target.value
                 if (active2 != null) {
                     var curMetric = active2.innerHTML.replaceAll(" ", "").toLowerCase()
