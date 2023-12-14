@@ -62,7 +62,7 @@ const Tabs = () => {
                 }}>Data Entry</button>
                 
             </div> */}
-            <div id="nav" className="fixed z-10 top-0 md:left-0 flex md:flex-col align-center items-center justify-evenly w-full md:w-20 h-28  md:h-full  border-b md:border-r   text-sm font-bold bg-gray-800 border-gray-600 placeholder-gray-400 text-white">
+            <div id="nav" className="fixed z-10 top-0 md:left-0 flex md:flex-col md:pl-0 pl-5 align-center items-center justify-evenly w-full md:w-20 h-28  md:h-full  border-b md:border-r   text-sm font-bold bg-gray-800 border-gray-600 placeholder-gray-400 text-white">
                 {/* <div id="indicator" className="w-10 h-1/6 opacity-0 absolute top-0 left-0  bg-white indic"></div> */}
                 <button className="h-fit w-full flex items-center justify-center" onClick={(e) => {
                     handleClick(<QueryPlayerAll/>, e)
