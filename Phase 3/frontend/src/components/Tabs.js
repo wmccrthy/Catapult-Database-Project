@@ -19,6 +19,7 @@ const Tabs = () => {
     const [active, setActive] = useState(<div></div>)
     const [toggle, setToggle] = useState(null)
     const [hovText, setHovText] = useState("")
+    const [curTeam, setCurTeam] = useState('MSOC')
 
     const handleClick = (element, bt) => {
         // set active tab to clicked button's associated window 
@@ -92,6 +93,15 @@ const Tabs = () => {
                         <FaPlus size="60" className="hover:rounded-md hover:bg-gray-600 rounded-3xl p-3 transition-all duration-500 bg-gray-900" onMouseOver={() => { handleMouseOver("Add Data")}}></FaPlus>
                         <span className="group-hover:scale-100 w-20 flex items-center justify-center h-7 absolute md:left-24 top-10 md:top-auto opacity-90 scale-0 transition duration-300  border text-xs font-light rounded-lg p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white">{hovText}</span> </div>
                 </button>
+                <select className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block py-1.5 opacity-70 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" id="sel1" onChange={async function (e) {
+                    var typeFilter = e.target.value
+                    setCurTeam(typeFilter)
+                    }}>
+                    <option value="MSOC">MSOC</option>
+                    <option value="WSOC">WSOC</option>
+                    <option value="MLAX">MLAX</option>
+                    <option value="WLAX">WLAX</option>
+                </select>
             </div>
             <div className="md:left-12 relative w-full md:w-9/12 md:top-0 top-20 min-h-full flex justify-center content-center items-center">
                 {active}
