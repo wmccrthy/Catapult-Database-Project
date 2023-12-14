@@ -183,6 +183,7 @@ async function custom(query) {
             query = " ".join(query);
         }
         console.log(`Running Query: ${query}`)
+        console.log(condition)
         queryData = await client.query(query);
         console.log(queryData)
         console.log(queryData.rows);
