@@ -10,6 +10,9 @@ import { motion } from "framer-motion";
 
 const QueryPlayerAll = (props) => {
     const teamID = props.team 
+
+    // const season = props.season
+    
     // going to need this to be custom queries bc player's dont have a team attribute; instead grab name and email of all players who have partcipated in a session
     // with the given teamID 
     // just use select framework with longer condition bc of aids with ILIKE ^ 
@@ -19,7 +22,6 @@ const QueryPlayerAll = (props) => {
     const [display, setDisplay] = useState(props.defData);
 
 
-    // UPDATES PLAYER LIST STATE VARIABLE TO REPRESENT THE PLAYER LIST FILTERED BY NAME INPUT (QUERIES THE PLAYER TABLE OF DATABASE)
     const getPlayers = async (allPlayers = false) => {
         try {
             var query = `SELECT name, email FROM player WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
@@ -27,10 +29,10 @@ const QueryPlayerAll = (props) => {
                 // var condition = `email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
                 var query = `SELECT name, email FROM player WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
             } else {
-                if (nameFilter.length >= 1) {
-                    var query = `SELECT name, email FROM player WHERE name ILIKE ${nameFilter} AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
-                    // var condition = `name ILIKE ${nameFilter} AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
-                } 
+                // if (nameFilter.length >= 1) {
+                //     var query = `SELECT name, email FROM player WHERE name ILIKE ${nameFilter} AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
+                //     // var condition = `name ILIKE ${nameFilter} AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
+                // } 
             }
             // console.log(query)
             // var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email&condition=${condition}`);
@@ -109,7 +111,7 @@ const QueryPlayerAll = (props) => {
     return (
         <motion.div initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}}  transition={{duration:.5, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full border border-gray-700 rounded-md min-h-96">
             <h3 className="w-full text-center p-1 bg-gray-800 text-white font-bold text-lg rounded-t-md">Player Season Data</h3>
-            <input id="playerInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none" type="text" placeholder="Enter Player Name" onChange={function (e) {
+            {/* <input id="playerInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none" type="text" placeholder="Enter Player Name" onChange={function (e) {
                 setFilter(e.target.value);
                 console.log(e);
                 console.log(nameFilter)
@@ -119,7 +121,7 @@ const QueryPlayerAll = (props) => {
                 setFilter(document.querySelector("#playerInp"));
                 getPlayers();
                 filterList();
-            } } />
+            } } /> */}
     
             <div className="max-h-96 w-full overflow-y-auto">
                 <table className="w-full text-sm text-left  text-gray-400">

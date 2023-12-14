@@ -3,52 +3,49 @@ import {useState} from "react";
 import PlayerSessionGraph from "./PlayerSessionGraph";
 import { motion } from "framer-motion";
 
-
-// query for each stat perhaps? 
-const leaderQuery = async (stat, filter = null) => {
-    var query = `SELECT R.email, R.${stat} FROM recordsstatson R
-    WHERE R.${stat} = (SELECT MAX(${stat}) FROM recordsstatson WHERE email = R.email) ORDER BY R.${stat} DESC;`
-    if (filter != null) {
-        var query = `SELECT R.email, R.${stat} FROM recordsstatson R
-        WHERE R.${stat} = (SELECT MAX(${stat}) FROM recordsstatson WHERE email = R.email AND sessionid in (SELECT S.sessionid from session S where S.type = '${filter}')) ORDER BY R.${stat} DESC;`
-    }
-    try {
-        console.log(query)
-        var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`)
-        var leaderBoardData = await response.json();
-        console.log(leaderBoardData);
-        return leaderBoardData;
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-// 
-const leaderAvgQuery = async (stat, filter = null) => {
-    var query = `SELECT email, AVG(${stat}) AS ${stat} FROM recordsstatson GROUP BY email ORDER BY ${stat} DESC;`
-    console.log(query)
-    if (filter != null) {
-        query = `SELECT R.email, AVG(R.${stat}) AS ${stat} FROM recordsstatson R WHERE (SELECT S.type FROM session S WHERE S.sessionid = R.sessionid) = '${filter}' GROUP BY R.email ORDER BY ${stat} DESC;`
-    }
-    try { 
-        var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`)
-        var leaderBoardData = await response.json();
-        console.log("hmmmm")
-        console.log(leaderBoardData);
-        return leaderBoardData;
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-
-
-const Leaderboards = () => {
+const Leaderboards = (props) => {
     const [display, setDisplay] = useState(<div></div>)
     const [display2, setDisplay2] = useState(<div></div>)
     const [active, setActive] = useState(null)
     const [active2, setActive2] = useState(null)
+    const teamID = props.team;
 
+        // query for each stat perhaps? 
+    const leaderQuery = async (stat, filter = null) => {
+        var query = `SELECT R.email, R.${stat} FROM recordsstatson R
+        WHERE R.${stat} = (SELECT MAX(${stat}) FROM recordsstatson WHERE email = R.email) AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') ORDER BY R.${stat} DESC;`
+        if (filter != null) {
+            var query = `SELECT R.email, R.${stat} FROM recordsstatson R
+            WHERE R.${stat} = (SELECT MAX(${stat}) FROM recordsstatson WHERE email = R.email AND sessionid in (SELECT S.sessionid from session S where S.type = '${filter}')) AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') ORDER BY R.${stat} DESC;`
+        }
+        try {
+            console.log(query)
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`)
+            var leaderBoardData = await response.json();
+            console.log(leaderBoardData);
+            return leaderBoardData;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // 
+    const leaderAvgQuery = async (stat, filter = null) => {
+        var query = `SELECT email, AVG(${stat}) AS ${stat} FROM recordsstatson GROUP BY email ORDER BY ${stat} DESC;`
+        console.log(query)
+        if (filter != null) {
+            query = `SELECT R.email, AVG(R.${stat}) AS ${stat} FROM recordsstatson R WHERE (SELECT S.type FROM session S WHERE S.sessionid = R.sessionid) = '${filter}' GROUP BY R.email ORDER BY ${stat} DESC;`
+        }
+        try { 
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`)
+            var leaderBoardData = await response.json();
+            console.log("hmmmm")
+            console.log(leaderBoardData);
+            return leaderBoardData;
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     const getLeaderBoard = async (stat, filter = null) => {
         var l = await leaderQuery(stat, filter);

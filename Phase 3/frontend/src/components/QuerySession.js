@@ -47,25 +47,14 @@ const averageThisSession = async (session, date) => {
         }
 }
 
-const averageAllSession = async (sessionType) => {
-    const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE session.type = '${sessionType}';`
-        try {
-            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
-            const averageData = await response.json();
-            averageData[0].date = `${sessionType} seasonal avg`;
-            averageData[0].email = `${sessionType} seasonal avg`;
-            // console.log(averageData)
-            return averageData[0];
-        } catch(err) {
-            console.error(err)
-        }
-}
 
 
-const QuerySession = () => {
+
+const QuerySession = (props) => {
     const [sessionFilter, setFilter] = useState("");
     const [sessionList, setSessionList] = useState([]);
     const [display, setDisplay] = useState(<div></div>)
+    const teamID = props.team;
 
     // APPLIES FILTRATION TO PLAYER LIST BASED ON NAME INPUT
     const filterList = () => {
@@ -76,7 +65,7 @@ const QuerySession = () => {
                                 <td className="px-6 py-4">{session.date}</td>
                                 <td className="px-6 py-4"><button onClick={function () {
                                     // QueryPlayer
-                                    setDisplay(<QueryPlayer session={session.sessionid} date={session.date} defData={<div></div>}></QueryPlayer>);
+                                    setDisplay(<QueryPlayer team={teamID} session={session.sessionid} date={session.date} defData={<div></div>}></QueryPlayer>);
                                 }}>View Player Stats</button></td>
                             </tr>
         ))
@@ -86,12 +75,14 @@ const QuerySession = () => {
     // UPDATES Session list variable to match user input filtering 
     const getSessions = async () => {
         try {
-            const condTest = `date ILIKE ${sessionFilter} ORDER BY sessionid`
+            // const condTest = `date ILIKE ${sessionFilter} ORDER BY sessionid`
+            const query = `SELECT date, sessionid, type FROM session WHERE sessionid in (SELECT h.sessionid FROM holds h WHERE h.teamid = '${teamID}') ORDER BY sessionid;`
             // var response = await fetch(`http://localhost:4000/select?table=session&field=date, sessionid, type`);
             // if (sessionFilter.replace(" ", "").length >= 1) {
             //     response = await fetch(`http://localhost:4000/select?table=session&field=date, sessionid, type&condition=${condTest}`);
             // } 
-            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=session&field=date, sessionid, type&condition=${condTest}`);
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`)
+            // var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=session&field=date, sessionid, type&condition=${condTest}`);
             const sessionData = await response.json()
             console.log(sessionData)
             setSessionList(sessionData)
@@ -105,10 +96,24 @@ const QuerySession = () => {
         getSessions();
     }, [])
 
+    const averageAllSession = async (sessionType) => {
+        const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE session.type = '${sessionType}' AND (SELECT h.teamid FROM holds h WHERE h.sessionid = session.sessionid) = '${teamID}';`
+            try {
+                var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
+                const averageData = await response.json();
+                averageData[0].date = `${sessionType} seasonal avg`;
+                averageData[0].email = `${sessionType} seasonal avg`;
+                // console.log(averageData)
+                return averageData[0];
+            } catch(err) {
+                console.error(err)
+            }
+    }
+
     return (
         <motion.div  initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}} transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full border  border-gray-700 rounded-md">
             <h3 className="w-full text-center p-1 bg-gray-800 text-white font-bold text-lg rounded-t-md">Session Data</h3>
-            <input id="sessionInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
+            {/* <input id="sessionInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
                 setFilter(e.target.value);
                 console.log(e);
                 console.log(sessionFilter);
@@ -118,7 +123,7 @@ const QuerySession = () => {
                 setFilter(document.querySelector("#sessionInp"));
                 getSessions();
                 filterList();
-            } } />
+            } } /> */}
 
             <div className="max-h-96 w-full overflow-y-auto">
                 <table className="w-full text-sm text-left text-gray-400">
@@ -151,7 +156,7 @@ const QuerySession = () => {
                                     <td className="px-6 py-4">{session.date}</td>
                                     <td className="px-6 py-4"><button onClick={function () {
                                         // QueryPlayer
-                                        setDisplay(<QueryPlayer type={session.type} session={session.sessionid} date={session.date} defData={<div></div>}></QueryPlayer>)
+                                        setDisplay(<QueryPlayer team={teamID} type={session.type} session={session.sessionid} date={session.date} defData={<div></div>}></QueryPlayer>)
                                         console.log(display)
                                     }}>View Player Stats</button></td>
                                     <td className="px-6 py-4">

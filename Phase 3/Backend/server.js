@@ -2,7 +2,6 @@ const express = require("express")
 const cors = require("cors")
 const client = require("./db")
 const { response } = require("express")
-const { default: QueryPlayer } = require("../frontend/src/components/QueryPlayer")
 // const { query } = require("express")
 
 const app = express()
@@ -156,7 +155,6 @@ async function insert (table, field, values, condition = null) {
 async function update(table, field, values, condition) {
     // if (field != '*') {field = `(${field})`};
     values = `(${values})`;
-
     var queryData = [];
     try {
         let q = `UPDATE ${table} SET ${field}=${values} WHERE ${condition};`;
@@ -175,16 +173,7 @@ async function update(table, field, values, condition) {
 async function custom(query) {
     var queryData = [];
     try {
-        console.log(query)
-        if (query.includes("ILIKE")) {
-            console.log("working detection")
-            query = query.split(" ")
-            var relInd = query.indexOf("ILIKE")
-            query[relInd+1] = `'%${query[relInd]}%'`;
-            query = " ".join(query);
-        }
         console.log(`Running Query: ${query}`)
-        console.log(condition)
         queryData = await client.query(query);
         console.log(queryData)
         console.log(queryData.rows);
