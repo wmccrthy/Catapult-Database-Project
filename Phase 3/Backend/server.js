@@ -178,7 +178,7 @@ async function custom(query) {
             console.log("working detection")
             query = query.split(" ")
             var relInd = query.indexOf("ILIKE")
-            query[relInd] = `'%${query[relInd]}%'`;
+            query[relInd+1] = `'%${query[relInd]}%'`;
             query = " ".join(query);
         }
         console.log(`Running Query: ${query}`)
