@@ -8,6 +8,7 @@ import PlayerSessionStats from "./PlayerSessionStats";
 import { motion } from "framer-motion";
 
 const QueryPlayer = (props) => {
+    const teamID = props.team
     const [nameFilter, setFilter] = useState("");
     const [playerList, setPlayerList] = useState([]);
     const [display, setDisplay] = useState(props.defData);
@@ -18,18 +19,23 @@ const QueryPlayer = (props) => {
     // UPDATES PLAYER LIST STATE VARIABLE TO REPRESENT THE PLAYER LIST FILTERED BY NAME INPUT (QUERIES THE PLAYER TABLE OF DATABASE)
     const getPlayers = async (allPlayers = false) => {
         try {
+            var query = `SELECT name, email FROM player WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
             if (allPlayers) {
-                var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email`);
+                // var condition = `email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
+                var query = `SELECT name, email FROM player WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
             } else {
-                const condTest = `name ILIKE ${nameFilter}`
-                var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email`);
-                if (nameFilter.replace(" ", "").length >= 1) {
-                    response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email&condition=${condTest}`);
+                if (nameFilter.length >= 1) {
+                    var query = `SELECT name, email FROM player WHERE name ILIKE ${nameFilter} AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
+                    // var condition = `name ILIKE ${nameFilter} AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
                 } 
             }
+            // console.log(query)
+            // var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email&condition=${condition}`);
+            console.log(query)
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`);
             const playerData = await response.json()
             console.log(playerData)
-            setPlayerList(playerData)
+            setPlayerList(playerData);
             return playerData;
         } catch(err) {
             console.log(err)

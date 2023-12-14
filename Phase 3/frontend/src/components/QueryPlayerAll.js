@@ -9,22 +9,33 @@ import PlayerSeasonStats from "./PlayerSeasonStats";
 import { motion } from "framer-motion";
 
 const QueryPlayerAll = (props) => {
+    const teamID = props.team 
+    // going to need this to be custom queries bc player's dont have a team attribute; instead grab name and email of all players who have partcipated in a session
+    // with the given teamID 
+    // just use select framework with longer condition bc of aids with ILIKE ^ 
+
     const [nameFilter, setFilter] = useState("");
     const [playerList, setPlayerList] = useState([]);
     const [display, setDisplay] = useState(props.defData);
 
+
     // UPDATES PLAYER LIST STATE VARIABLE TO REPRESENT THE PLAYER LIST FILTERED BY NAME INPUT (QUERIES THE PLAYER TABLE OF DATABASE)
     const getPlayers = async (allPlayers = false) => {
         try {
+            var query = `SELECT name, email FROM player WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
             if (allPlayers) {
-                var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email`);
+                // var condition = `email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
+                var query = `SELECT name, email FROM player WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
             } else {
-                const condTest = `name ILIKE ${nameFilter}`
-                var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email`);
-                if (nameFilter.replace(" ", "").length >= 1) {
-                    response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email&condition=${condTest}`);
+                if (nameFilter.length >= 1) {
+                    var query = `SELECT name, email FROM player WHERE name ILIKE ${nameFilter} AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
+                    // var condition = `name ILIKE ${nameFilter} AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
                 } 
             }
+            // console.log(query)
+            // var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=name, email&condition=${condition}`);
+            console.log(query)
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`);
             const playerData = await response.json()
             console.log(playerData)
             setPlayerList(playerData);
@@ -35,7 +46,7 @@ const QueryPlayerAll = (props) => {
     }
 
     const getSeasonStats = async (playerEmail) => {
-        const query = `SELECT session.date, distance, sprintdistance, topspeed, energy, playerload FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE email = '${playerEmail}';`
+        const query = `SELECT session.date, distance, sprintdistance, topspeed, energy, playerload FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE email = '${playerEmail}' AND teamid = '${teamID}';`
         try {
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`);
             const seasonData = await response.json();
@@ -50,7 +61,7 @@ const QueryPlayerAll = (props) => {
     const getPlayerAverages = async (playerEmail, playerName, sessionType) => {
         sessionType = sessionType.replace(" ", "").replace("\n", "")
         const relevantSessions = `SELECT sessionid FROM session WHERE type = '${sessionType}'`;
-        const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid IN (${relevantSessions});`
+        const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid IN (${relevantSessions}) AND teamid = '${teamID}';`
         try {
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
             const averageData = await response.json();

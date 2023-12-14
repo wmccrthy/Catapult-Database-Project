@@ -2,6 +2,7 @@ const express = require("express")
 const cors = require("cors")
 const client = require("./db")
 const { response } = require("express")
+const { default: QueryPlayer } = require("../frontend/src/components/QueryPlayer")
 // const { query } = require("express")
 
 const app = express()
@@ -101,7 +102,7 @@ async function select (table, field, condition = null) {
                 unformattedCond[2] = `'%${unformattedCond[2]}%'`
                 condition = unformattedCond.join(" ");
             }
-
+            console.log(condition)
             let q = `SELECT ${field} FROM ${table} WHERE ${condition};`;
             console.log(`RUNNING QUERY: ${q}`)
             queryData = await client.query(q);
@@ -111,6 +112,7 @@ async function select (table, field, condition = null) {
         console.log(`SELECTED FROM ${table}`)
     } catch(err) {
         console.error(err);
+        return err;
     } finally {
         console.log("SELECT RETURNING")
         console.log(queryData.rows)
@@ -172,6 +174,13 @@ async function update(table, field, values, condition) {
 async function custom(query) {
     var queryData = [];
     try {
+        if (query.includes("LIKE")) {
+            console.log("working detection")
+            query = query.split(" ")
+            var relInd = query.indexOf("ILIKE")
+            query[relInd] = `'%${query[relInd]}%'`;
+            query = " ".join(query);
+        }
         console.log(`Running Query: ${query}`)
         queryData = await client.query(query);
         console.log(queryData)
