@@ -5,11 +5,15 @@ import { motion } from "framer-motion";
 
 
 // query for each stat perhaps? 
-const leaderQuery = async (stat) => {
+const leaderQuery = async (stat, filter = null) => {
     var query = `SELECT R.email, R.${stat} FROM recordsstatson R
     WHERE R.${stat} = (SELECT MAX(${stat}) FROM recordsstatson WHERE email = R.email) ORDER BY R.${stat} DESC;`
-    
+    if (filter != null) {
+        var query = `SELECT R.email, R.${stat} FROM recordsstatson R
+        WHERE R.${stat} = (SELECT MAX(${stat}) FROM recordsstatson WHERE email = R.email AND sessionid in (SELECT S.sessionid from session S where S.type = '${filter}')) ORDER BY R.${stat} DESC;`
+    }
     try {
+        console.log(query)
         var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`)
         var leaderBoardData = await response.json();
         console.log(leaderBoardData);
@@ -46,8 +50,8 @@ const Leaderboards = () => {
     const [active2, setActive2] = useState(null)
 
 
-    const getLeaderBoard = async (stat) => {
-        var l = await leaderQuery(stat);
+    const getLeaderBoard = async (stat, filter = null) => {
+        var l = await leaderQuery(stat, filter);
         var formattedToArr = []
         for (let player of l) {
             player.email = player.email.replace("@amherst.edu", "");
@@ -82,34 +86,58 @@ const Leaderboards = () => {
         <h3 className="w-full text-center p-1  bg-gray-800 text-white font-bold text-lg rounded-t-md">Leaderboards</h3>
         <div id="cont" className="max-h-156 w-full flex flex-col content-center items-center justify-evenly">
             <h4 className="w-full text-center p-1  bg-gray-800 text-gray-400 font-bold text-lg rounded-t-md m-1">Highest Recorded Stats</h4>
+            <select className=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel1" onChange={async function (e) {
+                var typeFilter = e.target.value
+                if (active != null) {
+                    var curMetric = active.innerHTML.replaceAll(" ", "").toLowerCase()
+                    if (typeFilter == "All") {typeFilter = null;}
+                    var updatedData = await getLeaderBoard(curMetric, typeFilter)
+                    setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={updatedData} dataKeys={[curMetric]}></PlayerSessionGraph>)
+                }}}>
+                <option value={null}>All</option>
+                <option value="training">Training</option>
+                <option value="game">Game</option>
+            </select>
             <div className="w-full flex items-center content-center justify-between text-center md:gap-10 mb-5 mt-3"> 
                 <button className="leaderButton md:text-[1vw] text-[2vw]   uppercase  text-gray-400" onClick={async function(e) {
-                    var data = await getLeaderBoard("distance");
+                    var typeFilter = document.querySelector("#sel1").value;
+                    if (typeFilter== 'All') {typeFilter = null;}
+                    var data = await getLeaderBoard("distance", typeFilter);
                     setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["distance"]}></PlayerSessionGraph>)
                     toggleButton(e.target)
                 }}>Distance</button>
                 <button className="leaderButton md:text-[1vw] text-[2vw]  uppercase  text-gray-400" onClick={async function(e) {
-                    var data = await getLeaderBoard("sprintdistance");
+                    var typeFilter = document.querySelector("#sel1").value;
+                    if (typeFilter== 'All') {typeFilter = null;}
+                    var data = await getLeaderBoard("sprintdistance", typeFilter);
                     setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["sprintdistance"]}></PlayerSessionGraph>)
                     toggleButton(e.target)
                 }}>Sprint Distance</button>
                  <button className="leaderButton md:text-[1vw] text-[2vw]  uppercase  text-gray-400" onClick={async function(e) {
-                    var data = await getLeaderBoard("distancepermin");
+                     var typeFilter = document.querySelector("#sel1").value;
+                     if (typeFilter== 'All') {typeFilter = null;}
+                    var data = await getLeaderBoard("distancepermin", typeFilter);
                     setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["distancepermin"]}></PlayerSessionGraph>)
                     toggleButton(e.target)
                 }}>Distance Per Min</button>
                 <button className="leaderButton md:text-[1vw] text-[2vw] uppercase  text-gray-400" onClick={async function(e) {
-                    var data = await getLeaderBoard("topspeed");
+                    var typeFilter = document.querySelector("#sel1").value;
+                    if (typeFilter== 'All') {typeFilter = null;}
+                    var data = await getLeaderBoard("topspeed", typeFilter);
                     setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["topspeed"]}></PlayerSessionGraph>)
                     toggleButton(e.target)
                 }}>Top Speed</button>
                  <button className="leaderButton md:text-[1vw] text-[2vw]  uppercase  text-gray-400" onClick={async function(e) {
-                    var data = await getLeaderBoard("energy");
+                     var typeFilter = document.querySelector("#sel1").value;
+                     if (typeFilter== 'All') {typeFilter = null;}
+                    var data = await getLeaderBoard("energy", typeFilter);
                     setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["energy"]}></PlayerSessionGraph>)
                     toggleButton(e.target)
                 }}>Energy</button>
                  <button className="leaderButton md:text-[1vw] text-[2vw] uppercase  text-gray-400" onClick={async function(e) {
-                    var data = await getLeaderBoard("playerload");
+                     var typeFilter = document.querySelector("#sel1").value;
+                     if (typeFilter== 'All') {typeFilter = null;}
+                    var data = await getLeaderBoard("playerload", typeFilter);
                     setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100}  data={data} dataKeys={["playerload"]}></PlayerSessionGraph>)
                     toggleButton(e.target)
                 }}>Player Load</button>
