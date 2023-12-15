@@ -2,14 +2,15 @@ import DataEntry from "./DataEntry";
 import React, {useState} from "react"
 
 
-const DataKey = () => {
+const DataKey = (props) => {
     const [display, setDisplay] = useState(<div></div>)
     const adminPassword = "ams2023db257"
+    const teamID = props.team
 
     const handleInput = (e) => {
         if (e.key == "Enter") {
             if (document.querySelector("#pass").value == adminPassword) {
-                setDisplay(<DataEntry></DataEntry>)
+                setDisplay(<DataEntry team={teamID}></DataEntry>)
                 document.querySelector("#pass").style.display = "none";
             } else {
                 setDisplay(<div className="text-white mt-2 font-bold text-center">Incorrect Password</div>)

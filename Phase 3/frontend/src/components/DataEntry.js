@@ -14,11 +14,12 @@ import { motion } from "framer-motion";
 // ask for admin password before allowing file upload 
 
 
-const DataEntry = () => {
+const DataEntry = (props) => {
     const metersToYards = 1.09361;
     const mpsTOmph  = 2.23694;
     const [data, setData] = useState([])
-    const [teamid, setTeamid] = useState('')
+    // const [teamid, setTeamid] = useState('')
+    const teamid = `'${props.team}'`
 
     const handleFileUpload = async (e) => {
         const dataFile = e.target.files[0]
@@ -30,9 +31,6 @@ const DataEntry = () => {
                 setData(results.data);
             }
         })
-        setTeamid(`'${document.querySelector("#teamID").value}'`)
-        console.log(teamid)
-        console.log(`${document.querySelector("#teamID").value}`)
     };
 
     const parseData = async (data) => {
@@ -188,16 +186,10 @@ const DataEntry = () => {
                         await handleFileUpload(e)
                         // console.log(data)
                     }} className="w-1/8  text-s  text-gray-700  dark:text-gray-400 outline-none"></input>
-                <h6 className="text-center">Team ID</h6>
-                <select id="teamID" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={null}>
-                    <option value="MSOC">MSOC</option>
-                    <option value="WSOC">WSOC</option>
-                    {/* <option value="game"></option> */}
-                </select>
-                </div>
-                <button className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
+                    <button className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
                     await parseData(data)
-                }}>Upload</button>
+                    }}>Upload</button>
+                </div>
             </div>
             <div id="player-inp" className="flex flex-col items-center gap-2">
                 <h6 className="text-center text-white font-light">Add Players</h6>
