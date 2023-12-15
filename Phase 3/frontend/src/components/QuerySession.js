@@ -11,11 +11,13 @@ import React from "react";
 import QueryPlayer from "./QueryPlayer";
 import SessionGraph from "./SessionGraph"
 import { motion} from "framer-motion";
+import SessionSeasonGraph from "./SessionSeasonGraph";
 
 const QuerySession = (props) => {
     const [sessionFilter, setFilter] = useState("");
     const [sessionList, setSessionList] = useState([]);
     const [display, setDisplay] = useState(<div></div>)
+    const [seasonalDisplay, setSeasDisplay] = useState(<span className="font-extralight opacity-70 text-white"></span>)
     const teamID = props.team;
 
     // for all player stats in a session the goal is to get all session data from given session, organized by player email, realistically, all I need is session id
@@ -47,6 +49,18 @@ const QuerySession = (props) => {
                 averageData[0].email = `${date} avg`;
                 // console.log(averageData)
                 return averageData[0];
+            } catch(err) {
+                console.error(err)
+            }
+    }
+
+    const getSeasonalAvgs = async () => {
+        const averagesQuery = `SELECT session.date, AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson JOIN session on recordsstatson.sessionid = session.sessionid WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') GROUP BY session.date, session.sessionid ORDER BY session.sessionid;`
+            try {
+                var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
+                const averageData = await response.json();
+                // console.log(averageData)
+                return averageData;
             } catch(err) {
                 console.error(err)
             }
@@ -108,7 +122,26 @@ const QuerySession = (props) => {
 
     return (
         <motion.div  initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}} transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full border  border-gray-700 rounded-md">
-            <h3 className="w-full text-center p-1 bg-gray-800 text-white font-bold text-lg rounded-t-md">Session Data</h3>
+             <div className="w-full flex flex-col content-center justify-center items-center bg-gray-800 rounded-md mb-5">
+                {/* have data for session averages accross season */}
+                <h3 className="w-full text-center p-1 bg-gray-800 text-white font-bold text-lg rounded-t-md cursor-pointer hover:opacity-60 hover:scale-90 transition-all duration-300" onClick={async () => {
+                    var graphW = document.querySelector("#cont").offsetWidth-100;
+                    const seasonAvgs = await getSeasonalAvgs();
+                    if (seasonalDisplay.type === "span") {
+                        console.log(seasonalDisplay)
+                        setSeasDisplay(<motion.div initial={{opacity: 0, y:-250}} animate={{opacity:1, y:0}} transition={{duration:.85}} className="max-h-[30rem] w-full overflow-y-auto">
+                            <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={["distance", 'sprintdistance']}></SessionSeasonGraph>
+                            <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={['energy', 'playerload']}></SessionSeasonGraph>
+                            <SessionSeasonGraph team={teamID}  width={graphW} data={seasonAvgs} dataKeys={['topspeed']}></SessionSeasonGraph>
+                        </motion.div>);
+                    } else {
+                        console.log(seasonalDisplay)
+                        setSeasDisplay(<span></span>)
+                    }
+                }}>Toggle Seasonal Session Data Display</h3>
+                {seasonalDisplay}
+            </div>
+            <h3 className="w-full text-center p-1 bg-gray-800 text-white font-bold text-lg rounded-t-md">Individual Session Data</h3>
             {/* <input id="sessionInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
                 setFilter(e.target.value);
                 console.log(e);
@@ -120,7 +153,6 @@ const QuerySession = (props) => {
                 getSessions();
                 filterList();
             } } /> */}
-
             <div className="max-h-96 w-full overflow-y-auto">
                 <table className="w-full text-sm text-left text-gray-400">
                     <thead className="text-xs uppercase bg-gray-700 text-gray-400 sticky top-0">

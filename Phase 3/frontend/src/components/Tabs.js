@@ -4,7 +4,7 @@
 //  - leaderboards 
 //  - data entry 
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Leaderboards from "./Leaderboards";
 import QuerySession from "./QuerySession";
 import QueryPlayerAll from "./QueryPlayerAll";
@@ -23,7 +23,7 @@ const Tabs = () => {
 
     const handleClick = (element, bt) => {
         // set active tab to clicked button's associated window 
-        var animatedDiv = <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:0.75}}> {element} </motion.div>
+        // var animatedDiv = <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:0.75}}> {element} </motion.div>
         setActive(element);
         console.log(bt)
         // document.querySelector("#indicator").style.left = left;
@@ -96,7 +96,10 @@ const Tabs = () => {
                 <select className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block py-1.5 opacity-70 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"  onChange={async function (e) {
                     var typeFilter = e.target.value
                     setCurTeam(typeFilter)
+                    // active.props.team = typeFilter;
                     setActive(<div></div>)
+                    if (toggle != null) { toggle.classList.toggle("indic") }
+                    setToggle(null);
                     }}>
                     <option value="MSOC">MSOC</option>
                     <option value="WSOC">WSOC</option>
