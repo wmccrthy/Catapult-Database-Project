@@ -83,18 +83,6 @@ const Leaderboards = (props) => {
         <h3 className="w-full text-center p-1  bg-gray-800 text-white font-bold text-lg rounded-t-md">Leaderboards</h3>
         <div id="cont" className="max-h-156 w-full flex flex-col content-center items-center justify-evenly">
             <h4 className="w-full text-center p-1  bg-gray-800 text-gray-400 font-bold text-lg rounded-t-md m-1">Highest Recorded Stats</h4>
-            <select className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel1" onChange={async function (e) {
-                var typeFilter = e.target.value
-                if (active != null) {
-                    var curMetric = active.innerHTML.replaceAll(" ", "").toLowerCase()
-                    if (typeFilter == "All") {typeFilter = null;}
-                    var updatedData = await getLeaderBoard(curMetric, typeFilter)
-                    setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={updatedData} dataKeys={[curMetric]}></PlayerSessionGraph>)
-                }}}>
-                <option value={null}>All</option>
-                <option value="training">Training</option>
-                <option value="game">Game</option>
-            </select>
             <div className="w-full flex items-center content-center justify-between text-center md:gap-10 mb-5 mt-3"> 
                 <button className="leaderButton md:text-[1vw] text-[2vw]   uppercase  text-gray-400" onClick={async function(e) {
                     var typeFilter = document.querySelector("#sel1").value;
@@ -139,24 +127,24 @@ const Leaderboards = (props) => {
                     toggleButton(e.target)
                 }}>Player Load</button>
             </div>
+            <select className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel1" onChange={async function (e) {
+                var typeFilter = e.target.value
+                if (active != null) {
+                    var curMetric = active.innerHTML.replaceAll(" ", "").toLowerCase()
+                    if (typeFilter == "All") {typeFilter = null;}
+                    var updatedData = await getLeaderBoard(curMetric, typeFilter)
+                    setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={updatedData} dataKeys={[curMetric]}></PlayerSessionGraph>)
+                }}}>
+                <option value={null}>All</option>
+                <option value="training">Training</option>
+                <option value="game">Game</option>
+            </select>
             {display}
         </div>
 
         {/* have input that allows user to pick whether ranked average data is from game, training, or either */}
         <div id="cont" className="max-h-156 w-full flex flex-col content-center items-center justify-evenly">
             <h4 className="w-full text-center p-1 bg-gray-800 text-gray-400 font-bold text-lg rounded-t-md m-1">Average Recorded Stats</h4>
-            <select className=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel" onChange={async function (e) {
-                var typeFilter = e.target.value
-                if (active2 != null) {
-                    var curMetric = active2.innerHTML.replaceAll(" ", "").toLowerCase()
-                    if (typeFilter == "All") {typeFilter = null;}
-                    var updatedData = await getAverageBoard(curMetric, typeFilter)
-                    setDisplay2(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={updatedData} dataKeys={[curMetric]}></PlayerSessionGraph>)
-                }}}>
-                <option value={null}>All</option>
-                <option value="training">Training</option>
-                <option value="game">Game</option>
-            </select>
             <div className="w-full flex items-center content-center justify-between text-center md:gap-10 mb-5 mt-3"> 
                 <button className="leaderButton md:text-[1vw] text-[2vw] uppercase  text-gray-400" onClick={async function(e) {
                     var typeFilter = document.querySelector("#sel").value;
@@ -201,6 +189,18 @@ const Leaderboards = (props) => {
                     toggleButton2(e.target)
                 }}>Player Load</button>
             </div>
+            <select className=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel" onChange={async function (e) {
+                var typeFilter = e.target.value
+                if (active2 != null) {
+                    var curMetric = active2.innerHTML.replaceAll(" ", "").toLowerCase()
+                    if (typeFilter == "All") {typeFilter = null;}
+                    var updatedData = await getAverageBoard(curMetric, typeFilter)
+                    setDisplay2(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={updatedData} dataKeys={[curMetric]}></PlayerSessionGraph>)
+                }}}>
+                <option value={null}>All</option>
+                <option value="training">Training</option>
+                <option value="game">Game</option>
+            </select>
             {display2}
         </div>
     </motion.div>

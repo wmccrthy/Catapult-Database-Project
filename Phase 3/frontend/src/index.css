@@ -37,3 +37,7 @@ code {
   background-color: rgb(75 85 99 / var(--tw-bg-opacity));
   border-radius: 0.375em;
 }
+
+.rotated {
+  transform: rotate(-90deg);
+}

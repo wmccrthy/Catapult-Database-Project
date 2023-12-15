@@ -10,7 +10,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import React from "react";
 import QueryPlayer from "./QueryPlayer";
 import SessionGraph from "./SessionGraph"
-import { motion} from "framer-motion";
+import { motion, AnimatePresence} from "framer-motion";
+import { MdOutlineArrowDropDownCircle } from "react-icons/md";
 import SessionSeasonGraph from "./SessionSeasonGraph";
 
 const QuerySession = (props) => {
@@ -104,6 +105,7 @@ const QuerySession = (props) => {
     // CALLED GETPLAYERS UPON INITIAL RENDERING SUCH THAT PLAYERLIST IS POPULATED ON SCREEN
     useEffect (() => {
         getSessions();
+        document.querySelector("h3").click()
     }, [])
 
     const averageAllSession = async (sessionType) => {
@@ -122,26 +124,32 @@ const QuerySession = (props) => {
 
     return (
         <motion.div  initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}} transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full border  border-gray-700 rounded-md">
-             <div className="w-full flex flex-col content-center justify-center items-center bg-gray-800 rounded-md mb-5">
+             <div className="w-full flex flex-col content-center justify-center items-center bg-gray-800 rounded-md">
                 {/* have data for session averages accross season */}
-                <h3 className="w-full text-center p-1 bg-gray-800 text-white font-bold text-lg rounded-t-md cursor-pointer hover:opacity-60 hover:scale-90 transition-all duration-300" onClick={async () => {
+                <h3 className="w-full flex items-center justify-center  text-center p-1 bg-gray-800 text-white font-bold text-lg rounded-t-md cursor-pointer hover:opacity-60 transition-all duration-300 border-b border-gray-700" onClick={async (e) => {
+                   console.log(e.target.querySelector("svg"))
+                   if (e.target.type == "svg") {
+                        e.target.classList.toggle("rotated")
+                   } else {e.target.querySelector("svg").classList.toggle("rotated")}
+                   
                     var graphW = document.querySelector("#cont").offsetWidth-100;
                     const seasonAvgs = await getSeasonalAvgs();
                     if (seasonalDisplay.type === "span") {
                         console.log(seasonalDisplay)
-                        setSeasDisplay(<motion.div initial={{opacity: 0, y:-250}} animate={{opacity:1, y:0}} transition={{duration:.85}} className="max-h-[30rem] w-full overflow-y-auto">
-                            <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={["distance", 'sprintdistance']}></SessionSeasonGraph>
-                            <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={['energy', 'playerload']}></SessionSeasonGraph>
-                            <SessionSeasonGraph team={teamID}  width={graphW} data={seasonAvgs} dataKeys={['topspeed']}></SessionSeasonGraph>
-                        </motion.div>);
+                        setSeasDisplay(
+                            <motion.div initial={{opacity: 0, y:-150}} animate={{opacity:1, y:0}} transition={{duration:.85}}  className="max-h-[30rem] w-full overflow-y-auto">
+                                <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={["distance", 'sprintdistance']}></SessionSeasonGraph>
+                                <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={['energy', 'playerload']}></SessionSeasonGraph>
+                                <SessionSeasonGraph team={teamID}  width={graphW} data={seasonAvgs} dataKeys={['topspeed']}></SessionSeasonGraph>
+                            </motion.div>);
                     } else {
                         console.log(seasonalDisplay)
                         setSeasDisplay(<span></span>)
                     }
-                }}>Toggle Seasonal Session Data Display</h3>
+                }}>Toggle Seasonal Session Data Display <MdOutlineArrowDropDownCircle className="ml-3 transition-all duration-300"></MdOutlineArrowDropDownCircle> </h3>
                 {seasonalDisplay}
             </div>
-            <h3 className="w-full text-center p-1 bg-gray-800 text-white font-bold text-lg rounded-t-md">Individual Session Data</h3>
+            <h3 className="w-full text-center p-1 bg-gray-800 text-white font-bold text-lg">Individual Session Data</h3>
             {/* <input id="sessionInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
                 setFilter(e.target.value);
                 console.log(e);
