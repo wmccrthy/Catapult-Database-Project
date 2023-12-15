@@ -12,49 +12,45 @@ import QueryPlayer from "./QueryPlayer";
 import SessionGraph from "./SessionGraph"
 import { motion} from "framer-motion";
 
-
-// for all player stats in a session the goal is to get all session data from given session, organized by player email, realistically, all I need is session id
-const moreEfficientSessionData = async (session) => {
-    // SELECT email, 
-    try {
-        // console.log("working")
-        const condTest = `sessionid = '${session}'`
-        // console.log(condTest)
-        var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=recordsstatson&field=email, distance, sprintdistance, energy, topspeed, playerload&condition=${condTest}`);
-        const playerData = await response.json();
-        for (let row of playerData) {
-            console.log(row)
-            row.email = row.email.replace("@amherst.edu", "")
-        }
-        // console.log(playerData);
-        return playerData;
-    } catch(err) {
-        console.log(err)
-    }
-}
-
-const averageThisSession = async (session, date) => {
-    const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE sessionid = '${session}';`
-        try {
-            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
-            const averageData = await response.json();
-            averageData[0].date = `${date} avg`;
-            averageData[0].email = `${date} avg`;
-            // console.log(averageData)
-            return averageData[0];
-        } catch(err) {
-            console.error(err)
-        }
-}
-
-
-
-
 const QuerySession = (props) => {
     const [sessionFilter, setFilter] = useState("");
     const [sessionList, setSessionList] = useState([]);
     const [display, setDisplay] = useState(<div></div>)
     const teamID = props.team;
+
+    // for all player stats in a session the goal is to get all session data from given session, organized by player email, realistically, all I need is session id
+    const moreEfficientSessionData = async (session) => {
+        // SELECT email, 
+        try {
+            // console.log("working")
+            const condTest = `sessionid = '${session}' AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
+            // console.log(condTest)
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=recordsstatson&field=email, distance, sprintdistance, energy, topspeed, playerload&condition=${condTest}`);
+            const playerData = await response.json();
+            for (let row of playerData) {
+                console.log(row)
+                row.email = row.email.replace("@amherst.edu", "")
+            }
+            // console.log(playerData);
+            return playerData;
+        } catch(err) {
+            console.log(err)
+        }
+    }
+
+    const averageThisSession = async (session, date) => {
+        const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE sessionid = '${session}' AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}');`
+            try {
+                var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
+                const averageData = await response.json();
+                averageData[0].date = `${date} avg`;
+                averageData[0].email = `${date} avg`;
+                // console.log(averageData)
+                return averageData[0];
+            } catch(err) {
+                console.error(err)
+            }
+    }
 
     // APPLIES FILTRATION TO PLAYER LIST BASED ON NAME INPUT
     const filterList = () => {

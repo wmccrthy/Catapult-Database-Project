@@ -58,7 +58,7 @@ const QueryPlayer = (props) => {
     const getPlayerAverages = async (playerEmail, playerName, sessionType) => {
         sessionType = sessionType.replace(" ", "").replace("\n", "")
         const relevantSessions = `SELECT sessionid FROM session WHERE type = '${sessionType}'`;
-        const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid IN (${relevantSessions});`
+        const averagesQuery = `SELECT AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid IN (${relevantSessions}) AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}');`
         try {
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
             // var testres = await fetch(`http://localhost:4000/custom?query=${relevantSessions}`);

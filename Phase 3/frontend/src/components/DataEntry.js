@@ -61,7 +61,7 @@ const DataEntry = () => {
             }
             if (row["Split Name"] === 'all') {
                 var player = {}
-                player.name = `'${row["Player Name"]}'`
+                player.name = `'${row["Player Name"].replace("'", "")}'`
                 try {
                     var fetchEmail = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=player&field=email&condition=name = ${player.name}`)
                     var getEmail = await fetchEmail.json();

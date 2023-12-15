@@ -31,10 +31,10 @@ const Leaderboards = (props) => {
 
     // 
     const leaderAvgQuery = async (stat, filter = null) => {
-        var query = `SELECT email, AVG(${stat}) AS ${stat} FROM recordsstatson GROUP BY email ORDER BY ${stat} DESC;`
+        var query = `SELECT email, AVG(${stat}) AS ${stat} FROM recordsstatson WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') GROUP BY email ORDER BY ${stat} DESC;`
         console.log(query)
         if (filter != null) {
-            query = `SELECT R.email, AVG(R.${stat}) AS ${stat} FROM recordsstatson R WHERE (SELECT S.type FROM session S WHERE S.sessionid = R.sessionid) = '${filter}' GROUP BY R.email ORDER BY ${stat} DESC;`
+            query = `SELECT R.email, AVG(R.${stat}) AS ${stat} FROM recordsstatson R WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND (SELECT S.type FROM session S WHERE S.sessionid = R.sessionid) = '${filter}' GROUP BY R.email ORDER BY ${stat} DESC;`
         }
         try { 
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`)
