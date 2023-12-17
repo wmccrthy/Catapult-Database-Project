@@ -137,7 +137,7 @@ const QuerySession = (props) => {
                     if (seasonalDisplay.type === "span") {
                         console.log(seasonalDisplay)
                         setSeasDisplay(
-                            <motion.div initial={{opacity: 0, y:-150}} animate={{opacity:1, y:0}} transition={{duration:.85}}  className="max-h-[30rem] w-full overflow-y-auto">
+                            <motion.div initial={{opacity: 0, y:200}} animate={{opacity:1, y:0}} transition={{duration:.85}}  className="max-h-[30rem] w-full overflow-y-auto ">
                                 <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={["distance", 'sprintdistance']}></SessionSeasonGraph>
                                 <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={['energy', 'playerload']}></SessionSeasonGraph>
                                 <SessionSeasonGraph team={teamID}  width={graphW} data={seasonAvgs} dataKeys={['topspeed']}></SessionSeasonGraph>
@@ -149,7 +149,7 @@ const QuerySession = (props) => {
                 }}>Toggle Seasonal Session Data Display <MdOutlineArrowDropDownCircle className="ml-3 transition-all duration-300"></MdOutlineArrowDropDownCircle> </h3>
                 {seasonalDisplay}
             </div>
-            <h3 className="w-full text-center p-1 bg-gray-800 text-white font-bold text-lg">Individual Session Data</h3>
+            <h3 className="w-full text-center p-1 border-t border-gray-700 bg-gray-800 text-white font-bold text-lg">Individual Session Data</h3>
             {/* <input id="sessionInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
                 setFilter(e.target.value);
                 console.log(e);
