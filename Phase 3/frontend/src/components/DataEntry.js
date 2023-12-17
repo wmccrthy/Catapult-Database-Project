@@ -150,7 +150,6 @@ const DataEntry = (props) => {
         //      - we want to convert the following: distance/sprintdistance/distancepermin (yards), top speed (mph)
     }
 
-
     const parsePlayerAddition = async () => {
         const inputs = document.querySelector("#player-inp").querySelectorAll("input")
         var pName = inputs[0].value

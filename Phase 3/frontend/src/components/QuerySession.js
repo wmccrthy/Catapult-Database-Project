@@ -137,7 +137,7 @@ const QuerySession = (props) => {
                     if (seasonalDisplay.type === "span") {
                         console.log(seasonalDisplay)
                         setSeasDisplay(
-                            <motion.div initial={{opacity: 0, y:200}} animate={{opacity:1, y:0}} transition={{duration:.85}}  className="max-h-[30rem] w-full overflow-y-auto ">
+                            <motion.div initial={{opacity: 0, y:200}} animate={{opacity:1, y:0}} transition={{duration:.85}}  className="max-h-[30rem] w-full overflow-y-auto">
                                 <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={["distance", 'sprintdistance']}></SessionSeasonGraph>
                                 <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={['energy', 'playerload']}></SessionSeasonGraph>
                                 <SessionSeasonGraph team={teamID}  width={graphW} data={seasonAvgs} dataKeys={['topspeed']}></SessionSeasonGraph>
