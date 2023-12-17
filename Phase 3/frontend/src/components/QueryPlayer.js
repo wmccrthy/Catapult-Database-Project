@@ -46,7 +46,7 @@ const QueryPlayer = (props) => {
         try {
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
             const averageData = await response.json();
-            averageData[0].email = "session average";
+            averageData[0].email = `${sessionDate} average`;
             console.log(averageData)
             return averageData[0];
         } catch(err) {
