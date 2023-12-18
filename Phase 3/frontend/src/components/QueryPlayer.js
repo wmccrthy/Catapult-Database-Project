@@ -98,7 +98,7 @@ const QueryPlayer = (props) => {
     // APPLIES FILTRATION TO PLAYER LIST BASED ON NAME INPUT
     const filterList = () => {
         playerList.map(player => (
-            <tr className="border-b bg-gray-800 border-gray-700">
+            <tr className="border-b bg-gray-900 border-gray-700">
                 <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">{player.name}</th>
                 <td className="px-6 py-4">{player.email}</td>
                 <td className="px-6 py-4 flex"><button  onClick={async function () {
@@ -147,7 +147,7 @@ const QueryPlayer = (props) => {
                     </thead>
                     <tbody>
                         {playerList.map(player => (
-                            <tr className="border-b bg-gray-800 border-gray-700">
+                            <tr className="border-b bg-gray-900 border-gray-700">
                                 <th scope="row" className="px-6 py-4 font-medium  whitespace-nowrap text-white">{player.name}</th>
                                 <td className="px-6 py-4">{player.email}</td>
                                 <td className="px-6 py-4 flex"><button  onClick={async function () {

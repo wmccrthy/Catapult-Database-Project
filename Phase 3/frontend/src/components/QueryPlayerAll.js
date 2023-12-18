@@ -87,7 +87,7 @@ const QueryPlayerAll = (props) => {
     // APPLIES FILTRATION TO PLAYER LIST BASED ON NAME INPUT
     const filterList = () => {
         playerList.map(player => (
-            <tr className="border-b bg-gray-800 border-gray-700">
+            <tr className="border-b bg-gray-900 border-gray-700">
                 <th scope="row" className="px-6 py-4 font-medium  whitespace-nowrap text-white">{player.name}</th>
                 <td className="px-6 py-4">{player.email}</td>
                 <td className="px-6 py-4 flex"><button  onClick={async function () {
@@ -110,7 +110,7 @@ const QueryPlayerAll = (props) => {
 
     return (
         <motion.div initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}}  transition={{duration:.5, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full border border-gray-700 rounded-md min-h-96">
-            <h3 className="w-full text-center p-1 bg-gray-800 text-white font-bold text-lg rounded-t-md">Player Season Data</h3>
+            <h3 className="w-full text-center p-1 bg-gray-900 text-white font-bold text-lg rounded-t-md">Player Season Data</h3>
             {/* <input id="playerInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none" type="text" placeholder="Enter Player Name" onChange={function (e) {
                 setFilter(e.target.value);
                 console.log(e);
@@ -140,7 +140,7 @@ const QueryPlayerAll = (props) => {
                     </thead>
                     <tbody>
                         {playerList.map(player => (
-                            <tr className="border-b bg-gray-800 border-gray-700">
+                            <tr className="border-b bg-gray-900 border-gray-700">
                                 <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">{player.name}</th>
                                 <td className="px-6 py-4">{player.email}</td>
                                 <td className="px-6 py-4 flex"><button  onClick={async function () {

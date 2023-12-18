@@ -75,8 +75,8 @@ const SessionSeasonGraph = (props) => {
 
     if (props.multiStat) {
         return (
-            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-800  text-gray-400 mb-5">
-                    {/* <BarChart className="w-full mt-1 text-md bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
+            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-900  text-gray-400 mb-5">
+                    {/* <BarChart className="w-full mt-1 text-md bg-gray-900 text-gray-400" width={graphW} height={400} data={data}>
                         <XAxis dataKey="date" fontSize={8} angle={-10} dy={8}/>
                         <YAxis label={<Label angle={-90} dx={-30}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <YAxis label={<Label angle={-90} dx={25}>{`${dataKey2} (${units2})`}</Label>} yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
@@ -85,7 +85,7 @@ const SessionSeasonGraph = (props) => {
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
                         <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart> */}
-                    <h4 className="w-full text-center p-1 bg-gray-800 text-white font-light text-lg rounded-t-md">{dataKey1} and {dataKey2} Team Average Per Session</h4>
+                    <h4 className="w-full text-center p-1 bg-gray-900 text-white font-light text-lg rounded-t-md">{dataKey1} and {dataKey2} team average per session</h4>
                     <select className=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel" onChange={async function (e) {
                         var typeFilter = e.target.value
                         if (typeFilter == "All") {
@@ -98,7 +98,7 @@ const SessionSeasonGraph = (props) => {
                         <option value="training">Training</option>
                         <option value="game">Game</option>
                     </select>
-                    <AreaChart className="w-full mt-1 text-md bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
+                    <AreaChart className="w-full mt-1 text-md bg-gray-900 text-gray-400" width={graphW} height={400} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
@@ -122,8 +122,8 @@ const SessionSeasonGraph = (props) => {
             </div>)
     } else {
         return (
-            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-800  text-gray-400 mb-5">
-                    {/* <BarChart className="w-full mt-1 text-md  bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
+            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-900  text-gray-400 mb-5">
+                    {/* <BarChart className="w-full mt-1 text-md  bg-gray-900 text-gray-400" width={graphW} height={400} data={data}>
                         <XAxis dataKey="date" fontSize={8} angle={-10} dy={8}/>
                         <YAxis label={<Label angle={-90} dx={-10}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
@@ -131,7 +131,7 @@ const SessionSeasonGraph = (props) => {
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
                         <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart> */}
-                    <h4 className="w-full text-center p-1 bg-gray-800 text-white font-light text-lg rounded-t-md">{dataKey1} Team Average Per Session</h4>
+                    <h4 className="w-full text-center p-1 bg-gray-900 text-white font-light text-lg rounded-t-md">{dataKey1} team average per session</h4>
                     <select className=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel" onChange={async function (e) {
                         var typeFilter = e.target.value
                         if (typeFilter == "All") {
@@ -144,7 +144,7 @@ const SessionSeasonGraph = (props) => {
                         <option value="training">Training</option>
                         <option value="game">Game</option>
                     </select>
-                    <AreaChart className="w-full mt-1 text-md  bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
+                    <AreaChart className="w-full mt-1 text-md  bg-gray-900 text-gray-400" width={graphW} height={400} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>

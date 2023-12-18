@@ -7,7 +7,10 @@ body {
   /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif; */
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    /* font-family: 'Dosis', "sans-serif"; */
+    font-family: 'Titillium Web', "sans-serif";
+    /* font-family: 'Roboto Sans', 'serif' */
+  /* font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -41,3 +44,9 @@ code {
 .rotated {
   transform: rotate(-90deg);
 }
+
+.open {
+  transform: translateY("-100");
+  transform: translateX('1');
+}
+

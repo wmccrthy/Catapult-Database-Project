@@ -80,9 +80,9 @@ const Leaderboards = (props) => {
 
     return (
     <motion.div initial={{opacity: 0,  scale:.95}} animate={{opacity:1, scale:1}}   transition={{duration:0.65}} className="flex flex-col content-center items-center align-center w-full p-5 border border-gray-700 rounded-t-md">
-        <h3 className="w-full text-center p-1  bg-gray-800 text-white font-bold text-lg rounded-t-md">Leaderboards</h3>
+        <h3 className="w-full text-center p-1  bg-gray-900 text-white font-bold text-lg rounded-t-md">Leaderboards</h3>
         <div id="cont" className="max-h-156 w-full flex flex-col content-center items-center justify-evenly">
-            <h4 className="w-full text-center p-1  bg-gray-800 text-gray-400 font-bold text-lg rounded-t-md m-1">Highest Recorded Stats</h4>
+            <h4 className="w-full text-center p-1  bg-gray-900 text-gray-400 font-bold text-lg rounded-t-md m-1">Highest Recorded Stats</h4>
             <div className="w-full flex items-center content-center justify-between text-center md:gap-10 mb-5 mt-3"> 
                 <button className="leaderButton md:text-[1vw] text-[2vw]   uppercase  text-gray-400" onClick={async function(e) {
                     var typeFilter = document.querySelector("#sel1").value;
@@ -144,7 +144,7 @@ const Leaderboards = (props) => {
 
         {/* have input that allows user to pick whether ranked average data is from game, training, or either */}
         <div id="cont" className="max-h-156 w-full flex flex-col content-center items-center justify-evenly">
-            <h4 className="w-full text-center p-1 bg-gray-800 text-gray-400 font-bold text-lg rounded-t-md m-1">Average Recorded Stats</h4>
+            <h4 className="w-full text-center p-1 bg-gray-900 text-gray-400 font-bold text-lg rounded-t-md m-1">Average Recorded Stats</h4>
             <div className="w-full flex items-center content-center justify-between text-center md:gap-10 mb-5 mt-3"> 
                 <button className="leaderButton md:text-[1vw] text-[2vw] uppercase  text-gray-400" onClick={async function(e) {
                     var typeFilter = document.querySelector("#sel").value;

@@ -11,13 +11,13 @@ import React from "react";
 import QueryPlayer from "./QueryPlayer";
 import SessionGraph from "./SessionGraph"
 import { motion, AnimatePresence} from "framer-motion";
-import { MdOutlineArrowDropDownCircle } from "react-icons/md";
+import { MdElectricCar, MdOutlineArrowDropDownCircle } from "react-icons/md";
 import SessionSeasonGraph from "./SessionSeasonGraph";
 
 const QuerySession = (props) => {
     const [sessionFilter, setFilter] = useState("");
     const [sessionList, setSessionList] = useState([]);
-    const [display, setDisplay] = useState(<div></div>)
+    const [display, setDisplay] = useState(<span></span>)
     const [seasonalDisplay, setSeasDisplay] = useState(<span className="font-extralight opacity-70 text-white"></span>)
     const teamID = props.team;
 
@@ -70,7 +70,7 @@ const QuerySession = (props) => {
     // APPLIES FILTRATION TO PLAYER LIST BASED ON NAME INPUT
     const filterList = () => {
         sessionList.map(session => (
-                            <tr className="border-b bg-gray-800 border-gray-700">
+                            <tr className="border-b bg-gray-900 border-gray-700">
                                 <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">{session.type}</th>
                                 <td className="px-6 py-4">{session.sessionid}</td>
                                 <td className="px-6 py-4">{session.date}</td>
@@ -103,9 +103,25 @@ const QuerySession = (props) => {
     }
 
     // CALLED GETPLAYERS UPON INITIAL RENDERING SUCH THAT PLAYERLIST IS POPULATED ON SCREEN
+    const setInitialDisp = async () => {
+        document.querySelector("#icon").classList.toggle("rotated")
+        var graphW = document.querySelector("#cont").offsetWidth-100;
+        const seasonAvgs = await getSeasonalAvgs();
+        if (seasonalDisplay.type === "span") {
+        console.log(seasonalDisplay)
+        setSeasDisplay(
+            <motion.div initial={{opacity: 0, y:200}} animate={{opacity:1, y:0}} transition={{duration:.85}}  className="max-h-[30rem] w-full overflow-y-auto">
+                <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={["distance", 'sprintdistance']}></SessionSeasonGraph>
+                <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={['energy', 'playerload']}></SessionSeasonGraph>
+                <SessionSeasonGraph team={teamID}  width={graphW} data={seasonAvgs} dataKeys={['topspeed']}></SessionSeasonGraph>
+            </motion.div>);
+    }}
+
     useEffect (() => {
         getSessions();
-        document.querySelector("h3").click()
+        setInitialDisp();
+        // document.querySelector("h3").click()
+        // console.log(e.target.querySelector("svg"))   
     }, [])
 
     const averageAllSession = async (sessionType) => {
@@ -123,33 +139,16 @@ const QuerySession = (props) => {
     }
 
     return (
-        <motion.div  initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}} transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full border  border-gray-700 rounded-md">
-             <div className="w-full flex flex-col content-center justify-center items-center bg-gray-800 rounded-md">
+        <motion.div  initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}} transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full">
+            <div id="cnt" className="w-full flex flex-col content-center justify-center items-center bg-gray-900 rounded-md transition-all duration-300 hover:h-[29rem] h-10 border border-gray-600 border-b-0 rounded-t-md" onMouseEnter={(e) => {
+                    document.querySelector("#icon").classList.toggle("rotated")
+            }} onMouseLeave={(e) => {
+                document.querySelector("#icon").classList.toggle("rotated")
+            }}>
                 {/* have data for session averages accross season */}
-                <h3 className="w-full flex items-center justify-center  text-center p-1 bg-gray-800 text-white font-bold text-lg rounded-t-md cursor-pointer hover:opacity-60 transition-all duration-300 border-b border-gray-700" onClick={async (e) => {
-                   console.log(e.target.querySelector("svg"))
-                   if (e.target.type == "svg") {
-                        e.target.classList.toggle("rotated")
-                   } else {e.target.querySelector("svg").classList.toggle("rotated")}
-                   
-                    var graphW = document.querySelector("#cont").offsetWidth-100;
-                    const seasonAvgs = await getSeasonalAvgs();
-                    if (seasonalDisplay.type === "span") {
-                        console.log(seasonalDisplay)
-                        setSeasDisplay(
-                            <motion.div initial={{opacity: 0, y:200}} animate={{opacity:1, y:0}} transition={{duration:.85}}  className="max-h-[30rem] w-full overflow-y-auto">
-                                <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={["distance", 'sprintdistance']}></SessionSeasonGraph>
-                                <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={['energy', 'playerload']}></SessionSeasonGraph>
-                                <SessionSeasonGraph team={teamID}  width={graphW} data={seasonAvgs} dataKeys={['topspeed']}></SessionSeasonGraph>
-                            </motion.div>);
-                    } else {
-                        console.log(seasonalDisplay)
-                        setSeasDisplay(<span></span>)
-                    }
-                }}>Toggle Seasonal Session Data Display <MdOutlineArrowDropDownCircle className="ml-3 transition-all duration-300"></MdOutlineArrowDropDownCircle> </h3>
+                <h3 className="w-full flex items-center justify-center  text-center p-1 bg-gray-900 text-white font-bold text-lg rounded-t-md cursor-pointer hover:opacity-60 transition-all duration-300 border-b border-gray-700">Toggle Seasonal Session Data Display <MdOutlineArrowDropDownCircle id="icon" className="ml-3 transition-all duration-300"></MdOutlineArrowDropDownCircle> </h3>
                 {seasonalDisplay}
             </div>
-            <h3 className="w-full text-center p-1 border-t border-gray-700 bg-gray-800 text-white font-bold text-lg">Individual Session Data</h3>
             {/* <input id="sessionInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
                 setFilter(e.target.value);
                 console.log(e);
@@ -161,9 +160,10 @@ const QuerySession = (props) => {
                 getSessions();
                 filterList();
             } } /> */}
-            <div className="max-h-96 w-full overflow-y-auto">
+            <div className="max-h-96 w-full overflow-y-auto z-10 border border-gray-600 rounded-b-md">
                 <table className="w-full text-sm text-left text-gray-400">
-                    <thead className="text-xs uppercase bg-gray-700 text-gray-400 sticky top-0">
+                    <caption className="sticky top-0 h-auto w-full bg-gray-900 text-white text-lg">Individual Session Data</caption>
+                    <thead className="w-full text-xs uppercase bg-gray-700 text-gray-400 sticky top-7">
                         <tr>
                             <th scope="col" className="px-6 py-3">
                                 Type
@@ -186,7 +186,7 @@ const QuerySession = (props) => {
                         {/* HAVE TWO BUTTONS WITHIN THE TABLE, ONE PROMPTS SEEING INDIVIDUAL PLAYER STATS
                         //  OTHER PROMPTS SEEING SESSION STATS FOR ALL PLAYERS (IN BAR GRAPH) PER METRIC */}
                         {sessionList.map(session => (
-                                <tr className="border-b bg-gray-800 border-gray-700">
+                                <tr className="border-b bg-gray-900 border-gray-700">
                                     <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">{session.type}</th>
                                     <td className="px-6 py-4">{session.sessionid}</td>
                                     <td className="px-6 py-4">{session.date}</td>
@@ -227,7 +227,7 @@ const QuerySession = (props) => {
                     </tbody>
                 </table>
             </div>
-            <div className="w-full flex flex-col content-center justify-center items-center bg-gray-800 rounded-b-md"> {display}</div>
+            <div className="w-full flex flex-col content-center justify-center items-center bg-gray-900 rounded-b-md"> {display}</div>
         
         </motion.div>
         

@@ -68,8 +68,8 @@ const PlayerSessionGraph = (props) => {
     
     if (props.multiStat) {
         return (
-            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-800  text-gray-400 mb-5">
-                    <BarChart className="w-full mt-1 text-md bg-gray-800 text-gray-400" width={graphW} height={450} data={data}>
+            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-900  text-gray-400 mb-5">
+                    <BarChart className="w-full mt-1 text-md bg-gray-900 text-gray-400" width={graphW} height={450} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
@@ -91,8 +91,8 @@ const PlayerSessionGraph = (props) => {
             </div>)
     } else {
         return (
-            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-800  text-gray-400 mb-5">
-                    <BarChart className="w-full mt-1 text-md  bg-gray-800 text-gray-400" width={graphW} height={450} data={data}>
+            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-900  text-gray-400 mb-5">
+                    <BarChart className="w-full mt-1 text-md  bg-gray-900 text-gray-400" width={graphW} height={450} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>

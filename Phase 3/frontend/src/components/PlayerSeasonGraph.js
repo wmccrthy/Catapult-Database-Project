@@ -75,8 +75,8 @@ const PlayerSeasonGraph = (props) => {
 
     if (props.multiStat) {
         return (
-            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-800  text-gray-400 mb-5">
-                    {/* <BarChart className="w-full mt-1 text-md bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
+            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-900  text-gray-400 mb-5">
+                    {/* <BarChart className="w-full mt-1 text-md bg-gray-900 text-gray-400" width={graphW} height={400} data={data}>
                         <XAxis dataKey="date" fontSize={8} angle={-10} dy={8}/>
                         <YAxis label={<Label angle={-90} dx={-30}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <YAxis label={<Label angle={-90} dx={25}>{`${dataKey2} (${units2})`}</Label>} yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
@@ -97,7 +97,7 @@ const PlayerSeasonGraph = (props) => {
                         <option value="training">Training</option>
                         <option value="game">Game</option>
                     </select>
-                    <AreaChart className="w-full mt-1 text-md bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
+                    <AreaChart className="w-full mt-1 text-md bg-gray-900 text-gray-400" width={graphW} height={400} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
@@ -121,8 +121,8 @@ const PlayerSeasonGraph = (props) => {
             </div>)
     } else {
         return (
-            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-800  text-gray-400 mb-5">
-                    {/* <BarChart className="w-full mt-1 text-md  bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
+            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-900  text-gray-400 mb-5">
+                    {/* <BarChart className="w-full mt-1 text-md  bg-gray-900 text-gray-400" width={graphW} height={400} data={data}>
                         <XAxis dataKey="date" fontSize={8} angle={-10} dy={8}/>
                         <YAxis label={<Label angle={-90} dx={-10}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
                         <YAxis yAxisId="right" orientation="right" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
@@ -142,7 +142,7 @@ const PlayerSeasonGraph = (props) => {
                         <option value="training">Training</option>
                         <option value="game">Game</option>
                     </select>
-                    <AreaChart className="w-full mt-1 text-md  bg-gray-800 text-gray-400" width={graphW} height={400} data={data}>
+                    <AreaChart className="w-full mt-1 text-md  bg-gray-900 text-gray-400" width={graphW} height={400} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>

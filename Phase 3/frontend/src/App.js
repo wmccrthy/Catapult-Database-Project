@@ -10,7 +10,7 @@ const App = () => {
 
   return (
     <>
-    <div className="flex flex-col align-baseline justify-center items-center w-screen min-h-screen overflow-y-auto bg-gray-800 pb-10 pt-10">
+    <div className="flex flex-col align-baseline justify-center items-center w-screen min-h-screen overflow-y-auto bg-gray-900 pb-10 pt-10">
       {/* <div className=" w-11/12 flex gap-5">
         <div className="w-full">
           <QuerySession/>
