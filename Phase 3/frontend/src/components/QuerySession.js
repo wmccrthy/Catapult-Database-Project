@@ -140,13 +140,19 @@ const QuerySession = (props) => {
 
     return (
         <motion.div  initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}} transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full">
-            <div id="cnt" className="w-full flex flex-col content-center justify-center items-center bg-gray-900 rounded-md transition-all duration-300 hover:h-[32rem] h-8 border border-gray-600 border-b-0 rounded-t-md" onMouseEnter={(e) => {
-                    document.querySelector("#icon").classList.toggle("rotated")
+            <div id="cnt" className="w-full flex flex-col content-center justify-center items-center bg-gray-900 rounded-md transition-all duration-300 h-8 border border-gray-600 border-b-0 rounded-t-md" onMouseEnter={(e) => {
+                
+                    if (!document.querySelector("#cnt").classList.contains("open")) {document.querySelector("#cnt").classList.toggle("preview")
+                    document.querySelector("#icon").classList.toggle("rotated")}
             }} onMouseLeave={(e) => {
-                document.querySelector("#icon").classList.toggle("rotated")
+                if (!document.querySelector("#cnt").classList.contains("open")) {document.querySelector("#cnt").classList.toggle("preview")
+                document.querySelector("#icon").classList.toggle("rotated")}
+            }} onClick={() => {
+                document.querySelector("#cnt").classList.toggle("preview")
+                document.querySelector("#cnt").classList.toggle("open")
             }}>
                 {/* have data for session averages accross season */}
-                <h4 className="w-full flex items-center justify-center  text-center pb-1 bg-gray-900 text-white font-bold text-md rounded-t-md cursor-pointer hover:opacity-60 transition-all duration-300 border-b border-gray-700">Toggle Seasonal Session Data Display <MdOutlineArrowDropDownCircle id="icon" className="ml-3 transition-all duration-300"></MdOutlineArrowDropDownCircle> </h4>
+                <h4 className="w-full flex items-center justify-center text-center pb-1 bg-gray-900 text-white font-bold text-md rounded-t-md cursor-pointer hover:opacity-60 transition-all duration-300 border-b border-gray-700">Toggle Seasonal Session Data Display <MdOutlineArrowDropDownCircle id="icon" className="ml-3 transition-all duration-300"></MdOutlineArrowDropDownCircle> </h4>
                 {seasonalDisplay}
             </div>
             {/* <input id="sessionInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
@@ -160,7 +166,7 @@ const QuerySession = (props) => {
                 getSessions();
                 filterList();
             } } /> */}
-            <div className="max-h-96 w-full overflow-y-auto z-10 border border-gray-600 rounded-b-md">
+            <div className="max-h-96 w-full overflow-y-auto z-10 border border-b-0 border-gray-600">
                 <table className="w-full text-sm text-left text-gray-400">
                     <caption className="sticky top-0 h-auto w-full bg-gray-900 text-white text-lg">Individual Session Data</caption>
                     <thead className="w-full text-xs uppercase bg-gray-700 text-gray-400 sticky top-7">
@@ -227,7 +233,7 @@ const QuerySession = (props) => {
                     </tbody>
                 </table>
             </div>
-            <div className="w-full flex flex-col content-center justify-center items-center bg-gray-900 rounded-b-md"> {display}</div>
+            <div className="w-full flex flex-col content-center justify-center items-center bg-gray-900 border border-gray-600 rounded-b-md"> {display}</div>
         
         </motion.div>
         

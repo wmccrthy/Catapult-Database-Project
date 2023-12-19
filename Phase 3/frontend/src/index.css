@@ -46,7 +46,10 @@ code {
 }
 
 .open {
-  transform: translateY("-100");
-  transform: translateX('1');
+  height: 32rem;
+}
+
+.preview {
+  height: 5rem;
 }
 
