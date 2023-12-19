@@ -148,9 +148,9 @@ const QueryPlayer = (props) => {
                     <tbody>
                         {playerList.map(player => (
                             <tr className="border-b bg-gray-900 border-gray-700">
-                                <th scope="row" className="px-6 py-4 font-medium  whitespace-nowrap text-white">{player.name}</th>
-                                <td className="px-6 py-4">{player.email}</td>
-                                <td className="px-6 py-4 flex"><button  onClick={async function () {
+                                <th scope="row" className="py-1 sm:px-6 sm:py-4  font-medium  whitespace-nowrap text-white">{player.name}</th>
+                                <td className="py-1 sm:px-6 sm:py-4 ">{player.email}</td>
+                                <td className="py-1 sm:px-6 sm:py-4 flex"><button  onClick={async function () {
                                     var statArr = await getPlayerStats(player.email, session);
                                     var avgStatArr = await getSessionAverages();
                                     var playerAvgArr = await getPlayerAverages(player.email, player.name, seshType);

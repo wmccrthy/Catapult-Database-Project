@@ -127,13 +127,13 @@ const QueryPlayerAll = (props) => {
                 <table className="w-full text-sm text-left  text-gray-400">
                     <thead className="text-xs  uppercase bg-gray-700 text-gray-400 sticky top-0">
                         <tr>
-                            <th scope="col" className="px-6 py-3">
+                            <th scope="col" className="px-1 py-1 sm:px-6 sm:py-3">
                                 Name
                             </th>
-                            <th scope="col" className="px-6 py-3">
+                            <th scope="col" className="px-1 py-1 sm:px-6 sm:py-3">
                                 Email
                             </th>
-                            <th scope="col" className="px-6 py-3">
+                            <th scope="col" className="px-1 py-1 sm:px-6 sm:py-3">
                                 Season Stats
                             </th>
                         </tr>
@@ -141,9 +141,9 @@ const QueryPlayerAll = (props) => {
                     <tbody>
                         {playerList.map(player => (
                             <tr className="border-b bg-gray-900 border-gray-700">
-                                <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">{player.name}</th>
-                                <td className="px-6 py-4">{player.email}</td>
-                                <td className="px-6 py-4 flex"><button  onClick={async function () {
+                                <th scope="row" className="py-1 sm:px-6 sm:py-4 font-medium whitespace-nowrap text-white">{player.name}</th>
+                                <td className="py-1 sm:px-6 sm:py-4">{player.email}</td>
+                                <td className="py-1 sm:px-6 sm:py-4"><button  onClick={async function () {
                                     var trainingAvg = await getPlayerAverages(player.email, player.name, "training");
                                     var gameAvg = await getPlayerAverages(player.email, player.name, "game");
                                     var avgData = []

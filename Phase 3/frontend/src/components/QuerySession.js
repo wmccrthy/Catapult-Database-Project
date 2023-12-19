@@ -140,13 +140,13 @@ const QuerySession = (props) => {
 
     return (
         <motion.div  initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}} transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full">
-            <div id="cnt" className="w-full flex flex-col content-center justify-center items-center bg-gray-900 rounded-md transition-all duration-300 hover:h-[29rem] h-10 border border-gray-600 border-b-0 rounded-t-md" onMouseEnter={(e) => {
+            <div id="cnt" className="w-full flex flex-col content-center justify-center items-center bg-gray-900 rounded-md transition-all duration-300 hover:h-[32rem] h-8 border border-gray-600 border-b-0 rounded-t-md" onMouseEnter={(e) => {
                     document.querySelector("#icon").classList.toggle("rotated")
             }} onMouseLeave={(e) => {
                 document.querySelector("#icon").classList.toggle("rotated")
             }}>
                 {/* have data for session averages accross season */}
-                <h3 className="w-full flex items-center justify-center  text-center p-1 bg-gray-900 text-white font-bold text-lg rounded-t-md cursor-pointer hover:opacity-60 transition-all duration-300 border-b border-gray-700">Toggle Seasonal Session Data Display <MdOutlineArrowDropDownCircle id="icon" className="ml-3 transition-all duration-300"></MdOutlineArrowDropDownCircle> </h3>
+                <h4 className="w-full flex items-center justify-center  text-center pb-1 bg-gray-900 text-white font-bold text-md rounded-t-md cursor-pointer hover:opacity-60 transition-all duration-300 border-b border-gray-700">Toggle Seasonal Session Data Display <MdOutlineArrowDropDownCircle id="icon" className="ml-3 transition-all duration-300"></MdOutlineArrowDropDownCircle> </h4>
                 {seasonalDisplay}
             </div>
             {/* <input id="sessionInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
@@ -165,19 +165,19 @@ const QuerySession = (props) => {
                     <caption className="sticky top-0 h-auto w-full bg-gray-900 text-white text-lg">Individual Session Data</caption>
                     <thead className="w-full text-xs uppercase bg-gray-700 text-gray-400 sticky top-7">
                         <tr>
-                            <th scope="col" className="px-6 py-3">
+                            <th scope="col" className="py-1 sm:px-6 sm:py-3">
                                 Type
                             </th>
-                            <th scope="col" className="px-6 py-3">
+                            <th scope="col" className="py-1 sm:px-6 sm:py-3">
                                 Session_ID
                             </th>
-                            <th scope="col" className="px-6 py-3">
+                            <th scope="col" className="py-1 sm:px-6 sm:py-3">
                                 Date
                             </th>
-                            <th scope="col" className="px-6 py-3">
+                            <th scope="col" className="py-1 sm:px-6 sm:py-3">
                                 Player Stats
                             </th>
-                            <th scope="col" className="px-6 py-3">
+                            <th scope="col" className="py-1 sm:px-6 sm:py-3">
                                 All Stats
                             </th>
                         </tr>
@@ -187,15 +187,15 @@ const QuerySession = (props) => {
                         //  OTHER PROMPTS SEEING SESSION STATS FOR ALL PLAYERS (IN BAR GRAPH) PER METRIC */}
                         {sessionList.map(session => (
                                 <tr className="border-b bg-gray-900 border-gray-700">
-                                    <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">{session.type}</th>
-                                    <td className="px-6 py-4">{session.sessionid}</td>
-                                    <td className="px-6 py-4">{session.date}</td>
-                                    <td className="px-6 py-4"><button onClick={function () {
+                                    <th scope="row" className="py-1 sm:px-6 sm:py-4  font-medium whitespace-nowrap text-white">{session.type}</th>
+                                    <td className="py-1 sm:px-6 sm:py-4">{session.sessionid}</td>
+                                    <td className="py-1 sm:px-6 sm:py-4">{session.date}</td>
+                                    <td className="py-1 sm:px-6 sm:py-4"><button onClick={function () {
                                         // QueryPlayer
                                         setDisplay(<QueryPlayer team={teamID} type={session.type} session={session.sessionid} date={session.date} defData={<div></div>}></QueryPlayer>)
                                         console.log(display)
                                     }}>View Player Stats</button></td>
-                                    <td className="px-6 py-4">
+                                    <td className="py-1 sm:px-6 sm:py-4 ">
                                         <button onClick={async function () {
                                             // QueryPlayers
                                             var formatList = await moreEfficientSessionData(session.sessionid)
