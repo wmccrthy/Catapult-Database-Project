@@ -141,18 +141,17 @@ const QuerySession = (props) => {
     return (
         <motion.div  initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}} transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full">
             <div id="cnt" className="w-full flex flex-col content-center justify-center items-center bg-gray-900 rounded-md transition-all duration-300 h-8 border border-gray-600 border-b-0 rounded-t-md" onMouseEnter={(e) => {
-                
                     if (!document.querySelector("#cnt").classList.contains("open")) {document.querySelector("#cnt").classList.toggle("preview")
                     document.querySelector("#icon").classList.toggle("rotated")}
             }} onMouseLeave={(e) => {
                 if (!document.querySelector("#cnt").classList.contains("open")) {document.querySelector("#cnt").classList.toggle("preview")
                 document.querySelector("#icon").classList.toggle("rotated")}
-            }} onClick={() => {
-                document.querySelector("#cnt").classList.toggle("preview")
-                document.querySelector("#cnt").classList.toggle("open")
             }}>
                 {/* have data for session averages accross season */}
-                <h4 className="w-full flex items-center justify-center text-center pb-1 bg-gray-900 text-white font-bold text-md rounded-t-md cursor-pointer hover:opacity-60 transition-all duration-300 border-b border-gray-700">Toggle Seasonal Session Data Display <MdOutlineArrowDropDownCircle id="icon" className="ml-3 transition-all duration-300"></MdOutlineArrowDropDownCircle> </h4>
+                <h4 className="w-full flex items-center justify-center text-center pb-1 bg-gray-900 text-white font-bold text-md rounded-t-md cursor-pointer hover:opacity-60 transition-all duration-300 border-b border-gray-700"  onClick={() => {
+                document.querySelector("#cnt").classList.toggle("preview")
+                document.querySelector("#cnt").classList.toggle("open")
+            }}>Toggle Seasonal Session Data Display <MdOutlineArrowDropDownCircle id="icon" className="ml-3 transition-all duration-300"></MdOutlineArrowDropDownCircle> </h4>
                 {seasonalDisplay}
             </div>
             {/* <input id="sessionInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none " type="text" placeholder="Month Day Year" onChange={function (e) {
