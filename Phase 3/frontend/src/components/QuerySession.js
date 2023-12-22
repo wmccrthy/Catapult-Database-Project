@@ -13,6 +13,7 @@ import SessionGraph from "./SessionGraph"
 import { motion, AnimatePresence} from "framer-motion";
 import { MdElectricCar, MdOutlineArrowDropDownCircle } from "react-icons/md";
 import SessionSeasonGraph from "./SessionSeasonGraph";
+import SeasonShotAccGraph from "./SeasonShotAccGraph";
 
 const QuerySession = (props) => {
     const [sessionFilter, setFilter] = useState("");
@@ -67,6 +68,30 @@ const QuerySession = (props) => {
             }
     }
 
+    const getShotAccuracy = async () => {
+        const query = `SELECT session.date as date, ((((SUM(sog)*1.0))/SUM(sh))*100.0) as accuracy, ((((SUM(g)*1.0))/SUM(sh))*100.0) as conversionrate FROM recordsstatson JOIN session on recordsstatson.sessionid = session.sessionid WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND session.type = 'game' AND sh IS NOT NULL GROUP BY session.date, session.sessionid ORDER BY session.sessionid;`
+        try {
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`);
+            const data = await response.json();
+            console.log(data)
+            return data;
+        } catch(err) {
+            console.error(err)
+        }
+    }
+
+    const getDistancePerMP = async () => {
+        const query = `SELECT session.date as date, (SUM(distance)/SUM(mp)) as distancePerMinutePlayed, (SUM(sprintdistance)/SUM(mp)) as sprintDistancePerMinutePlayed  FROM recordsstatson JOIN session on recordsstatson.sessionid = session.sessionid WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND session.type = 'game' AND sh IS NOT NULL GROUP BY session.date, session.sessionid ORDER BY session.sessionid;`
+        try {
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`);
+            const data = await response.json();
+            console.log(data)
+            return data;
+        } catch(err) {
+            console.error(err)
+        }
+    }
+
     // APPLIES FILTRATION TO PLAYER LIST BASED ON NAME INPUT
     const filterList = () => {
         sessionList.map(session => (
@@ -107,13 +132,17 @@ const QuerySession = (props) => {
         document.querySelector("#icon").classList.toggle("rotated")
         var graphW = document.querySelector("#cont").offsetWidth-100;
         const seasonAvgs = await getSeasonalAvgs();
+        const shotAcc = await getShotAccuracy();
+        console.log(shotAcc)
         if (seasonalDisplay.type === "span") {
         console.log(seasonalDisplay)
         setSeasDisplay(
             <motion.div initial={{opacity: 0, y:200}} animate={{opacity:1, y:0}} transition={{duration:.85}}  className="max-h-[30rem] w-full overflow-y-auto">
+                {/* seasonShotAccuracy graph for each player */}
                 <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={["distance", 'sprintdistance']}></SessionSeasonGraph>
                 <SessionSeasonGraph team={teamID} multiStat={true} width={graphW} data={seasonAvgs} dataKeys={['energy', 'playerload']}></SessionSeasonGraph>
                 <SessionSeasonGraph team={teamID}  width={graphW} data={seasonAvgs} dataKeys={['topspeed']}></SessionSeasonGraph>
+                <SeasonShotAccGraph team={teamID} multiStat={false} width={graphW} data={shotAcc} dataKeys={["accuracy", "conversionrate"]}></SeasonShotAccGraph>
             </motion.div>);
     }}
 

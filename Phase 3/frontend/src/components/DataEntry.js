@@ -18,6 +18,7 @@ const DataEntry = (props) => {
     const metersToYards = 1.09361;
     const mpsTOmph  = 2.23694;
     const [data, setData] = useState([])
+    // const [date, setDate] = useState("")
     // const [teamid, setTeamid] = useState('')
     const teamid = `'${props.team}'`
 
@@ -33,7 +34,59 @@ const DataEntry = (props) => {
         })
     };
 
-    const parseData = async (data) => {
+
+    const parseTechData = async (data) => {
+        // parse given data to update recordsstatson relation w technical performance data (goals, assists, shots, sog)
+        // use format: 
+            // UPDATE table_name
+            // SET column1 = value1, column2 = value2, ...
+            // WHERE condition;
+        // uploaded file should be of format: 
+        // Name (sep. by comma), Shots, Shots on goal, goals, assists, minutes played 
+        // extract row -> update players recordsstatson entry
+        console.log(data) 
+        var queries = []
+        for (let row of data) {
+            // goals, assists, shots, shots on goal, minutes played
+            console.log(row)
+            var g = row.G
+            var a = row.A
+            var sh = row.SH
+            var sog = row.SOG
+            var mp = row.MIN
+            var name = row.Player.split(",")
+            var tmp = name[0]; name[0] = name[1]; name[1] = tmp;
+            var date = row.DATE
+            // if (row.Date != null) { setDate(row.Date)}
+            name[0] = name[0].replace(" ", "")
+            name = name.join(" ")
+            console.log(name)
+            name = name.replace("'", "")
+            var query = `UPDATE recordsstatson SET g = ${g}, a = ${a}, sh = ${sh}, sog = ${sog}, mp = ${mp} WHERE email = (SELECT p.email FROM player p WHERE p.name = '${name}') AND sessionid = (SELECT s.sessionid FROM session s WHERE s.date = '${date}');`
+            console.log(query)
+            queries.push(query)
+        }
+
+        for (let q of queries) {
+            try {
+                var ins = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/customInsert?query=${q}`, {
+                    method: "POST"
+                })
+                var success = await ins.json()
+                console.log(success)
+            } catch (err) {
+                console.error(err)
+            }
+        }
+
+
+        // all we want to do is update the row in recordsstatson associated with the player on the given date (if player didn't wear gps that day, sorry)
+        // UPDATE recordsstatson
+        // SET g = ${extractedGoals}, SET a = ${extractedAssists}, SET sh = ${extractedShots}, SET SOG = ${extractedSOG}
+        // WHERE (SELECT p.name FROM player p WHERE p.email = email) AND date = ${date}
+    }
+
+    const parseGPSData = async (data) => {
         // parse given data into proper format 
         // 1. extract relevant info 
         //      - fortunately, data is passed as JSON so we can simply retrieve relevant attributes 
@@ -186,8 +239,20 @@ const DataEntry = (props) => {
                         // console.log(data)
                     }} className="w-1/8  text-s  text-gray-700  dark:text-gray-400 outline-none"></input>
                     <button className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
-                    await parseData(data)
+                    await parseGPSData(data)
                     }}>Upload</button>
+                </div>
+
+                <h5 className="text-white text-center">Upload Game Data</h5>
+                <div className="flex mb-5 items-center gap-2 text-white font-light">
+                    <input type="file" accept=".csv" onInput={async function (e) {
+                        await handleFileUpload(e)
+                        // console.log(data)
+                    }} className="w-1/8  text-s  text-gray-700  dark:text-gray-400 outline-none"></input>
+                    <button className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
+                    await parseTechData(data)
+                    }}>Upload</button>
+
                 </div>
             </div>
             <div id="player-inp" className="flex flex-col items-center gap-2">

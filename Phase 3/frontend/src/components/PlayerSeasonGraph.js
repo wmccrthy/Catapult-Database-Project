@@ -51,8 +51,8 @@ const PlayerSeasonGraph = (props) => {
                     <p className="label">{`${label}`}</p>
                     {/* <p className="intro">{getIntroOfPage(label)}</p> */}
                     <div className="desc">
-                        <p>{payload[0].name}: {payload[0].value} {units1}</p>
-                        <p>{payload[1].name}: {payload[1].value} {units2}</p>
+                        <p>{payload[0].name}: {Number(payload[0].value).toFixed(2)} {units1}</p>
+                        <p>{payload[1].name}: {Number(payload[1].value).toFixed(2)} {units2}</p>
                     </div>
                     </div>
                 );
@@ -63,7 +63,7 @@ const PlayerSeasonGraph = (props) => {
                     <p className="label">{`${label}`}</p>
                     {/* <p className="intro">{getIntroOfPage(label)}</p> */}
                     <p className="desc">
-                        <p>{payload[0].name}: {payload[0].value} {units1}</p>
+                        <p>{payload[0].name}: {Number(payload[0].value).toFixed(2)} {units1}</p>
                     </p>
                     </div>
                 );

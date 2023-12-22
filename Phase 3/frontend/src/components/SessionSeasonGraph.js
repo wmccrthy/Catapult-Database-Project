@@ -51,8 +51,8 @@ const SessionSeasonGraph = (props) => {
                     <p className="label">{`${label}`}</p>
                     {/* <p className="intro">{getIntroOfPage(label)}</p> */}
                     <div className="desc">
-                        <p>{payload[0].name}: {payload[0].value} {units1}</p>
-                        <p>{payload[1].name}: {payload[1].value} {units2}</p>
+                        <p>{payload[0].name}: {Number(payload[0].value).toFixed(2)} {units1}</p>
+                        <p>{payload[1].name}: {Number(payload[1].value).toFixed(2)} {units2}</p>
                     </div>
                     </div>
                 );
@@ -63,7 +63,7 @@ const SessionSeasonGraph = (props) => {
                     <p className="label">{`${label}`}</p>
                     {/* <p className="intro">{getIntroOfPage(label)}</p> */}
                     <p className="desc">
-                        <p>{payload[0].name}: {payload[0].value} {units1}</p>
+                        <p>{payload[0].name}: {Number(payload[0].value).toFixed(2)} {units1}</p>
                     </p>
                     </div>
                 );
@@ -86,7 +86,7 @@ const SessionSeasonGraph = (props) => {
                         <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart> */}
                     <h4 className="w-full text-center p-1 bg-gray-900 text-white font-light text-lg rounded-t-md">{dataKey1} and {dataKey2} team average per session</h4>
-                    <select className=" border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel" onChange={async function (e) {
+                    <select className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel" onChange={async function (e) {
                         var typeFilter = e.target.value
                         if (typeFilter == "All") {
                             setData(initData);

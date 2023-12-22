@@ -98,8 +98,8 @@ const SessionGraph = (props) => {
                     <p className="label">{`${label}`}</p>
                     {/* <p className="intro">{getIntroOfPage(label)}</p> */}
                     <div className="desc">
-                        <p>{payload[0].name}: {payload[0].value} {units1}</p>
-                        <p>{payload[1].name}: {payload[1].value} {units2}</p>
+                        <p>{payload[0].name}: {Number(payload[0].value).toFixed(2)} {units1}</p>
+                        <p>{payload[1].name}: {Number(payload[1].value).toFixed(2)} {units2}</p>
                     </div>
                     </div>
                 );
@@ -110,7 +110,7 @@ const SessionGraph = (props) => {
                     <p className="label">{`${label}`}</p>
                     {/* <p className="intro">{getIntroOfPage(label)}</p> */}
                     <p className="desc">
-                        <p>{payload[0].name}: {payload[0].value} {units1}</p>
+                        <p>{payload[0].name}: {Number(payload[0].value).toFixed(2)} {units1}</p>
                     </p>
                     </div>
                 );
@@ -120,9 +120,9 @@ const SessionGraph = (props) => {
     
     if (dataKey2 != null) {
         return (
-            <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  className="w-full flex flex-col justify-center content-center  bg-gray-900  text-gray-400 mb-5">
-                    <h3 className="mt-1 text-center text-white font-semibold">{graphDesc}</h3>
-                    {!props.isAvg && <input id="filter" className="w-full h-8 text-s text-center  bg-gray-700 text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
+            <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  className="w-full flex flex-col justify-center content-center items-center  bg-gray-900  text-gray-400 mb-5">
+                    <h3 className="mt-1 text-center text-white font-semibold sm:mb-3">{graphDesc}</h3>
+                    {!props.isAvg && <input id="filter" className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white w-1/3" type="text" placeholder="Name" onKeyUp={function (e) {
                         setFilter(document.querySelector("#filter").value);
                         filterData();
                     }} onChange={function (e) {
@@ -151,9 +151,9 @@ const SessionGraph = (props) => {
             </motion.div>)
     } else {
         return (
-            <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  className="w-full flex flex-col justify-center content-center  bg-gray-900  text-gray-400 mb-5">
-                    <h3 className="mt-1 text-center text-white font-semibold">{graphDesc}</h3>
-                    {!props.isAvg && <input id="filter" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none rounded-md" type="text" placeholder="Name" onKeyUp={function (e) {
+            <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  className="w-full flex flex-col justify-center content-center items-center  bg-gray-900  text-gray-400 mb-5">
+                    <h3 className="mt-1 text-center text-white font-semibold sm:mb-3">{graphDesc}</h3>
+                    {!props.isAvg && <input id="filter"className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white w-1/3" type="text" placeholder="Name" onKeyUp={function (e) {
                         setFilter(document.querySelector("#filter").value);
                         filterData();
                     }} onChange={function (e) {

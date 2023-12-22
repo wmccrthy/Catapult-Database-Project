@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 
 const QueryPlayerAll = (props) => {
     const teamID = props.team 
-
+    var radarRange = [-0.5,0.0]
     // const season = props.season
     
     // going to need this to be custom queries bc player's dont have a team attribute; instead grab name and email of all players who have partcipated in a session
@@ -81,6 +81,43 @@ const QueryPlayerAll = (props) => {
         getPlayers();
     }, [])
 
+    // compare players session averages with team averages 
+    // stats to comp: distance / minutesPlayed, goals, assists, gc, shotAcc, gc per game 
+    const getPlayerOverview = async (playerEmail, playerName) => {
+        const teamQuery = `SELECT (SUM(mp)/(250.0*(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}'))) as minutesPlayed, ((SUM(g)*1.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}')) as goals, ((SUM(a)*1.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}')) as assists, (((SUM(sh)*1.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}'))/5) as shots, ((((SUM(sog)*1.0))/SUM(sh))) as accuracy FROM recordsstatson WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND mp IS NOT NULL`
+        const playerQuery = `SELECT (SUM(mp)/250.0) as minutesPlayed, SUM(g) as goals, SUM(a) as assists, ((SUM(sog)*1.0)/(NULLIF(SUM(sh), 0))) as accuracy, (SUM(sh)/5) as shots FROM recordsstatson WHERE email = '${playerEmail}' AND mp IS NOT NULL`
+        try {
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${teamQuery}`);
+            const averageData = await response.json();
+            averageData[0].name = "team averages"
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${playerQuery}`);
+            const playerData = await response.json();
+            playerData[0].name = `${playerName} averages`
+            // console.log(averageData);
+            // console.log(playerData);
+            // create new array with 
+            var reformatted = []
+            let i = 0;
+            for (var prop in averageData[0]) {
+                console.log(prop)
+                if (prop != "name") {
+                    reformatted.push({})
+                    reformatted[i].stat = prop
+                    reformatted[i].teamValue = averageData[0][prop]
+                    reformatted[i].playerValue = playerData[0][prop] == null ? 0 : playerData[0][prop];
+                    radarRange[0] = Math.min(radarRange[0], reformatted[i].playerValue)
+                    radarRange[1] = Math.max(radarRange[1], reformatted[i].teamValue, reformatted[i].playerValue)
+                    i += 1
+                }
+            }
+            console.log(radarRange)
+            console.log(reformatted)
+            return reformatted
+            // return Array.prototype.concat(averageData, playerData);
+        } catch(err) {
+            console.error(err);
+        }
+    }
 
     
 
@@ -97,8 +134,13 @@ const QueryPlayerAll = (props) => {
                                 avgData.push(gameAvg)
                                 avgData.push(trainingAvg)
                                 var seasonStatArr = await getSeasonStats(player.email)
+                                var overview = await getPlayerOverview(player.email, player.name)
+                                console.log(overview)
+                                console.log("workkkkk")
+                                console.log(radarRange)
+                                console.log(overview)
                                 // console.log(seasonStatArr)
-                                setDisplay(<PlayerSeasonStats averages={avgData} stats={seasonStatArr} name={player.name}></PlayerSeasonStats>);
+                                setDisplay(<PlayerSeasonStats averages={avgData} stats={seasonStatArr} name={player.name} radarRange={radarRange}></PlayerSeasonStats>);
                                 // need to render new table displaying stats (new component)
                 }}>View Stats</button></td>
             </tr>
@@ -150,8 +192,8 @@ const QueryPlayerAll = (props) => {
                                     avgData.push(gameAvg)
                                     avgData.push(trainingAvg)
                                     var seasonStatArr = await getSeasonStats(player.email)
-                                    // console.log(seasonStatArr)
-                                    setDisplay(<PlayerSeasonStats averages={avgData} stats={seasonStatArr} name={player.name} email={player.email}></PlayerSeasonStats>);
+                                    var overview = await getPlayerOverview(player.email, player.name)
+                                    setDisplay(<PlayerSeasonStats radarRange={radarRange} averages={avgData} overview={overview} stats={seasonStatArr} name={player.name} email={player.email}></PlayerSeasonStats>);
                                     // need to render new table displaying stats (new component)
                                 }}>View Stats</button></td>
                             </tr>

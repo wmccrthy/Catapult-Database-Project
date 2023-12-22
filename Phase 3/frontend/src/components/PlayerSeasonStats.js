@@ -4,13 +4,15 @@ import { useState, useEffect } from "react";
 import React from "react";
 import PlayerSessionGraph from "./PlayerSessionGraph";
 import PlayerSeasonGraph from "./PlayerSeasonGraph";
+import PlayerOverviewGraph from "./PlayerOverviewGraph";
 import { motion } from "framer-motion";
 
 const PlayerSeasonStats = (props) => {
     const playerStats = props.stats;
     const averageData = props.averages;
     const playerName = props.name;
-    console.log(playerStats);
+    const range = props.radarRange;
+    console.log(range)
 
     return (
         <motion.div initial={{opacity: 0}} animate={{opacity:1}} transition={{duration:.65}}  id="cont" className="flex flex-col content-center justify-center items-center gap-5 w-full">
@@ -23,6 +25,8 @@ const PlayerSeasonStats = (props) => {
              <PlayerSessionGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData}  dataKeys={["distance", 'sprintdistance']} multiStat={true}></PlayerSessionGraph>
              <PlayerSessionGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData} dataKeys={['energy', 'playerload']} multiStat={true}></PlayerSessionGraph>
              <PlayerSessionGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData} dataKeys={['topspeed']} multiStat={false}></PlayerSessionGraph>
+             <h3 className="mt-3 mb-3 text-center text-white font-bold">{playerName} Overview</h3>
+             <PlayerOverviewGraph range={range} width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={props.overview}></PlayerOverviewGraph>
         </motion.div>
         ) 
     }
