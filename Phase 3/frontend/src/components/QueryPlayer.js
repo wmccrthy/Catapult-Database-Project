@@ -117,7 +117,8 @@ const QueryPlayer = (props) => {
 
     // FIX THESE 
     const getPlayerOverview = async (playerEmail, playerName) => {
-        const teamQuery = `SELECT ((SUM(mp)/50.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}' AND sessionid = '${session}')) as minutesPlayed, (SUM(distance)/(SUM(mp)*50.0)) as distancePerMP,  ((SUM(sh)*1.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}' AND sessionid = '${session}')) as shots, ((SUM(sog)*1.0)/SUM(sh)) as accuracy FROM recordsstatson WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND sessionid = '${session}' AND mp IS NOT NULL AND mp > 0`
+        console.log('test')
+        const teamQuery = `SELECT ((SUM(mp)/50.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}' AND sessionid = '${session}')) as minutesPlayed, (SUM(distance)/(SUM(mp)*50.0)) as distancePerMP,  ((SUM(sh)*1.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}' AND sessionid = '${session}')) as shots, ((SUM(sog)*1.0)/SUM(sh)) as accuracy FROM recordsstatson WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND sessionid = '${session}' AND mp IS NOT NULL AND mp > 35`
         const playerQuery = `SELECT (mp/50.0) as minutesPlayed, ((distance/mp)/50.0) as distancePerMP, ((sog*1.0)/(NULLIF(sh, 0))) as accuracy, (sh) as shots FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid = '${session}'`
         try {
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${teamQuery}`);
