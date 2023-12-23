@@ -2,6 +2,7 @@ import React from "react"
 import { useState } from "react" 
 import Papa from "papaparse";
 import { motion } from "framer-motion";
+import ProgressBar from "./ProgressBar";
 
 // - input file field to upload csv 
 
@@ -18,6 +19,11 @@ const DataEntry = (props) => {
     const metersToYards = 1.09361;
     const mpsTOmph  = 2.23694;
     const [data, setData] = useState([])
+    const [status1, setStatus1] = useState(0);
+    const [show1, setShow1] = useState(false);
+    const [status2, setStatus2] = useState(0);
+    const [show2, setShow2] = useState(false);
+
     // const [date, setDate] = useState("")
     // const [teamid, setTeamid] = useState('')
     const teamid = `'${props.team}'`
@@ -36,6 +42,9 @@ const DataEntry = (props) => {
 
 
     const parseTechData = async (data) => {
+        var curStatus = 0;
+        setStatus2(curStatus);
+        setShow2(true);
         // parse given data to update recordsstatson relation w technical performance data (goals, assists, shots, sog)
         // use format: 
             // UPDATE table_name
@@ -77,16 +86,22 @@ const DataEntry = (props) => {
             } catch (err) {
                 console.error(err)
             }
+            curStatus += 100/queries.length;
+            setStatus2(curStatus);
         }
-
-
         // all we want to do is update the row in recordsstatson associated with the player on the given date (if player didn't wear gps that day, sorry)
         // UPDATE recordsstatson
         // SET g = ${extractedGoals}, SET a = ${extractedAssists}, SET sh = ${extractedShots}, SET SOG = ${extractedSOG}
         // WHERE (SELECT p.name FROM player p WHERE p.email = email) AND date = ${date}
+
+        // I want status bar to be displayed while this function is still running (data still uploading), terminate that bar's presence here 
+        setShow2(false)
     }
 
     const parseGPSData = async (data) => {
+        var curStatus = 0;
+        setStatus1(curStatus);
+        setShow1(true);
         // parse given data into proper format 
         // 1. extract relevant info 
         //      - fortunately, data is passed as JSON so we can simply retrieve relevant attributes 
@@ -145,6 +160,8 @@ const DataEntry = (props) => {
                 recordsQueries.push(`INSERT INTO recordsstatson (deviceid, email, sessionid, teamid, distance, sprintdistance, energy, playerload, topspeed, distancepermin) VALUES (${p.deviceid}, ${p.email}, ${s}, ${teamid}, ${p.distance*1000*metersToYards}, ${p.sprintdistance*metersToYards}, ${p.energy}, ${p.playerload},${p.topspeed*mpsTOmph}, ${p.distancepermin*metersToYards});`)
             }
         }
+        var div = 100/(sessionQueries.length + holdsQueries.length + participatesQueries.length + recordsQueries.length)
+
         for (var q of sessionQueries) {
             console.log(q)
             try {
@@ -156,6 +173,8 @@ const DataEntry = (props) => {
             } catch (err) {
                 console.error(err)
             }
+            curStatus += div;
+            setStatus1(curStatus)
         }
         for (var q of holdsQueries) {
             try {
@@ -167,6 +186,8 @@ const DataEntry = (props) => {
             } catch (err) {
                 console.error(err)
             }
+            curStatus += div;
+            setStatus1(curStatus)
         }
         for (var q of participatesQueries) {
             try {
@@ -178,6 +199,8 @@ const DataEntry = (props) => {
             } catch (err) {
                 console.error(err)
             }
+            curStatus += div;
+            setStatus1(curStatus)
         }
         for (var q of recordsQueries) {
             try {
@@ -189,6 +212,8 @@ const DataEntry = (props) => {
             } catch (err) {
                 console.error(err)
             }
+            curStatus += div;
+            setStatus1(curStatus)
         }
         // for session: 
         //      - add sessions w session[0] (date), session[1] (type) 
@@ -201,6 +226,10 @@ const DataEntry = (props) => {
         // REMEMBER convert units 
         //      - assuming passed data is directly from catapult csv export, distance will be in KM, sprint distance in meters, and top speed in m/s
         //      - we want to convert the following: distance/sprintdistance/distancepermin (yards), top speed (mph)
+
+
+        // I want status bar to be displayed while this function is still running (data still uploading), terminate that bar's presence here 
+        setShow1(false);
     }
 
     const parsePlayerAddition = async () => {
@@ -233,41 +262,42 @@ const DataEntry = (props) => {
         <motion.div initial={{opacity: 0.25, scale: .5}} animate={{opacity:1, scale:1}} transition={{duration:0.5}} className="flex p-4 rounded-md flex-col items-center content-center">
             <div className="mb-10 flex flex-col items-center">
                 <h5 className="text-white text-center">Upload Session Data</h5>
-                <div className="flex mb-5 items-center gap-2 text-white font-light">
+                <div className="flex items-center gap-2 text-white font-light">
                     <input type="file" accept=".csv" onInput={async function (e) {
                         await handleFileUpload(e)
                         // console.log(data)
-                    }} className="w-1/8  text-s  text-gray-700  dark:text-gray-400 outline-none"></input>
-                    <button className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
+                    }} className="w-1/8  text-s  text-gray-400 outline-none"></input>
+                    <button className=" border  text-sm rounded-lg block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
                     await parseGPSData(data)
                     }}>Upload</button>
                 </div>
+               {show1 && <ProgressBar status={status1}></ProgressBar>}
 
                 <h5 className="text-white text-center">Upload Game Data</h5>
-                <div className="flex mb-5 items-center gap-2 text-white font-light">
+                <div className="flex items-center gap-2 text-white font-light">
                     <input type="file" accept=".csv" onInput={async function (e) {
                         await handleFileUpload(e)
                         // console.log(data)
-                    }} className="w-1/8  text-s  text-gray-700  dark:text-gray-400 outline-none"></input>
-                    <button className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
+                    }} className="w-1/8  text-s  text-gray-400 outline-none"></input>
+                    <button className="border text-sm rounded-lg block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
                     await parseTechData(data)
                     }}>Upload</button>
-
                 </div>
+                {show2 && <ProgressBar status={status2}></ProgressBar>}
             </div>
             <div id="player-inp" className="flex flex-col items-center gap-2">
                 <h6 className="text-center text-white font-light">Add Players</h6>
                 <div className="flex items-center gap-2">
-                    <input type="text" placeholder="Player Name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" placeholder="Player Name" className="border text-sm rounded-lg block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 hover:brightness-90 transition">
                     </input>
-                    <input type="text" placeholder="Player Email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">  
+                    <input type="text" placeholder="Player Email" className="border text-sm rounded-lg block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 hover:brightness-90 transition">  
                     </input>
-                    <input type="text" placeholder="Paired Device ID" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" placeholder="Paired Device ID" className="border text-sm rounded-lg block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 hover:brightness-90 transition">
                     </input>
-                    <input type="text" placeholder="Season(ex. Fall23)" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" placeholder="Season(ex. Fall23)" className="border text-sm rounded-lg block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 hover:brightness-90 transition">
                     </input>
                 </div>
-                <button className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
+                <button className=" border  text-sm rounded-lg  block p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 hover:brightness-90 transition" onClick={async () => {
                     await parsePlayerAddition()
                 }}>Add</button>
             </div>

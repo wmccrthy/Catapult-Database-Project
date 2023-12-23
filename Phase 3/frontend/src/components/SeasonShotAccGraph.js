@@ -60,8 +60,8 @@ const SeasonShotAccGraph = (props) => {
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
                         <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart> */}
-                    <h4 className="w-full text-center p-1 bg-gray-900 text-white font-light text-lg rounded-t-md">{dataKey1} and {dataKey2}</h4>
-                    <RadarChart className="w-full mt-1 text-md bg-gray-900 text-gray-400" width={graphW+100} outerRadius={graphW/5} height={450} data={data}>
+                    <h4 className="w-full text-center bg-gray-900 text-white font-light text-lg rounded-t-md">{dataKey1} and {dataKey2}</h4>
+                    <RadarChart className="w-full text-md bg-gray-900 text-gray-400" width={graphW+100} outerRadius={graphW/4.5} height={graphW/1.8} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
