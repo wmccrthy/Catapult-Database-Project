@@ -15,6 +15,7 @@ const QueryPlayer = (props) => {
     const seshType = props.type;
     const session = props.session;
     const sessionDate = props.date;
+    const radarRange = [-0.5, 0.0]
 
     const getPlayers = async (allPlayers = false) => {
         try {
@@ -114,7 +115,42 @@ const QueryPlayer = (props) => {
         setDisplay(<div></div>);
     }
 
-
+    // FIX THESE 
+    const getPlayerOverview = async (playerEmail, playerName) => {
+        const teamQuery = `SELECT ((SUM(mp)/50.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}' AND sessionid = '${session}')) as minutesPlayed, (SUM(distance)/(SUM(mp)*50.0)) as distancePerMP,  ((SUM(sh)*1.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}' AND sessionid = '${session}')) as shots, ((SUM(sog)*1.0)/SUM(sh)) as accuracy FROM recordsstatson WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND sessionid = '${session}' AND mp IS NOT NULL AND mp > 0`
+        const playerQuery = `SELECT (mp/50.0) as minutesPlayed, ((distance/mp)/50.0) as distancePerMP, ((sog*1.0)/(NULLIF(sh, 0))) as accuracy, (sh) as shots FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid = '${session}'`
+        try {
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${teamQuery}`);
+            const averageData = await response.json();
+            averageData[0].name = "team average performance"
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${playerQuery}`);
+            const playerData = await response.json();
+            playerData[0].name = `${playerName} performance`
+            // console.log(averageData);
+            // console.log(playerData);
+            // create new array with 
+            var reformatted = []
+            let i = 0;
+            for (var prop in averageData[0]) {
+                console.log(prop)
+                if (prop != "name") {
+                    reformatted.push({})
+                    reformatted[i].stat = prop
+                    reformatted[i].teamValue = averageData[0][prop]
+                    reformatted[i].playerValue = playerData[0][prop] == null ? 0 : playerData[0][prop];
+                    radarRange[0] = Math.min(radarRange[0], reformatted[i].playerValue)
+                    radarRange[1] = Math.max(radarRange[1], reformatted[i].teamValue, reformatted[i].playerValue)
+                    i += 1
+                }
+            }
+            console.log(radarRange)
+            console.log(reformatted)
+            return reformatted
+            // return Array.prototype.concat(averageData, playerData);
+        } catch(err) {
+            console.error(err);
+        }
+    }
 
     return (
         <motion.div className="flex flex-col content-center items-center w-full">
@@ -154,7 +190,8 @@ const QueryPlayer = (props) => {
                                     var statArr = await getPlayerStats(player.email, session);
                                     var avgStatArr = await getSessionAverages();
                                     var playerAvgArr = await getPlayerAverages(player.email, player.name, seshType);
-                                    setDisplay(<PlayerSessionStats stats={statArr} averages={avgStatArr} pAverages={playerAvgArr} name={player.name} date={sessionDate}></PlayerSessionStats>);
+                                    var seshOverview = await getPlayerOverview(player.email, player.name);
+                                    setDisplay(<PlayerSessionStats type={seshType} overview={seshOverview} range={radarRange} stats={statArr} averages={avgStatArr} pAverages={playerAvgArr} name={player.name} date={sessionDate}></PlayerSessionStats>);
                                     console.log(display)
                                     // need to render new table displaying stats (new component)
                                 }}>View Stats</button></td>

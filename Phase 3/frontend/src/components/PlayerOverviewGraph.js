@@ -50,7 +50,7 @@ const PlayerOverviewGraph = (props) => {
     //   include select option like in leaderboards where players can filter data by "all", "games", or "training" s.t trends by session type are clearer 
 
     return (
-            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-900  text-gray-400 mb-5">
+            <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-900  text-gray-400 mb-1">
                     {/* <BarChart className="w-full mt-1 text-md bg-gray-900 text-gray-400" width={graphW} height={400} data={data}>
                         <XAxis dataKey="date" fontSize={8} angle={-10} dy={8}/>
                         <YAxis label={<Label angle={-90} dx={-30}>{`${dataKey1} (${units1})`}</Label>} yAxisId="left" orientation="left" stroke="grey" axisLine={false} tickLine={false}></YAxis> 
@@ -60,8 +60,8 @@ const PlayerOverviewGraph = (props) => {
                         <Legend wrapperStyle={{bottom: 0}}></Legend>
                         <Tooltip content={<CustomTooltip></CustomTooltip>} cursor={{fill:"darkgrey", fillOpacity:.25}}></Tooltip>
                     </BarChart> */}
-                    <h5 className="w-full text-center p-1 bg-gray-900 text-white font-extralight text-sm rounded-t-md">player/teamAvg Ratios</h5>
-                    <RadarChart className="w-full mt-1 text-md bg-gray-900 text-gray-400" width={graphW} outerRadius={graphW/4.5} height={500} data={data}>
+                    <h5 className="w-full text-center bg-gray-900 text-white font-extralight text-sm rounded-t-md">player/teamAvg Offensive Ratios</h5>
+                    <RadarChart className="w-full text-md bg-gray-900 text-gray-400" width={graphW} outerRadius={graphW/4} height={graphW/1.5} data={data}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>

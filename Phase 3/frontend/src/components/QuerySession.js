@@ -80,33 +80,6 @@ const QuerySession = (props) => {
         }
     }
 
-    const getDistancePerMP = async () => {
-        const query = `SELECT session.date as date, (SUM(distance)/SUM(mp)) as distancePerMinutePlayed, (SUM(sprintdistance)/SUM(mp)) as sprintDistancePerMinutePlayed  FROM recordsstatson JOIN session on recordsstatson.sessionid = session.sessionid WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND session.type = 'game' AND sh IS NOT NULL GROUP BY session.date, session.sessionid ORDER BY session.sessionid;`
-        try {
-            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`);
-            const data = await response.json();
-            console.log(data)
-            return data;
-        } catch(err) {
-            console.error(err)
-        }
-    }
-
-    // APPLIES FILTRATION TO PLAYER LIST BASED ON NAME INPUT
-    const filterList = () => {
-        sessionList.map(session => (
-                            <tr className="border-b bg-gray-900 border-gray-700">
-                                <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">{session.type}</th>
-                                <td className="px-6 py-4">{session.sessionid}</td>
-                                <td className="px-6 py-4">{session.date}</td>
-                                <td className="px-6 py-4"><button onClick={function () {
-                                    // QueryPlayer
-                                    setDisplay(<QueryPlayer team={teamID} session={session.sessionid} date={session.date} defData={<div></div>}></QueryPlayer>);
-                                }}>View Player Stats</button></td>
-                            </tr>
-        ))
-        setDisplay(<div></div>)
-    }
 
     // UPDATES Session list variable to match user input filtering 
     const getSessions = async () => {
@@ -233,7 +206,7 @@ const QuerySession = (props) => {
                                         <button onClick={async function () {
                                             // QueryPlayers
                                             var formatList = await moreEfficientSessionData(session.sessionid)
-                                            console.log(formatList)
+                                            // console.log(formatList)
                                             var graphW = document.querySelector("#cont").offsetWidth-100;
                                             var averageToday = await averageThisSession(session.sessionid, session.date);
                                             var averageAll = await averageAllSession(session.type);

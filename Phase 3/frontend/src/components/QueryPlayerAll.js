@@ -48,7 +48,7 @@ const QueryPlayerAll = (props) => {
     }
 
     const getSeasonStats = async (playerEmail) => {
-        const query = `SELECT session.date, distance, sprintdistance, topspeed, energy, playerload FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE email = '${playerEmail}' AND teamid = '${teamID}';`
+        const query = `SELECT session.date, distance, sprintdistance, topspeed, energy, playerload FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE email = '${playerEmail}' AND teamid = '${teamID}' ORDER BY session.sessionid;`
         try {
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`);
             const seasonData = await response.json();
