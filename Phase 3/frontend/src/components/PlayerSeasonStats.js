@@ -6,6 +6,7 @@ import PlayerSessionGraph from "./PlayerSessionGraph";
 import PlayerSeasonGraph from "./PlayerSeasonGraph";
 import PlayerOverviewGraph from "./PlayerOverviewGraph";
 import { motion } from "framer-motion";
+import PlayerCumulativeGraph from "./PlayerCumulativeGraph";
 
 const PlayerSeasonStats = (props) => {
     const playerStats = props.stats;
@@ -27,6 +28,7 @@ const PlayerSeasonStats = (props) => {
              <PlayerSessionGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData} dataKeys={['topspeed']} multiStat={false}></PlayerSessionGraph>
              <h3 className="mt-3 mb-3 text-center text-white font-bold">{playerName} Overview</h3>
              <PlayerOverviewGraph range={range} width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={props.overview}></PlayerOverviewGraph>
+             <PlayerCumulativeGraph width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={props.cumulative}></PlayerCumulativeGraph>
         </motion.div>
         ) 
     }

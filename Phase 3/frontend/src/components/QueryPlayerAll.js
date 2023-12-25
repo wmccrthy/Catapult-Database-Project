@@ -75,6 +75,25 @@ const QueryPlayerAll = (props) => {
             console.error(err)
         }
     }
+
+    const getPlayerCumulatives = async (playerEmail, playerName) => {
+        const query = `SELECT (SUM(distance)/1000.0) as "kiloyards ran", (SUM(sprintdistance)/1000) as "kiloyards sprinted", (SUM(mp)/60.0) as "hours played", SUM(g) as goals, SUM(a) as assists, SUM(sh) as shots FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid IN (SELECT sessionid FROM session WHERE type = 'game');`
+        try {
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`);
+            const data = await response.json();
+            var reformatted = []
+            let i =0;
+            for (var prop in data[0]) {
+                reformatted.push({})
+                reformatted[i].stat = prop;
+                reformatted[i].value = data[0][prop]
+                i += 1
+            } 
+            return reformatted;
+        } catch(err) {
+            console.error(err)
+        }
+    }
     
     // CALLED GETPLAYERS UPON INITIAL RENDERING SUCH THAT PLAYERLIST IS POPULATED ON SCREEN
     useEffect (() => {
@@ -105,6 +124,8 @@ const QueryPlayerAll = (props) => {
                     reformatted[i].stat = prop
                     reformatted[i].teamValue = averageData[0][prop]
                     reformatted[i].playerValue = playerData[0][prop] == null ? 0 : playerData[0][prop];
+                    // have values set in x:1 ratios (player:team)
+                    reformatted[i].playerValue/= reformatted[i].teamValue; reformatted[i].teamValue = 1; 
                     radarRange[0] = Math.min(radarRange[0], reformatted[i].playerValue)
                     radarRange[1] = Math.max(radarRange[1], reformatted[i].teamValue, reformatted[i].playerValue)
                     i += 1
@@ -193,7 +214,8 @@ const QueryPlayerAll = (props) => {
                                     avgData.push(trainingAvg)
                                     var seasonStatArr = await getSeasonStats(player.email)
                                     var overview = await getPlayerOverview(player.email, player.name)
-                                    setDisplay(<PlayerSeasonStats radarRange={radarRange} averages={avgData} overview={overview} stats={seasonStatArr} name={player.name} email={player.email}></PlayerSeasonStats>);
+                                    var cumulatives = await getPlayerCumulatives(player.email, player.name)
+                                    setDisplay(<PlayerSeasonStats radarRange={radarRange} cumulative={cumulatives} averages={avgData} overview={overview} stats={seasonStatArr} name={player.name} email={player.email}></PlayerSeasonStats>);
                                     // need to render new table displaying stats (new component)
                                 }}>View Stats</button></td>
                             </tr>

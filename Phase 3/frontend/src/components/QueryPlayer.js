@@ -117,7 +117,6 @@ const QueryPlayer = (props) => {
 
     // FIX THESE 
     const getPlayerOverview = async (playerEmail, playerName) => {
-        console.log('test')
         const teamQuery = `SELECT ((SUM(mp)/50.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}' AND sessionid = '${session}')) as minutesPlayed, (SUM(distance)/(SUM(mp)*50.0)) as distancePerMP,  ((SUM(sh)*1.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}' AND sessionid = '${session}')) as shots, ((SUM(sog)*1.0)/SUM(sh)) as accuracy FROM recordsstatson WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND sessionid = '${session}' AND mp IS NOT NULL AND mp > 35`
         const playerQuery = `SELECT (mp/50.0) as minutesPlayed, ((distance/mp)/50.0) as distancePerMP, ((sog*1.0)/(NULLIF(sh, 0))) as accuracy, (sh) as shots FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid = '${session}'`
         try {
@@ -139,6 +138,7 @@ const QueryPlayer = (props) => {
                     reformatted[i].stat = prop
                     reformatted[i].teamValue = averageData[0][prop]
                     reformatted[i].playerValue = playerData[0][prop] == null ? 0 : playerData[0][prop];
+                    if (prop != "goals" && prop != "assists") {reformatted[i].playerValue/= reformatted[i].teamValue; reformatted[i].teamValue = 1; }
                     radarRange[0] = Math.min(radarRange[0], reformatted[i].playerValue)
                     radarRange[1] = Math.max(radarRange[1], reformatted[i].teamValue, reformatted[i].playerValue)
                     i += 1
