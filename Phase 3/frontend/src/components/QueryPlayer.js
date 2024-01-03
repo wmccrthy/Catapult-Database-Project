@@ -117,8 +117,9 @@ const QueryPlayer = (props) => {
 
     // FIX THESE 
     const getPlayerOverview = async (playerEmail, playerName) => {
-        const teamQuery = `SELECT ((SUM(mp)/50.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}' AND sessionid = '${session}')) as minutesPlayed, (SUM(distance)/(SUM(mp)*50.0)) as distancePerMP,  ((SUM(sh)*1.0)/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}' AND sessionid = '${session}')) as shots, ((SUM(sog)*1.0)/SUM(sh)) as accuracy FROM recordsstatson WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND sessionid = '${session}' AND mp IS NOT NULL AND mp > 35`
-        const playerQuery = `SELECT (mp/50.0) as minutesPlayed, ((distance/mp)/50.0) as distancePerMP, ((sog*1.0)/(NULLIF(sh, 0))) as accuracy, (sh) as shots FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid = '${session}'`
+        const teamQuery = `SELECT AVG(mp) as minutesPlayed, AVG(distance) as distance, (SUM(distance)/(SUM(mp))) as distancePerMP,  ((SUM(sh)*1.0)/(SELECT COUNT(DISTINCT(email)) FROM recordsstatson WHERE teamid = '${teamID}' AND sessionid = '${session}' AND mp IS NOT NULL)) as shots, ((SUM(sog)*1.0)/SUM(sh)) as accuracy FROM recordsstatson WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND sessionid = '${session}' AND mp IS NOT NULL AND mp > 10`
+        const playerQuery = `SELECT mp as minutesPlayed, distance, (NULLIF(distance, 0)/mp) as distancePerMP, ((sog*1.0)/(NULLIF(sh, 0))) as accuracy, (sh) as shots FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid = '${session}'`
+        const playerAvgQuery = `SELECT AVG(mp) as minutesPlayed, AVG(distance) as distance, AVG((NULLIF(distance, 0)/mp)) as distancePerMP,  ((SUM(sh)*1.0)/(SELECT COUNT(DISTINCT(sessionid)) FROM recordsstatson WHERE teamid = '${teamID}' AND sh IS NOT NULL)) as shots, ((SUM(sog)*1.0)/SUM(sh)) as accuracy FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE email = '${playerEmail}' AND mp IS NOT NULL AND session.type = 'game'`
         try {
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${teamQuery}`);
             const averageData = await response.json();
@@ -126,9 +127,12 @@ const QueryPlayer = (props) => {
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${playerQuery}`);
             const playerData = await response.json();
             playerData[0].name = `${playerName} performance`
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${playerAvgQuery}`);
+            const playerAvgData = await response.json();
+            playerAvgData[0].name = `${playerName} average performance`
             // console.log(averageData);
             // console.log(playerData);
-            // create new array with 
+            // create new array formatting data according to radar chart organization 
             var reformatted = []
             let i = 0;
             for (var prop in averageData[0]) {
@@ -136,11 +140,14 @@ const QueryPlayer = (props) => {
                 if (prop != "name") {
                     reformatted.push({})
                     reformatted[i].stat = prop
-                    reformatted[i].teamValue = averageData[0][prop]
+                    reformatted[i].teamAvgValue = averageData[0][prop]
                     reformatted[i].playerValue = playerData[0][prop] == null ? 0 : playerData[0][prop];
-                    if (prop != "goals" && prop != "assists") {reformatted[i].playerValue/= reformatted[i].teamValue; reformatted[i].teamValue = 1; }
+                    reformatted[i].playerAvgValue = playerAvgData[0][prop];
+                    if (prop != "goals" && prop != "assists") { reformatted[i].playerAvgValue /= reformatted[i].teamAvgValue; reformatted[i].playerValue /= reformatted[i].teamAvgValue; reformatted[i].teamAvgValue = 1; }
+                    reformatted[i].playerValue = isNaN(reformatted[i].playerValue) ? 0 : reformatted[i].playerValue;
                     radarRange[0] = Math.min(radarRange[0], reformatted[i].playerValue)
-                    radarRange[1] = Math.max(radarRange[1], reformatted[i].teamValue, reformatted[i].playerValue)
+                    radarRange[1] = Math.max(radarRange[1], reformatted[i].teamAvgValue, reformatted[i].playerValue, reformatted[i].playerAvgValue)
+                    console.log(reformatted[i].playerValue)
                     i += 1
                 }
             }
@@ -152,6 +159,7 @@ const QueryPlayer = (props) => {
             console.error(err);
         }
     }
+        
 
     return (
         <motion.div className="flex flex-col content-center items-center w-full">
@@ -193,7 +201,7 @@ const QueryPlayer = (props) => {
                                     var playerAvgArr = await getPlayerAverages(player.email, player.name, seshType);
                                     var seshOverview = await getPlayerOverview(player.email, player.name);
                                     setDisplay(<PlayerSessionStats type={seshType} overview={seshOverview} range={radarRange} stats={statArr} averages={avgStatArr} pAverages={playerAvgArr} name={player.name} date={sessionDate}></PlayerSessionStats>);
-                                    console.log(display)
+                                    // console.log(display)
                                     // need to render new table displaying stats (new component)
                                 }}>View Stats</button></td>
                             </tr>

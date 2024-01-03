@@ -14,6 +14,7 @@ import { motion, AnimatePresence} from "framer-motion";
 import { MdElectricCar, MdOutlineArrowDropDownCircle } from "react-icons/md";
 import SessionSeasonGraph from "./SessionSeasonGraph";
 import SeasonShotAccGraph from "./SeasonShotAccGraph";
+import PlayerOverviewGraph from "./PlayerOverviewGraph";
 
 const QuerySession = (props) => {
     const [sessionFilter, setFilter] = useState("");
@@ -27,7 +28,7 @@ const QuerySession = (props) => {
         // SELECT email, 
         try {
             // console.log("working")
-            const condTest = `sessionid = '${session}' AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}')`
+            const condTest = `sessionid = '${session}' AND email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND distance IS NOT NULL`
             // console.log(condTest)
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/select?table=recordsstatson&field=email, distance, sprintdistance, energy, topspeed, playerload&condition=${condTest}`);
             const playerData = await response.json();
@@ -57,7 +58,7 @@ const QuerySession = (props) => {
     }
 
     const getSeasonalAvgs = async () => {
-        const averagesQuery = `SELECT session.date, AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson JOIN session on recordsstatson.sessionid = session.sessionid WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') GROUP BY session.date, session.sessionid ORDER BY session.sessionid;`
+        const averagesQuery = `SELECT session.date, AVG(distance) as distance, AVG(sprintdistance) as sprintdistance, AVG(topspeed) as topspeed, AVG(energy) as energy, AVG(playerload) as playerload FROM recordsstatson JOIN session on recordsstatson.sessionid = session.sessionid WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND distance IS NOT NULL GROUP BY session.date, session.sessionid ORDER BY session.sessionid;`
             try {
                 var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${averagesQuery}`);
                 const averageData = await response.json();
@@ -140,6 +141,49 @@ const QuerySession = (props) => {
             }
     }
 
+
+    const getTeamOverview = async (session, sessionDate) => {
+        var radarRange = [0, 0]
+        const teamQuery = `SELECT AVG(mp) as minutesPlayed, AVG(distance) as distanceP,  ((SUM(sh)*1.0)/(SELECT COUNT(DISTINCT(sessionid)) FROM recordsstatson WHERE teamid = '${teamID}' AND sh IS NOT NULL)) as shots, ((SUM(sog)*1.0)/SUM(sh)) as accuracy FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND mp IS NOT NULL AND session.type = 'game'`
+        const teamAvgQuery = `SELECT AVG(sub.minutesplayed) as avgMin, AVG(sub.distancep) as avgDistance, AVG(sub.shots) as avgShots, AVG(sub.accuracy) as avgaccuracy FROM (${teamQuery}) AS sub`
+        const sessionQuery = `SELECT ((SUM(mp))/(SELECT COUNT(DISTINCT(email)) FROM participatesin WHERE teamid = '${teamID}' AND sessionid = '${session}')) as avgMin, (SUM(distance)/(SELECT COUNT(DISTINCT(email)) FROM recordsstatson WHERE teamid = '${teamID}' AND sessionid = '${session}' AND mp > 10 AND distance IS NOT NULL)) as avgdistance,  ((SUM(sh)*1.0)) as avgshots, ((SUM(sog)*1.0)/SUM(sh)) as avgaccuracy FROM recordsstatson WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND mp IS NOT NULL AND mp > 5 AND sessionid = '${session}'`
+        try {
+                    var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${teamAvgQuery}`);
+                    const averageData = await response.json();
+                    var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${sessionQuery}`);
+                    const sessionData = await response.json();
+                    averageData[0].name = `${teamID} Average Data`   
+                    sessionData[0].name = `${sessionDate} Data`                 
+                    console.log(averageData) 
+                    console.log(sessionData)
+                    var reformatted = []
+                    let i = 0;
+                    for (var prop in averageData[0]) {
+                        console.log(prop)
+                        console.log(sessionData[0][prop])
+                        if (prop != "name") {
+                            reformatted.push({})
+                            reformatted[i].stat = prop
+                            reformatted[i].teamAvgValue = averageData[0][prop]
+                            reformatted[i].sessionValue = sessionData[0][prop] === null ? 0 : sessionData[0][prop];
+                            console.log(reformatted[i].sessionValue)
+                            if (prop != "goals" && prop != "assists") {reformatted[i].sessionValue /= reformatted[i].teamAvgValue; reformatted[i].teamAvgValue = 1; }
+                            
+                            reformatted[i].sessionValue = isNaN(reformatted[i].sessionValue) ? 0 : reformatted[i].sessionValue;
+                            radarRange[0] = Math.min(radarRange[0], reformatted[i].sessionValue)
+                            radarRange[1] = Math.max(radarRange[1], reformatted[i].teamAvgValue, reformatted[i].sessionValue)
+                            console.log(reformatted[i].sessionValue)
+                            i += 1
+                        }
+                    }
+
+                    return [reformatted, radarRange]
+            } catch(err) {
+                    console.error(err);
+            }
+    }
+        
+
     return (
         <motion.div  initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}} transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full">
             <div id="cnt" className="w-full flex flex-col content-center justify-center items-center bg-gray-900 rounded-md transition-all duration-300 h-8 border border-gray-600 border-b-0 rounded-t-md" onMouseEnter={(e) => {
@@ -214,6 +258,8 @@ const QuerySession = (props) => {
                                             var totalData = []
                                             totalData.push(averageToday)
                                             totalData.push(averageAll)
+                                            var teamOv = await getTeamOverview(session.sessionid, session.date);
+                                            console.log(teamOv)
                                             setDisplay(
                                                 <div className="flex flex-col justify-center content-center">
                                                     <h3 className="mt-3 mb-3 text-center text-white font-bold">{session.type.toUpperCase()} from {session.date}</h3>
@@ -224,6 +270,7 @@ const QuerySession = (props) => {
                                                     <SessionGraph width={graphW} data={totalData} session={session} dataKeys={["distance", 'sprintdistance']} date={session.date} isAvg={true}></SessionGraph>
                                                     <SessionGraph  width={graphW} data={totalData} session={session} dataKeys={['energy', 'playerload']} date={session.date} isAvg={true}></SessionGraph>
                                                     <SessionGraph  width={graphW} data={totalData} session={session} dataKeys={['topspeed']} date={session.date} isAvg={true}></SessionGraph>
+                                                    {session.type == "game" && <PlayerOverviewGraph range={teamOv[1]} width={document.querySelector("#cont").offsetWidth-100}  data={teamOv[0]} dKey={`session`}></PlayerOverviewGraph>}
                                                 </div>)
                                             console.log(display)
                                         }}>View All Stats</button>

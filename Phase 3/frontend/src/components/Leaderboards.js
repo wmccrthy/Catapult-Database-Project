@@ -29,6 +29,24 @@ const Leaderboards = (props) => {
         }
     }
 
+    const gcQuery = async (stat, filter = null) => {
+        var query = `SELECT R.email, SUM(R.${stat}) as ${stat} FROM recordsstatson R
+        WHERE R.email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') GROUP BY R.email ORDER BY SUM(R.${stat}) DESC;`
+        if (filter != null) {
+            var query = `SELECT R.email, SUM(R.${stat}) as ${stat} FROM recordsstatson R
+            WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') AND sessionid in (SELECT S.sessionid from session S where S.type = '${filter}') GROUP BY R.email ORDER BY SUM(R.${stat}) DESC;`
+        }
+        try {
+            console.log(query)
+            var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`)
+            var leaderBoardData = await response.json();
+            console.log(leaderBoardData);
+            return leaderBoardData;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     // 
     const leaderAvgQuery = async (stat, filter = null) => {
         var query = `SELECT email, AVG(${stat}) AS ${stat} FROM recordsstatson WHERE email in (SELECT P.email FROM participatesin P WHERE P.teamid = '${teamID}') GROUP BY email ORDER BY ${stat} DESC;`
@@ -47,8 +65,9 @@ const Leaderboards = (props) => {
         }
     }
 
-    const getLeaderBoard = async (stat, filter = null) => {
+    const getLeaderBoard = async (stat, filter = null, gc = false) => {
         var l = await leaderQuery(stat, filter);
+        if (gc) { l = await gcQuery(stat, filter) };
         var formattedToArr = []
         for (let player of l) {
             player.email = player.email.replace("@amherst.edu", "");
@@ -84,6 +103,7 @@ const Leaderboards = (props) => {
         <div id="cont" className="max-h-156 w-full flex flex-col content-center items-center justify-evenly">
             <h4 className="w-full text-center p-1  bg-gray-900 text-gray-400 font-bold text-lg rounded-t-md m-1">Highest Recorded Stats</h4>
             <div className="w-full flex items-center content-center justify-between text-center md:gap-10 mb-5 mt-3"> 
+
                 <button className="leaderButton md:text-[1vw] text-[2vw]   uppercase  text-gray-400" onClick={async function(e) {
                     var typeFilter = document.querySelector("#sel1").value;
                     if (typeFilter== 'All') {typeFilter = null;}
@@ -112,27 +132,35 @@ const Leaderboards = (props) => {
                     setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["topspeed"]}></PlayerSessionGraph>)
                     toggleButton(e.target)
                 }}>Top Speed</button>
-                 <button className="leaderButton md:text-[1vw] text-[2vw]  uppercase  text-gray-400" onClick={async function(e) {
-                     var typeFilter = document.querySelector("#sel1").value;
-                     if (typeFilter== 'All') {typeFilter = null;}
-                    var data = await getLeaderBoard("energy", typeFilter);
-                    setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["energy"]}></PlayerSessionGraph>)
+                <button className="leaderButton md:text-[1vw] text-[2vw] uppercase  text-gray-400" onClick={async function(e) {
+                    var typeFilter = document.querySelector("#sel1").value;
+                    if (typeFilter== 'All') {typeFilter = null;}
+                    var data = await getLeaderBoard("g", typeFilter, true);
+                    console.log(data)
+                    setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["g"]}></PlayerSessionGraph>)
                     toggleButton(e.target)
-                }}>Energy</button>
-                 <button className="leaderButton md:text-[1vw] text-[2vw] uppercase  text-gray-400" onClick={async function(e) {
-                     var typeFilter = document.querySelector("#sel1").value;
-                     if (typeFilter== 'All') {typeFilter = null;}
-                    var data = await getLeaderBoard("playerload", typeFilter);
-                    setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100}  data={data} dataKeys={["playerload"]}></PlayerSessionGraph>)
+                }}>Goals</button>
+                <button className="leaderButton md:text-[1vw] text-[2vw] uppercase  text-gray-400" onClick={async function(e) {
+                    var typeFilter = document.querySelector("#sel1").value;
+                    if (typeFilter== 'All') {typeFilter = null;}
+                    var data = await getLeaderBoard("a", typeFilter, true);
+                    setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={data} dataKeys={["a"]}></PlayerSessionGraph>)
                     toggleButton(e.target)
-                }}>Player Load</button>
+                }}>Assists</button>    
             </div>
             <select className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-1 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" value={null} id="sel1" onChange={async function (e) {
                 var typeFilter = e.target.value
                 if (active != null) {
                     var curMetric = active.innerHTML.replaceAll(" ", "").toLowerCase()
+                    var gc = false;
+                    if (curMetric == "goals") { 
+                        curMetric = 'g'
+                        gc = true }; 
+                    if (curMetric == "assists") { 
+                        curMetric = 'a'
+                        gc = true};
                     if (typeFilter == "All") {typeFilter = null;}
-                    var updatedData = await getLeaderBoard(curMetric, typeFilter)
+                    var updatedData = await getLeaderBoard(curMetric, typeFilter, gc)
                     setDisplay(<PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100} data={updatedData} dataKeys={[curMetric]}></PlayerSessionGraph>)
                 }}}>
                 <option value={null}>All</option>

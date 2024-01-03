@@ -71,21 +71,42 @@ const DataEntry = (props) => {
             name = name.join(" ")
             console.log(name)
             name = name.replace("'", "")
-            var query = `UPDATE recordsstatson SET g = ${g}, a = ${a}, sh = ${sh}, sog = ${sog}, mp = ${mp} WHERE email = (SELECT p.email FROM player p WHERE p.name = '${name}') AND sessionid = (SELECT s.sessionid FROM session s WHERE s.date = '${date}');`
-            console.log(query)
+            // `IF EXISTS (SELECT * FROM recordsstatson WHERE email = (SELECT p.email FROM player p WHERE p.name = '${name}') AND sessionid = (SELECT s.sessionid FROM session s WHERE s.date = '${date}')) BEGIN (update) END ELSE BEGIN (insert) END`
+            // need to insert to participates in first
+            var insertParticipates = `INSERT INTO participatesin (email, sessionid, teamid) VALUES ((SELECT p.email FROM player p WHERE p.name = '${name}'), (SELECT s.sessionid FROM session s WHERE s.date = '${date}'), ${teamid});`
+            var insertRec = `INSERT INTO recordsstatson (deviceid, email, sessionid, teamid, g, a, sh, sog, mp) VALUES ((SELECT t.deviceid FROM tracks t WHERE t.email = (SELECT p.email FROM player p WHERE p.name = '${name}')), (SELECT p.email FROM player p WHERE p.name = '${name}'), (SELECT s.sessionid FROM session s WHERE s.date = '${date}'), ${teamid}, ${g}, ${a}, ${sh}, ${sog}, ${mp})`
+            var update = `UPDATE recordsstatson SET g = ${g}, a = ${a}, sh = ${sh}, sog = ${sog}, mp = ${mp} WHERE email = (SELECT p.email FROM player p WHERE p.name = '${name}') AND sessionid = (SELECT s.sessionid FROM session s WHERE s.date = '${date}')`
+            var query = [[insertParticipates, insertRec], update]
             queries.push(query)
         }
 
-        for (let q of queries) {
+        for (let pair of queries) {
             try {
-                var ins = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/customInsert?query=${q}`, {
-                    method: "POST"
-                })
-                var success = await ins.json()
-                console.log(success)
-            } catch (err) {
-                console.error(err)
+                    var participatesQ = pair[0][0]
+                    var recQ = pair[0][1]
+                    var ins = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/customInsert?query=${participatesQ}`, {
+                        method: "POST"
+                    })
+                    var success = await ins.json()
+                    var ins = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/customInsert?query=${recQ}`, {
+                        method: "POST"
+                    })
+                    var success = await ins.json()
+                    console.log(success)
+                } catch (err) {
+                    // if insert fails (indicating that existing record does exist (player did wear GPS on given day, so update record instead))
+                    try {
+                        var update = pair[1]
+                        var ins = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/customInsert?query=${update}`, {
+                        method: "POST"
+                        })
+                        var success = await ins.json()
+                    } catch (err) {
+                        console.error(err)
+                    }
+                    console.error(err)
             }
+            
             curStatus += 100/queries.length;
             setStatus2(curStatus);
         }
@@ -261,7 +282,7 @@ const DataEntry = (props) => {
     return (
         <motion.div initial={{opacity: 0.25, scale: .5}} animate={{opacity:1, scale:1}} transition={{duration:0.5}} className="flex p-4 rounded-md flex-col items-center content-center">
             <div className="mb-10 flex flex-col items-center">
-                <h5 className="text-white text-center">Upload Session Data</h5>
+                <h5 className="text-white text-center">Upload {teamid.replaceAll("'", "")} Session Data</h5>
                 <div className="flex items-center gap-2 text-white font-light">
                     <input type="file" accept=".csv" onInput={async function (e) {
                         await handleFileUpload(e)
@@ -273,7 +294,7 @@ const DataEntry = (props) => {
                 </div>
                {show1 && <ProgressBar status={status1}></ProgressBar>}
 
-                <h5 className="text-white text-center">Upload Game Data</h5>
+                <h5 className="text-white text-center">Upload {teamid.replaceAll("'", "")} Game Data</h5>
                 <div className="flex items-center gap-2 text-white font-light">
                     <input type="file" accept=".csv" onInput={async function (e) {
                         await handleFileUpload(e)

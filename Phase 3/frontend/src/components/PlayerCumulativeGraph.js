@@ -50,7 +50,7 @@ const PlayerCumulativeGraph = (props) => {
   
     return (
             <div className="w-full flex flex-col justify-center items-center content-center  bg-gray-900  text-gray-400 mb-5">
-                    <h5 className="mt-3 mb-3 text-center text-white font-extralight text-sm">{playerName} Game Cumulative Stats</h5>
+                    <h4 className="mt-3 mb-3 text-center text-white text-md">{playerName} Game Cumulative Stats</h4>
                     <BarChart className="w-full mt-1 text-md bg-gray-900 text-gray-400" width={graphW} height={400} data={initData}>
                         <defs>
                             <linearGradient id="col1" x1="0" y1="0" x2="0" y2="1">

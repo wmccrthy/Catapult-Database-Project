@@ -38,7 +38,7 @@ const PlayerSessionStats = (props) => {
             <PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100}  data={totalData} session={props.date} dataKeys={['energy', 'playerload']} multiStat={true}></PlayerSessionGraph>
             <PlayerSessionGraph width={document.querySelector("#cont").offsetWidth-100}  data={totalData} session={props.date} dataKeys={['topspeed']} multiStat={false}></PlayerSessionGraph>
             {/* add radar graph for visualizing player shot acc, conversion rate, distance per MP, mp vs team average */}
-            {type == "game" && <PlayerOverviewGraph range={range} width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={props.overview}></PlayerOverviewGraph>}
+            {type == "game" && <PlayerOverviewGraph range={range} width={document.querySelector("#cont").offsetWidth-100} showPlayerAvg={true} name={playerName} data={props.overview}></PlayerOverviewGraph>}
         </motion.div>
         ) 
     }

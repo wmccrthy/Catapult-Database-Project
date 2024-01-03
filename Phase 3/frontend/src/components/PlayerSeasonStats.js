@@ -26,8 +26,7 @@ const PlayerSeasonStats = (props) => {
              <PlayerSessionGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData}  dataKeys={["distance", 'sprintdistance']} multiStat={true}></PlayerSessionGraph>
              <PlayerSessionGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData} dataKeys={['energy', 'playerload']} multiStat={true}></PlayerSessionGraph>
              <PlayerSessionGraph  width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={averageData} dataKeys={['topspeed']} multiStat={false}></PlayerSessionGraph>
-             <h3 className="mt-3 mb-3 text-center text-white font-bold">{playerName} Overview</h3>
-             <PlayerOverviewGraph range={range} width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={props.overview}></PlayerOverviewGraph>
+             <PlayerOverviewGraph range={range} width={document.querySelector("#cont").offsetWidth-100} showPlayerAvg={false} name={playerName} data={props.overview}></PlayerOverviewGraph>
              <PlayerCumulativeGraph width={document.querySelector("#cont").offsetWidth-100}  name={playerName} data={props.cumulative}></PlayerCumulativeGraph>
         </motion.div>
         ) 

@@ -48,7 +48,7 @@ const QueryPlayerAll = (props) => {
     }
 
     const getSeasonStats = async (playerEmail) => {
-        const query = `SELECT session.date, distance, sprintdistance, topspeed, energy, playerload FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE email = '${playerEmail}' AND teamid = '${teamID}' ORDER BY session.sessionid;`
+        const query = `SELECT session.date, distance, sprintdistance, topspeed, energy, playerload FROM recordsstatson JOIN session ON recordsstatson.sessionid = session.sessionid WHERE email = '${playerEmail}' AND teamid = '${teamID}' AND distance IS NOT NULL ORDER BY session.sessionid;`
         try {
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`);
             const seasonData = await response.json();
@@ -77,7 +77,7 @@ const QueryPlayerAll = (props) => {
     }
 
     const getPlayerCumulatives = async (playerEmail, playerName) => {
-        const query = `SELECT (SUM(distance)/1000.0) as "kiloyards ran", (SUM(sprintdistance)/1000) as "kiloyards sprinted", (SUM(mp)/60.0) as "hours played", SUM(g) as goals, SUM(a) as assists, SUM(sh) as shots FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid IN (SELECT sessionid FROM session WHERE type = 'game');`
+        const query = `SELECT (SUM(distance)*(0.000568182)) as "miles ran", (SUM(sprintdistance)*(0.000568182)) as "miles sprinted", (SUM(mp)/60.0) as "hours played", SUM(g) as goals, SUM(a) as assists, SUM(sh) as shots FROM recordsstatson WHERE email = '${playerEmail}' AND sessionid IN (SELECT sessionid FROM session WHERE type = 'game');`
         try {
             var response = await fetch(`http://cosc-257-node11.cs.amherst.edu:4000/custom?query=${query}`);
             const data = await response.json();
@@ -122,12 +122,12 @@ const QueryPlayerAll = (props) => {
                 if (prop != "name") {
                     reformatted.push({})
                     reformatted[i].stat = prop
-                    reformatted[i].teamValue = averageData[0][prop]
+                    reformatted[i].teamAvgValue = averageData[0][prop]
                     reformatted[i].playerValue = playerData[0][prop] == null ? 0 : playerData[0][prop];
                     // have values set in x:1 ratios (player:team)
-                    reformatted[i].playerValue/= reformatted[i].teamValue; reformatted[i].teamValue = 1; 
+                    reformatted[i].playerValue/= reformatted[i].teamAvgValue; reformatted[i].teamAvgValue = 1; 
                     radarRange[0] = Math.min(radarRange[0], reformatted[i].playerValue)
-                    radarRange[1] = Math.max(radarRange[1], reformatted[i].teamValue, reformatted[i].playerValue)
+                    radarRange[1] = Math.max(radarRange[1], reformatted[i].teamAvgValue, reformatted[i].playerValue)
                     i += 1
                 }
             }
