@@ -20,6 +20,7 @@ const QueryPlayerAll = (props) => {
     const [nameFilter, setFilter] = useState("");
     const [playerList, setPlayerList] = useState([]);
     const [display, setDisplay] = useState(props.defData);
+    const [showX, setShowX] = useState(false);
 
 
     const getPlayers = async (allPlayers = false) => {
@@ -170,6 +171,12 @@ const QueryPlayerAll = (props) => {
     }
 
 
+    const handleXClick = () => {
+        setShowX(false);
+        setDisplay(<div></div>);
+    }
+        
+
 
     return (
         <motion.div initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}}  transition={{duration:.5, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full border border-gray-700 rounded-md min-h-96">
@@ -215,6 +222,7 @@ const QueryPlayerAll = (props) => {
                                     var seasonStatArr = await getSeasonStats(player.email)
                                     var overview = await getPlayerOverview(player.email, player.name)
                                     var cumulatives = await getPlayerCumulatives(player.email, player.name)
+                                    setShowX(true);
                                     setDisplay(<PlayerSeasonStats radarRange={radarRange} cumulative={cumulatives} averages={avgData} overview={overview} stats={seasonStatArr} name={player.name} email={player.email}></PlayerSeasonStats>);
                                     // need to render new table displaying stats (new component)
                                 }}>View Stats</button></td>
@@ -223,9 +231,10 @@ const QueryPlayerAll = (props) => {
                     </tbody>
             </table>
             </div>
-            <div className="w-full flex content-center justify-center ">
+            <motion.div layout className="w-full flex content-center justify-center relative border border-opacity-10 border-gray-600">
+                {showX && <div className="absolute text-white text-6xl -top-4 right-4 cursor-pointer hover:scale-90 transition-all duration-300 hover:opacity-50" onClick={() => {handleXClick()}}>&times;</div>}
                 {display}
-            </div>
+            </motion.div>
         </motion.div>
         ) 
     }

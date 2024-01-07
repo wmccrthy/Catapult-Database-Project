@@ -22,6 +22,7 @@ const QuerySession = (props) => {
     const [display, setDisplay] = useState(<span></span>)
     const [seasonalDisplay, setSeasDisplay] = useState(<span className="font-extralight opacity-70 text-white"></span>)
     const teamID = props.team;
+    const [showX, setShowX] = useState(false);
 
     // for all player stats in a session the goal is to get all session data from given session, organized by player email, realistically, all I need is session id
     const moreEfficientSessionData = async (session) => {
@@ -182,10 +183,16 @@ const QuerySession = (props) => {
                     console.error(err);
             }
     }
+
+    const handleXClick = () => {
+        setShowX(false);
+        setDisplay(<div></div>);
+    }
+        
         
 
     return (
-        <motion.div  initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}} transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full">
+        <motion.div initial={{opacity: 0, scale:.95}} animate={{opacity:1, scale:1}} transition={{duration:.65, delay: 0.1}} id="cont" className="flex flex-col content-center items-center w-full">
             <div id="cnt" className="w-full flex flex-col content-center justify-center items-center bg-gray-900 rounded-md transition-all duration-300 h-8 border border-gray-600 border-b-0 rounded-t-md" onMouseEnter={(e) => {
                     if (!document.querySelector("#cnt").classList.contains("open")) {document.querySelector("#cnt").classList.toggle("preview")
                     document.querySelector("#icon").classList.toggle("rotated")}
@@ -211,7 +218,7 @@ const QuerySession = (props) => {
                 getSessions();
                 filterList();
             } } /> */}
-            <div className="max-h-96 w-full overflow-y-auto z-10 border border-b-0 border-gray-600">
+            <div className="max-h-96 w-full overflow-y-auto z-10 border border-gray-600">
                 <table className="w-full text-sm text-left text-gray-400">
                     <caption className="sticky top-0 h-auto w-full bg-gray-900 text-white text-lg">Individual Session Data</caption>
                     <thead className="w-full text-xs uppercase bg-gray-700 text-gray-400 sticky top-7">
@@ -242,8 +249,13 @@ const QuerySession = (props) => {
                                     <td className="py-1 sm:px-6 sm:py-4">{session.sessionid}</td>
                                     <td className="py-1 sm:px-6 sm:py-4">{session.date}</td>
                                     <td className="py-1 sm:px-6 sm:py-4"><button onClick={function () {
+                                        setDisplay(<div></div>);
                                         // QueryPlayer
-                                        setDisplay(<QueryPlayer team={teamID} type={session.type} session={session.sessionid} date={session.date} defData={<div></div>}></QueryPlayer>)
+                                        setTimeout(() => {
+                                            setShowX(true);
+                                            setDisplay(<QueryPlayer team={teamID} type={session.type} session={session.sessionid} date={session.date} defData={<div></div>}></QueryPlayer>)
+                                        }, 500)
+                                        // setDisplay(<QueryPlayer team={teamID} type={session.type} session={session.sessionid} date={session.date} defData={<div></div>}></QueryPlayer>)
                                         console.log(display)
                                     }}>View Player Stats</button></td>
                                     <td className="py-1 sm:px-6 sm:py-4 ">
@@ -259,9 +271,10 @@ const QuerySession = (props) => {
                                             totalData.push(averageToday)
                                             totalData.push(averageAll)
                                             var teamOv = await getTeamOverview(session.sessionid, session.date);
+                                            setShowX(true);
                                             console.log(teamOv)
                                             setDisplay(
-                                                <div className="flex flex-col justify-center content-center">
+                                                <motion.div layout className="w-full flex flex-col justify-center content-center border border-gray-600 rounded-b-md box-content">
                                                     <h3 className="mt-3 mb-3 text-center text-white font-bold">{session.type.toUpperCase()} from {session.date}</h3>
                                                     <SessionGraph width={graphW} data={formatList} session={session} dataKeys={["distance", 'sprintdistance']}></SessionGraph>
                                                     <SessionGraph  width={graphW} data={formatList} session={session} dataKeys={['energy', 'playerload']}></SessionGraph>
@@ -271,7 +284,7 @@ const QuerySession = (props) => {
                                                     <SessionGraph  width={graphW} data={totalData} session={session} dataKeys={['energy', 'playerload']} date={session.date} isAvg={true}></SessionGraph>
                                                     <SessionGraph  width={graphW} data={totalData} session={session} dataKeys={['topspeed']} date={session.date} isAvg={true}></SessionGraph>
                                                     {session.type == "game" && <PlayerOverviewGraph range={teamOv[1]} width={document.querySelector("#cont").offsetWidth-100}  data={teamOv[0]} dKey={`session`}></PlayerOverviewGraph>}
-                                                </div>)
+                                                </motion.div>)
                                             console.log(display)
                                         }}>View All Stats</button>
                                     </td>
@@ -281,7 +294,10 @@ const QuerySession = (props) => {
                     </tbody>
                 </table>
             </div>
-            <div className="w-full flex flex-col content-center justify-center items-center bg-gray-900 border border-gray-600 rounded-b-md"> {display}</div>
+            <motion.div layout className="w-full h-fit flex flex-col content-center justify-center items-center bg-gray-900 border border-gray-600 border-opacity-10 relative"> 
+                {showX && <div className="absolute text-white text-6xl -top-4 right-4 cursor-pointer hover:scale-90 transition-all duration-300 hover:opacity-50 z-10" onClick={() => {handleXClick()}}>&times;</div>}
+                {display}
+            </motion.div>
         
         </motion.div>
         

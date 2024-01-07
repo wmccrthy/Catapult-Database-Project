@@ -16,6 +16,7 @@ const QueryPlayer = (props) => {
     const session = props.session;
     const sessionDate = props.date;
     const radarRange = [-0.5, 0.0]
+    const [showX, setShowX] = useState(false);
 
     const getPlayers = async (allPlayers = false) => {
         try {
@@ -159,10 +160,15 @@ const QueryPlayer = (props) => {
             console.error(err);
         }
     }
+
+    const handleXClick = () => {
+        setShowX(false);
+        setDisplay(<div></div>);
+    }
         
 
     return (
-        <motion.div className="flex flex-col content-center items-center w-full">
+        <motion.div className="flex flex-col content-center items-center w-full border border-gray-600 box-content">
             {/* <input id="playerInp" className="w-full h-8 text-s text-center bg-gray-700 text-gray-400 outline-none" type="text" placeholder="Enter Player Name" onChange={function (e) {
                 setFilter(e.target.value);
                 console.log(e);
@@ -174,7 +180,7 @@ const QueryPlayer = (props) => {
                 getPlayers();
                 filterList();
             } } /> */}
-    
+        
             <div className="max-h-64 w-full overflow-y-auto">
                 <table className="w-full text-sm text-left  text-gray-400">
                     <thead className="text-xs  uppercase  bg-gray-700 text-gray-400 sticky top-0">
@@ -200,6 +206,8 @@ const QueryPlayer = (props) => {
                                     var avgStatArr = await getSessionAverages();
                                     var playerAvgArr = await getPlayerAverages(player.email, player.name, seshType);
                                     var seshOverview = await getPlayerOverview(player.email, player.name);
+                                    console.log(statArr)
+                                    if (statArr[0] != null) {setShowX(true);} else {setShowX(false)};
                                     setDisplay(<PlayerSessionStats type={seshType} overview={seshOverview} range={radarRange} stats={statArr} averages={avgStatArr} pAverages={playerAvgArr} name={player.name} date={sessionDate}></PlayerSessionStats>);
                                     // console.log(display)
                                     // need to render new table displaying stats (new component)
@@ -209,9 +217,11 @@ const QueryPlayer = (props) => {
                     </tbody>
             </table>
             </div>
-            <div className="w-full flex content-center justify-center">
+            <motion.div layoutScroll className="w-full flex content-center relative justify-center transition-all">
+                {/* render close button in top right for all query windows */}
+                {showX && <div className="absolute text-white text-6xl -top-4 right-4 cursor-pointer hover:scale-90 transition-all duration-300 hover:opacity-50" onClick={() => {handleXClick()}}>&times;</div>}
                 {display}
-            </div>
+            </motion.div>
         </motion.div>
         ) 
     }
