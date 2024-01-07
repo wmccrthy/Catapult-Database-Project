@@ -218,7 +218,7 @@ const QuerySession = (props) => {
                 getSessions();
                 filterList();
             } } /> */}
-            <div className="max-h-96 w-full overflow-y-auto z-10 border border-gray-600">
+            <div className="max-h-96 w-full overflow-y-auto z-10 border border-gray-600 rounded-b-md">
                 <table className="w-full text-sm text-left text-gray-400">
                     <caption className="sticky top-0 h-auto w-full bg-gray-900 text-white text-lg">Individual Session Data</caption>
                     <thead className="w-full text-xs uppercase bg-gray-700 text-gray-400 sticky top-7">
